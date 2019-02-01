@@ -2552,7 +2552,9 @@ let complete_quest = ( successful = true ) => {
     let percentage_defeated = 1 - ( S.quest.current_boss_hp / S.quest.current_quest.boss.hp )
     if ( percentage_defeated > .40 ) percentage_defeated = .4
 
-    let q = S.quest.current_quest
+    // let q = {...S.quest.current_quest }
+    let q = JSON.parse( JSON.stringify( S.quest.current_quest ) )
+    console.log( 'q', q )
     q.rewards.ores *= percentage_defeated
     q.rewards.refined_ores *= percentage_defeated
     q.rewards.xp *= percentage_defeated
@@ -2571,6 +2573,8 @@ let complete_quest = ( successful = true ) => {
 }
 
 let gain_quest_rewards = ( quest, failed = false ) => {
+
+  console.log( 'gain quest reawrds', quest )
 
   // reset_quest_state()
 
