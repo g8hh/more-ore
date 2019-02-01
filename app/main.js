@@ -2239,35 +2239,42 @@ let start_quest = ( code_name ) => {
 
 let quest_initialization = () => {
 
-  if ( S.quest.state == 'in progress' || S.quest.state == 'completed' || S.quest.state == 'boss approaching' ) {
-    O.quest_initialized = true
-    BOOST_NOTIFIER.classList.add( 'active' )
-    HERO.classList.add( 'active', 'moving' )
-    handle_quest_progress()
-  }
+  if ( S.quest.state != null ) {
 
-  if ( S.quest.state == 'boss' || S.quest.state == 'failed' ) {
+    QUEST_AREA_CONTAINER.style.background = `url( ./app/assets/images/${ S.quest.current_quest.quest_bg }.png )`
+    QUEST_AREA_CONTAINER.style.backgroundSize = 'auto 100%'
 
-    let manual_attack = s( '.manual-attack' )
-    if ( manual_attack ) remove_el( manual_attack )
+    if ( S.quest.state == 'in progress' || S.quest.state == 'completed' || S.quest.state == 'boss approaching' ) {
+      O.quest_initialized = true
+      BOOST_NOTIFIER.classList.add( 'active' )
+      HERO.classList.add( 'active', 'moving' )
+      handle_quest_progress()
+    }
 
-    O.quest_initialized = true
-    
-    let boss_el_container = document.createElement( 'div' )
-    boss_el_container.classList.add( 'boss-container' )
-    boss_el_container.innerHTML = `
-      <p class='boss-hp'>${ S.quest.current_boss_hp } HP</p>
-      <img class='boss' src="https://via.placeholder.com/64" alt="">
-    `
+    if ( S.quest.state == 'boss' || S.quest.state == 'failed' ) {
 
-    QUEST_AREA_CONTAINER.append( boss_el_container )
-    
-    quest_failed()
-  }
+      let manual_attack = s( '.manual-attack' )
+      if ( manual_attack ) remove_el( manual_attack )
 
-  if ( S.quest.state == 'boss defeated' ) {
-    O.quest_initialized = true
-    boss_defeated_banner()
+      O.quest_initialized = true
+      
+      let boss_el_container = document.createElement( 'div' )
+      boss_el_container.classList.add( 'boss-container' )
+      boss_el_container.innerHTML = `
+        <p class='boss-hp'>${ S.quest.current_boss_hp } HP</p>
+        <img class='boss' src="https://via.placeholder.com/64" alt="">
+      `
+
+      QUEST_AREA_CONTAINER.append( boss_el_container )
+      
+      quest_failed()
+    }
+
+    if ( S.quest.state == 'boss defeated' ) {
+      O.quest_initialized = true
+      boss_defeated_banner()
+    }
+
   }
 
 }
@@ -2528,6 +2535,9 @@ let handle_quest_area_click = ( e ) => {
 }
 
 let complete_quest = ( successful = true ) => {
+
+  QUEST_AREA_CONTAINER.style.background = `url( "./app/assets/images/misc-mineshaft.png" )`
+  QUEST_AREA_CONTAINER.style.backgroundSize = 'auto 100%'
 
   let quest = select_from_arr( Quests, S.quest.current_quest.code_name )
 
