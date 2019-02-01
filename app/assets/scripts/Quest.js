@@ -6,6 +6,7 @@ let Quest = function( obj, id ) {
   this.desc = obj.desc
   this.flavor_text = obj.flavor_text
   this.img = obj.img
+  this.quest_bg = `quest-${ this.code_name }_bg`
   this.base_duration = obj.base_duration
   this.duration = obj.duration || this.base_duration - ( this.base_duration * S.quest_speed_bonus )
   this.completed = obj.completed || 0
