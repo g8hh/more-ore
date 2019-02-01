@@ -32,6 +32,8 @@ let Smith = function( obj = {} ) {
 
     this._update_progress = () => {
 
+        console.log( 'smith update progress firing')
+
         build_pickaxe_update( true )
     
         let bar = s( '.progress-bar' )

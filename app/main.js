@@ -362,7 +362,7 @@ let build_tabs = () => {
     if ( !tab.hidden ) {
       str += `
         <div 
-          class='tab ${ tab.name }-tab ${ O.current_tab == tab.code_name && "selected" }'
+          class='tab ${ tab.code_name }-tab ${ O.current_tab == tab.code_name && "selected" }'
           onclick='change_tab( "${ tab.code_name }" ); build_${ tab.code_name }_tab()'
         >${ tab.name }</div>
       `
@@ -1422,6 +1422,29 @@ let tutorial_buy_building = () => {
   tutorial.style.left = target_location_dimensions.left - tutorial.offsetWidth - 35 + 'px'
   tutorial.style.top = '20%'
 
+
+}
+
+let tutorial_smith_tab = () => {
+  console.log( 'tutorial smith tab firing' )
+  let tutorial = document.createElement( 'div' )
+
+  tutorial.classList.add( 'tutorial-container' )
+  tutorial.id = 'tutorial-smith-tab'
+  tutorial.innerHTML = `
+    <div class="arrow up"></div>
+    <div class="tutorial-content">
+      <p>You unlocked the Smith tab!</p>
+      <p>View your inventory and buy upgrades with your refined ores!</p>
+    </div>
+  `
+
+  let smith_tab_dimensions = s( '.smith-tab' ).getBoundingClientRect()
+
+  CONTAINER.append( tutorial )
+
+  tutorial.style.top = smith_tab_dimensions.bottom + 'px'
+  tutorial.style.left = smith_tab_dimensions.left + 'px'
 
 }
 
@@ -3096,6 +3119,7 @@ let update_ore_hp = ( amount ) => {
     if ( S.stats.total_rocks_destroyed == 2 ) {
       if ( Tabs[ 1 ].hidden == 1 ) { 
         Tabs[ 1 ].hidden = 0; build_tabs() 
+        tutorial_smith_tab()
       }
     }
 
@@ -3580,7 +3604,7 @@ window.addEventListener('keyup', (e) => {
       win_achievement( 'who_am_i?' )
     }
     if ( pressed.join( '' ).includes( 'qq' ) ) {
-      Smith_Upgrades.forEach( upgrade => { upgrade.duration = 200 })
+      // Smith_Upgrades.forEach( upgrade => { upgrade.duration = 200 })
       S.pickaxe.item.damage *= 1000
       S.refined_ores += 100
       Quests.forEach( quest => quest.duration = 1 * SECOND )

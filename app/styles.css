@@ -2590,7 +2590,15 @@ input:checked + .slider:before {
   justify-content: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
-  align-items: center; }
+  align-items: center;
+  z-index: 2; }
+  .tutorial-container#tutorial-smith-tab {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+    -webkit-animation: upAndDown .8s infinite ease-in-out;
+    animation: upAndDown .8s infinite ease-in-out; }
   .tutorial-container .tutorial-content {
     padding: 15px;
     background-color: black;
@@ -2613,6 +2621,11 @@ input:checked + .slider:before {
       border-top: 6px solid transparent;
       border-bottom: 6px solid transparent;
       border-left: 6px solid #969188; }
+    .tutorial-container .arrow.up {
+      border: none;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 6px solid #969188; }
 
 @-webkit-keyframes sideToSide {
   0% {
@@ -2635,6 +2648,28 @@ input:checked + .slider:before {
   100% {
     -webkit-transform: translateX(0px);
     transform: translateX(0px); } }
+
+@-webkit-keyframes upAndDown {
+  0% {
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px); }
+  50% {
+    -webkit-transform: translateY(5px);
+    transform: translateY(5px); }
+  100% {
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px); } }
+
+@keyframes upAndDown {
+  0% {
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px); }
+  50% {
+    -webkit-transform: translateY(5px);
+    transform: translateY(5px); }
+  100% {
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px); } }
 
 .tutorial-window-container {
   z-index: 10;
