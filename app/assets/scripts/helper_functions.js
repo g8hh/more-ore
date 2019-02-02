@@ -88,12 +88,18 @@ let get_geometric_sequence_price = ( base_price, price_scale, owned, current_pri
 
   if ( S.buy_amount == 'max' ) {
 
-    price = current_price
+    price = base_price * Math.pow( price_scale, owned )
     amount = 0
 
     while ( S.ores >= price ) {
       amount++
       price += base_price * Math.pow( price_scale, owned + amount )
+    }
+
+    // subtracts the last price
+    if ( amount > 1 ) {
+      price -= base_price * Math.pow( price_scale, owned + amount )
+      amount--
     }
 
 

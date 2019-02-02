@@ -447,6 +447,11 @@ let build_buy_amount = () => {
           ${ S.buy_amount == 100 && 'class="selected"' }>
           100
         </p>
+        <p
+          onclick='change_buy_amount("max")'
+          ${ S.buy_amount == 'max' && 'class="selected"' }>
+          MAX
+        </p>
       </div>
     </div>
   
@@ -479,8 +484,17 @@ let build_buildings = () => {
             <img src="./app/assets/images/${ building.img }.png" alt="building image"/>
           </div>
           <div class="middle">
-            <h1>${ building.name } ${ S.buy_amount != 1 ? "x" + S.buy_amount : "" }</h1>
-            <p><img class='ore-small' src='./app/assets/images/ore.png' /> <span class='${ S.ores < get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price && "not-enough" }'>${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) }</span> </p>
+            <h1>${ building.name } ${ S.buy_amount != 1 && S.buy_amount != 'max' ? "x" + S.buy_amount : "" }</h1>
+            `
+            // if ( S.buy_amount == 'max' ) {
+            //   str += `<p><img class='ore-small' src='./app/assets/images/ore.png' /> <span class='${ S.ores < building.current_price && "not-enough" }'>${ beautify_number( building.current_price ) }</span> </p>`
+            // } else {
+            //   str += `<p><img class='ore-small' src='./app/assets/images/ore.png' /> <span class='${ S.ores < get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price && "not-enough" }'>${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) }</span> </p>`
+            // }
+
+            str += `<p><img class='ore-small' src='./app/assets/images/ore.png' /> <span class='${ S.ores < get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price && "not-enough" }'>${ beautify_number( get_geometric_sequence_price( building.base_price, building.price_scale, building.owned, building.current_price ).price ) }</span> </p>`
+
+            str += `
           </div>
           <div class="right">
             <h1>${ building.owned }</h1>
