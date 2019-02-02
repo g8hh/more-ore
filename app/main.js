@@ -335,6 +335,10 @@ let position_elements = () => {
 // ==== RIGHT SIDE SHIT  =================================================================
 
 let change_tab = ( code_name ) => {
+
+  let smith_tab_tutorial = s( '#tutorial-smith-tab' )
+  if ( smith_tab_tutorial ) remove_el( smith_tab_tutorial )
+
   let t = select_from_arr( S.tabs, code_name )
 
   // if the clicked tab isn't currently selected
@@ -525,6 +529,8 @@ let update_building_prices = () => {
 }
 
 let build_smith_tab = () => {
+
+  if ( !Smith_Upgrades[ 0 ].owned ) tutorial_buy_fragility_spectacles()
 
   O.rebuild_smith_tab = 0
 
@@ -1083,6 +1089,10 @@ AUTOMATER_WRAPPER.addEventListener( 'transitionend', () => {
 })
 
 let start_smith_upgrade = ( arr, code_name  ) => {
+
+  let tutorial = s( '#tutorial-buy-spectacles' )
+  if ( tutorial ) remove_el( tutorial )
+
   let upgrade = select_from_arr( arr, code_name )
 
   if ( is_empty( SMITH.upgrade_in_progress ) ) {
@@ -1426,7 +1436,6 @@ let tutorial_buy_building = () => {
 }
 
 let tutorial_smith_tab = () => {
-  console.log( 'tutorial smith tab firing' )
   let tutorial = document.createElement( 'div' )
 
   tutorial.classList.add( 'tutorial-container' )
@@ -1446,6 +1455,27 @@ let tutorial_smith_tab = () => {
   tutorial.style.top = smith_tab_dimensions.bottom + 'px'
   tutorial.style.left = smith_tab_dimensions.left + 'px'
 
+}
+
+let tutorial_buy_fragility_spectacles = () => {
+  let tutorial = document.createElement( 'div' )
+
+  tutorial.classList.add( 'tutorial-container' )
+  tutorial.id = 'tutorial-buy-spectacles'
+  tutorial.innerHTML = `
+    <div class="tutorial-content">
+      <p>First upgrade on me :)</p>
+    </div>
+    <div class="arrow right"></div>
+  `
+  setTimeout(() => {
+    let fragility_dimensions = s( '.smith-upgrade.non-repeatable' ).getBoundingClientRect()
+
+    CONTAINER.append( tutorial )
+
+    tutorial.style.top = fragility_dimensions.top + 'px'
+    tutorial.style.left = fragility_dimensions.left - tutorial.offsetWidth - 30 + 'px'
+  }, 50)
 }
 
 // ==== COMBO SHIT =======================================================================
