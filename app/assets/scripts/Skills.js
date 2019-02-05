@@ -54,7 +54,7 @@ let Skill = function( obj, index ) {
             e.target.classList.remove( 'not-owned' )
 
             build_skills_header( true )
-            play_sound( 'skill_level_up' )
+            SE.play( 'skill_level_up' )
 
             if ( this.unlock_function ) this.__handle_unlock_function( this.unlock_function )
 

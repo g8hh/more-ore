@@ -22,7 +22,6 @@ let Building = function( obj ) {
         if ( S.ores >= buy_info.price ) {
             spend( buy_info.price )
             RN.new( e, 'successful-buy')
-            play_sound( 'buy_sound' )
             this.owned += buy_info.amount
             this.current_price = this.base_price * Math.pow( this.price_scale, this.owned )
 

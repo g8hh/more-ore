@@ -49,8 +49,7 @@ let Upgrade = function( obj ) {
 
     this.buy = ( e ) => {
         if ( S.ores >= this.price ) {
-            S.ores -= this.price
-            play_sound( 'buy_sound' )
+            spend( this.price )
             this.owned = 1
 
             remove_el( e.target )

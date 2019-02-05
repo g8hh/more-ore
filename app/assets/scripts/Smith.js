@@ -12,7 +12,7 @@ let Smith = function( obj = {} ) {
 
         if ( S.refined_ores >= upgrade.price ) {
             S.refined_ores -= upgrade.price
-            play_sound( 'smith_upgrade_start' )
+            SE.play( 'smith_upgrade_start' )
 
             this.upgrade_in_progress = upgrade
             this.duration = upgrade.duration

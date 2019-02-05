@@ -47,6 +47,7 @@ let TS = new TextScroller()
 let TT = new Tooltip()
 let SMITH = new Smith()
 let QL = new QuestLog()
+let SE = new SoundEngine()
 
 let O = {
   rebuild_bottom_tabs: 1,
@@ -186,7 +187,7 @@ let notify = ( text, color = 'white', type = null ) => {
 
   CONTAINER.append( div )
 
-  if ( type == 'error' ) play_sound( 'not_enough' )
+  if ( type == 'error' ) SE.play( 'not_enough' )
 
 }
 
@@ -280,7 +281,7 @@ let earn_refined_ores = ( amount ) => {
 
 let spend = ( amount ) => {
   S.ores -= amount
-  play_sound( 'buy_sound' )
+  SE.play( 'buy_sound' )
 }
 
 let position_elements = () => {
@@ -408,7 +409,7 @@ let build_upgrades = () => {
         str += `
           class='upgrade' 
           onclick="Upgrades[ ${ index } ].buy( event )" 
-          onmouseover="play_sound( 'store_item_hover' ); TT.show( event, { name: '${ upgrade.code_name }', type: 'upgrade' } )" 
+          onmouseover="SE.play( 'store_item_hover' ); TT.show( event, { name: '${ upgrade.code_name }', type: 'upgrade' } )" 
           onmouseout="TT.hide()"
           >
           <img src="./app/assets/images/${ upgrade.img }.png" />
@@ -477,7 +478,7 @@ let build_buildings = () => {
           id='building-${ building.code_name }' 
           class="building" 
           onclick="Buildings[ ${ index } ].buy( event )" 
-          onmouseover="play_sound( 'store_item_hover' ); TT.show( event, { name: '${ building.code_name }', type: 'building' } )" 
+          onmouseover="SE.play( 'store_item_hover' ); TT.show( event, { name: '${ building.code_name }', type: 'building' } )" 
           onmouseout="TT.hide()"
           >
           <div class="left">
@@ -1228,7 +1229,8 @@ let handle_click = ( e, type ) => {
     let crit = false
     if ( Math.random() <= S.weak_hit_crit_chance ) crit = true
 
-    play_sound( 'ore_weak_spot_hit' )
+    SE.play( 'ore_weak_spot_hit' )
+
     S.stats.total_weak_hit_clicks++
     S.current_combo++
     S.generation.xp_on_refine += .5
@@ -1277,7 +1279,7 @@ let handle_click = ( e, type ) => {
       S.current_combo = 0
     }
 
-    play_sound( 'ore_hit' )
+    SE.play( 'ore_hit' )
 
     RN.new( event, 'click', opc )
     handle_rock_particles( event )
@@ -1561,7 +1563,7 @@ let update_combo_sign_number = () => {
 
 let use_combo_shield = () => {
 
-  play_sound( 'combo_shield_break' )
+  SE.play( 'combo_shield_break' )
   S.combo_shield.available -= 1
   S.combo_shield.time_last_used = Date.now()
   S.stats.total_combo_shields_used++
@@ -1657,7 +1659,7 @@ let calculate_refine_rewards = () => {
 let refine = async () => {
 
   if ( S.stats.current_ores_earned >= 1000000 ) {
-    play_sound( 'refine' )
+    SE.play( 'refine' )
     S.stats.times_refined++
 
     let rewards = calculate_refine_rewards()
@@ -1852,7 +1854,7 @@ let generate_item_drop = ( is_hoverable = false ) => {
 
 let handle_hoverable_mouseover = ( e, item_uuid ) => {
   
-  play_sound( 'ore_hover' )
+  SE.play( 'ore_hover' )
   let item = s( `#item_drop_${ item_uuid }` )
   remove_el( item )
 
@@ -2450,7 +2452,7 @@ let generate_manual_attack = () => {
 
 let handle_manual_attack = ( event ) => {
 
-  play_sound( `boss_hit_${ get_random_num( 1, 2 ) }` )
+  SE[`boss_hit_${ get_random_num( 1, 2 ) }`].play()
   
   remove_el( event.target )
 
@@ -2598,7 +2600,7 @@ let complete_quest = ( successful = true ) => {
   QL.clear()
 
   if ( successful ) {
-    play_sound( 'quest_complete' )
+    SE.play( 'quest_complete' )
 
     quest.completed = 1
     quest.times_completed++
@@ -2621,7 +2623,7 @@ let complete_quest = ( successful = true ) => {
 
     
   } else {
-    play_sound( 'quest_failed' )
+    SE.play( 'quest_failed' )
     S.stats.total_quests_failed++
 
     remove_el( s( '.boss-container' ) )
@@ -2929,7 +2931,7 @@ let use_scroll = ( e, item_index ) => {
     
     if ( successful ) {
       notify( 'enhancement successful', 'green' )
-      play_sound( 'scroll_successful' )
+      SE.play( 'scroll_successful' )
       if ( scroll.stat != 'damage' ) {
         S.pickaxe.item[`${ scroll.stat }`] += scroll.amount
       } else {
@@ -2937,7 +2939,7 @@ let use_scroll = ( e, item_index ) => {
       }
     } else {
       notify( 'enhancement failed', 'red' )
-      play_sound( 'scroll_failed' )
+      SE.play( 'scroll_failed' )
     }
 
   } else {
@@ -2962,7 +2964,7 @@ let socket_gem = ( e, item_index ) => {
     
     if ( is_empty( S.pickaxe.item.sockets.socket[ i ] ) ) {
 
-      play_sound( 'socket_gem' )
+      SE.play( 'socket_gem' )
 
       socketed_bool = true
       S.pickaxe.item.sockets.socket[ i ] = S.inventory.items[ item_index ]
@@ -2985,7 +2987,7 @@ let socket_gem = ( e, item_index ) => {
 
 let unsocket_gem = ( e, socket_index ) => {
 
-  play_sound( 'socket_gem' )
+  SE.play( 'socket_gem' )
   TT.hide()
 
   add_to_inventory( S.pickaxe.item.sockets.socket[ socket_index ] )
@@ -3161,7 +3163,7 @@ let game_loop_1s = () => {
 
 let update_ore_hp = ( amount ) => {
   if (S.current_ore_hp - amount <= 0 ) {
-    play_sound( 'ore_destroyed' )
+    SE.play( 'ore_destroyed' )
 
     if ( s( '#tutorial-click-the-rock' ) ) remove_el( s( '#tutorial-click-the-rock' ) )
 
@@ -3233,7 +3235,7 @@ let update_ore_sprite = ( update_from_state = false) => {
     ORE_SPRITE.src = `./app/assets/images/ore${ S.misc.current_ore_sprite }-${ current_sprite }.png`
 
     if ( !update_from_state ) {
-      play_sound( 'ore_percentage_lost' )
+      SE.play( 'ore_percentage_lost' )
       handle_rock_particles( null, 5 )
       if ( Math.random() <= .6 ) {
         let amount = select_random_from_arr( [ 1, 1, 1, 2 ] )
@@ -3549,7 +3551,7 @@ let handle_gold_nugget_click = ( event, is_event = null ) => {
   if ( S.stats.total_nuggets_clicked == 10 ) { unlock_smith_upgrade( 'gold_nuggies_frequency_ii' ); unlock_smith_upgrade( 'gold_nuggies_chance_up_ii') }
   if ( S.stats.total_nuggets_clicked == 30 ) { unlock_smith_upgrade( 'gold_nuggies_frequency_iii' ); unlock_smith_upgrade( 'gold_nuggies_chance_up_iii') }
 
-  play_sound( 'gold_nugget_click' )
+  SE.play( 'gold_nugget_click' )
   remove_el( event.target )
 
   let chance = Math.random()
