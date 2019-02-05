@@ -30,13 +30,13 @@ let Smith = function( obj = {} ) {
         }
     }
 
-    this._update_progress = () => {
+    this._update_progress = ( tick_ms = 0 ) => {
 
         build_pickaxe_update( true )
     
         let bar = s( '.progress-bar' )
 
-        this.current_progress += ( 1000 / S.prefs.game_speed )
+        this.current_progress += tick_ms
 
         if ( bar ) {
             let percentage = ( this.current_progress / this.duration ) * 100

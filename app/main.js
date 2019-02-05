@@ -3129,7 +3129,7 @@ let game_loop = () => {
   if ( O.reposition_elements ) position_elements()
   if ( O.rebuild_bottom_tabs ) build_bottom_tabs()
 
-  if ( !is_empty( SMITH.upgrade_in_progress ) ) SMITH._update_progress()
+  if ( !is_empty( SMITH.upgrade_in_progress ) ) SMITH._update_progress( tick_ms )
   if ( S.quest.state == 'boss' ) update_boss_time_limit( tick_ms )
 
   if ( !O.quest_initialized ) quest_initialization()
