@@ -32,8 +32,6 @@ let Smith = function( obj = {} ) {
 
     this._update_progress = () => {
 
-        console.log( 'smith update progress firing')
-
         build_pickaxe_update( true )
     
         let bar = s( '.progress-bar' )
@@ -148,7 +146,7 @@ let load_smith = () => {
             SMITH = new Smith( JSON.parse( localStorage.getItem( 'smith' ) ) )
             
             if ( !is_empty( SMITH.upgrade_in_progress ) ) {
-                SMITH._upgrade_progress()
+                SMITH._update_progress()
             }
 
         }
