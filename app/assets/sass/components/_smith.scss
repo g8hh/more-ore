@@ -160,7 +160,7 @@
           position: absolute;
           top: -5px;
           left: -10px;
-          animation: new_sign 1s linear alternate-reverse infinite;
+          animation: new_sign .5s linear alternate-reverse infinite;
           font-family: 'Germania One';
           text-shadow: 0 0 2px black;
           color: crimson;
@@ -193,9 +193,9 @@
 
 @keyframes new_sign {
   0% {
-    transform: rotate( -40deg )
+    transform: rotate( -40deg ) scale( 1 );
   }
   100% {
-    transform: rotate( -50deg )
+    transform: rotate( -50deg ) scale( 1.2 );
   }
 }

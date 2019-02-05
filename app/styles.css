@@ -1506,7 +1506,7 @@ button {
           position: absolute;
           top: -5px;
           left: -10px;
-          animation: new_sign 1s linear alternate-reverse infinite;
+          animation: new_sign .5s linear alternate-reverse infinite;
           font-family: 'Germania One';
           text-shadow: 0 0 2px black;
           color: crimson; }
@@ -1525,19 +1525,19 @@ button {
 
 @-webkit-keyframes new_sign {
   0% {
-    -webkit-transform: rotate(-40deg);
-    transform: rotate(-40deg); }
+    -webkit-transform: rotate(-40deg) scale(1);
+    transform: rotate(-40deg) scale(1); }
   100% {
-    -webkit-transform: rotate(-50deg);
-    transform: rotate(-50deg); } }
+    -webkit-transform: rotate(-50deg) scale(1.2);
+    transform: rotate(-50deg) scale(1.2); } }
 
 @keyframes new_sign {
   0% {
-    -webkit-transform: rotate(-40deg);
-    transform: rotate(-40deg); }
+    -webkit-transform: rotate(-40deg) scale(1);
+    transform: rotate(-40deg) scale(1); }
   100% {
-    -webkit-transform: rotate(-50deg);
-    transform: rotate(-50deg); } }
+    -webkit-transform: rotate(-50deg) scale(1.2);
+    transform: rotate(-50deg) scale(1.2); } }
 
 .automater-wrapper {
   position: absolute;
