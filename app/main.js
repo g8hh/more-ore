@@ -1547,6 +1547,8 @@ let build_combo_sign = () => {
 
   COMBO_SIGN_CONTAINER.innerHTML = str
 
+  COMBO_SIGN_CONTAINER.style.top = TOPBAR_INVENTORY_CONTAINER.getBoundingClientRect().bottom + 'px'
+
 }
 
 let build_combo_shields = () => {
@@ -1576,8 +1578,10 @@ let update_combo_sign_number = () => {
   let combo_sign_number = s( '.combo-sign-number' )
   combo_sign_number.innerHTML = S.current_combo
 
-  s( '.opc_combo_multi' ).innerHTML = `OpC Bonus: ${ ( S.current_combo * S.opc_combo_multiplier ).toFixed( 2 ) }x`
-  s( '.ops_combo_multi' ).innerHTML = `OpS Bonus: ${ ( S.current_combo * S.ops_combo_multiplier ).toFixed( 2 ) }x`
+  if ( S.opc_combo_multiplier > 0 ) {
+    s( '.opc_combo_multi' ).innerHTML = `OpC Bonus: ${ ( S.current_combo * S.opc_combo_multiplier ).toFixed( 2 ) }x`
+    s( '.ops_combo_multi' ).innerHTML = `OpS Bonus: ${ ( S.current_combo * S.ops_combo_multiplier ).toFixed( 2 ) }x`
+  }
 }
 
 let use_combo_shield = () => {
@@ -2471,7 +2475,7 @@ let generate_manual_attack = () => {
 
 let handle_manual_attack = ( event ) => {
 
-  SE[`boss_hit_${ get_random_num( 1, 2 ) }`].play()
+  SE.play( `boss_hit_${ get_random_num( 1, 2 ) }` )
   
   remove_el( event.target )
 
