@@ -77,6 +77,16 @@ let Smith = function( obj = {} ) {
                 upgrade.level++
             }
 
+            if ( fn.increase_opc_combo_multiplier ) {
+                S.opc_combo_multiplier += fn.increase_opc_combo_multiplier
+                build_combo_sign()
+            }
+
+            if ( fn.increase_ops_combo_multiplier ) {
+                S.ops_combo_multiplier += fn.increase_ops_combo_multiplier
+                build_combo_sign()
+            }
+
             if ( fn.unlock_combo_shield ) {
                 S.combo_shield.owned++
                 S.combo_shield.available++

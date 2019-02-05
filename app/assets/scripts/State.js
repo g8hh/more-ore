@@ -23,7 +23,10 @@ let State = function( s = {} ) {
     weak_hit_multi: s.weak_hit_multi || 7,
     weak_hit_crit_chance: .02,
     weak_hit_crit_multi: 1.5,
+
     current_combo: s.current_combo || 0,
+    opc_combo_multiplier: s.opc_combo_multiplier || 0,
+    ops_combo_multiplier: s.ops_combo_multiplier || 0,
 
     buy_amount: 1,
 

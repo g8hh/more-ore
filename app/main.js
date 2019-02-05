@@ -1116,8 +1116,12 @@ let start_smith_upgrade = ( arr, code_name  ) => {
 }
 
 let calculate_opc = ( type ) => {
-  
-  let opc = S.pickaxe.item.damage
+
+  let base_opc = S.pickaxe.item.damage
+  let opc = base_opc
+
+  // opc += base_opc * S.opc_combo_multiplier
+  opc += base_opc * ( S.current_combo * S.opc_combo_multiplier )
 
   opc += S.ops * S.opc_from_ops
 
@@ -1169,6 +1173,8 @@ let calculate_ops = () => {
     ops += building.owned * building.production
 
   })
+
+  ops += ops * ( S.current_combo * S.ops_combo_multiplier )
 
   ops += ops * S.ops_multiplier
 
@@ -1235,7 +1241,11 @@ let handle_click = ( e, type ) => {
     S.current_combo++
     S.generation.xp_on_refine += .5
 
-    if ( S.current_combo == 5 ) { win_achievement( 'combo_baby' ); unlock_smith_upgrade( 'combo_shield_i' ) }
+    if ( S.current_combo == 5 ) { 
+      win_achievement( 'combo_baby' )
+      unlock_smith_upgrade( 'combo_shield_i' ) 
+      unlock_smith_upgrade( 'combo_multiplier' )
+    }
     if ( S.current_combo == 20 ) win_achievement( 'combo_pleb' )
     if ( S.current_combo == 50 ) win_achievement( 'combo_squire' )
     if ( S.current_combo == 100 ) win_achievement( 'combo_knight' )
@@ -1507,6 +1517,12 @@ let build_combo_sign = () => {
       <p>Current Combo</p>
       <h1 class='combo-sign-number'>${ S.current_combo }</h1>
       `
+    if ( S.opc_combo_multiplier > 0 ) {
+      str += `
+        <p class='opc_combo_multi'>OpC Bonus: ${ ( S.current_combo * S.opc_combo_multiplier ).toFixed( 2 ) }x</p>
+        <p class='ops_combo_multi'>OpS Bonus: ${ ( S.current_combo * S.ops_combo_multiplier ).toFixed( 2 ) }x</p>
+      `
+    }
 
     if ( S.combo_shield.owned > 0 ) {
       str += `
@@ -1558,7 +1574,10 @@ let build_combo_shields = () => {
 
 let update_combo_sign_number = () => {
   let combo_sign_number = s( '.combo-sign-number' )
-   combo_sign_number.innerHTML = S.current_combo
+  combo_sign_number.innerHTML = S.current_combo
+
+  s( '.opc_combo_multi' ).innerHTML = `OpC Bonus: ${ ( S.current_combo * S.opc_combo_multiplier ).toFixed( 2 ) }x`
+  s( '.ops_combo_multi' ).innerHTML = `OpS Bonus: ${ ( S.current_combo * S.ops_combo_multiplier ).toFixed( 2 ) }x`
 }
 
 let use_combo_shield = () => {
@@ -3660,7 +3679,7 @@ window.addEventListener('keyup', (e) => {
       win_achievement( 'who_am_i?' )
     }
     if ( pressed.join( '' ).includes( 'qq' ) ) {
-      // Smith_Upgrades.forEach( upgrade => { upgrade.duration = 200 })
+      Smith_Upgrades.forEach( upgrade => { upgrade.duration = 200 })
       S.pickaxe.item.damage *= 1000
       S.refined_ores += 100
       Quests.forEach( quest => quest.duration = 1 * SECOND )

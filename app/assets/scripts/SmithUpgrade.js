@@ -118,6 +118,18 @@ let smith_upgrades = [
         }
     },
 
+    {
+        name: 'Combo Multiplier',
+        desc: 'Adds a bonus multiplier to OpS and OpC relative to your current combo',
+        flavor_text: 'The higher the better',
+        duration: 1 * MINUTE,
+        price: 5,
+        locked: 1,
+        unlock_functions: {
+            increase_opc_combo_multiplier: .002,
+            increase_ops_combo_multiplier: .001
+        }
+    },
     // COMBO SHIELD UPGRADES
     {
         name: 'Combo Shield I',
