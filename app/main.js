@@ -2331,7 +2331,7 @@ let quest_initialization = () => {
       boss_el_container.classList.add( 'boss-container' )
       boss_el_container.innerHTML = `
         <p class='boss-hp'>${ S.quest.current_boss_hp } HP</p>
-        <img class='boss' src="./app/assets/images/boss-${ S.quest.current_quest.boss.name.toLowerCase() }.png" alt="">
+        <img class='boss' src="./app/assets/images/${ S.quest.current_quest.boss.img }.png" alt="">
       `
 
       QUEST_AREA_CONTAINER.append( boss_el_container )
@@ -2361,16 +2361,13 @@ let handle_quest_progress = ( duration = 0 ) => {
 
     HERO.classList.remove( 'moving' )
     HERO.classList.add( 'jumping' )
-
-    QL.append( `${ S.quest.current_quest.boss.name } has its eyes on you.` )
-
-    // QL.append( `${ S.quest.adventurer.name } has completed the ${ S.quest.current_quest.name }` )
     
   }
 
 }
 
 let boss_approaching = () => {
+
   S.quest.state = 'boss approaching'
 
   let boss_approaching_div = document.createElement( 'div' )
@@ -2378,6 +2375,8 @@ let boss_approaching = () => {
   boss_approaching_div.innerHTML = `
     <h1> BOSS APPROACHING !</h1>
   `
+
+  QL.append( `${ S.quest.current_quest.boss.approaching_text }` )
 
   QUEST_AREA_CONTAINER.append( boss_approaching_div )
 
@@ -2409,7 +2408,7 @@ let initiate_boss = () => {
   boss_el_container.classList.add( 'boss-container' )
   boss_el_container.innerHTML = `
     <p class='boss-hp'>${ beautify_number( S.quest.current_boss_hp ) } HP</p>
-    <img class='boss' src="./app/assets/images/boss-${ S.quest.current_quest.boss.name.toLowerCase() }.png" alt="">
+    <img class='boss' src="./app/assets/images/${ S.quest.current_quest.boss.img }.png" alt="">
   `
 
   generate_manual_attack()

@@ -197,7 +197,7 @@
 
     &:hover {
       background: #df9205;
-      transform: translate( -50%, -5px );
+      // transform: translate( -50%, -5px );
     }
   }
 
@@ -291,6 +291,7 @@
 
 .quest-area-container {
   position: relative;
+  overflow: hidden;
   // cursor: pointer;
 
   * {
@@ -299,7 +300,8 @@
 
   .quest-text-log {
     max-height: 80px;
-    width: 100%;
+    // width: 100%;
+    width: fit-content;
     background: rgba( 0, 0, 0, 0.5 );
     position: absolute;
     pointer-events: none;

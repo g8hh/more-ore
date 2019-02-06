@@ -14,6 +14,9 @@ let Quest = function( obj, id ) {
   this.total_xp_gained = obj.total_xp_gained || 0
   this.rewards = obj.rewards
   this.boss = obj.boss || null
+  if ( this.boss ) {
+    this.boss.img = `boss-${ this.boss.name.replace( / /g, '_' ).toLowerCase() }`
+  }
 
   this.locked = 1
   if ( obj.locked == 0 ) this.locked = 0
@@ -33,7 +36,8 @@ let quests = [
     locked: 0,
     boss: {
       name: 'Stumpy',
-      hp: 200
+      hp: 200,
+      approaching_text: 'Stumpy eyes you up'
     },
     rewards: {
       achievement: 'not_that_dark!',
@@ -58,7 +62,8 @@ let quests = [
     base_duration: 1 * HOUR,
     boss: {
       name: 'Spooky Scary Skeleton',
-      hp: 1 * THOUSAND
+      hp: 1.3 * THOUSAND,
+      approaching_text: 'You hear a faint sound of Doot Doots off in the distance.'
     },
     rewards: {
       achievement: 'spooky_scary_skeletons',
@@ -79,8 +84,13 @@ let quests = [
     name: 'Venal Corruption',
     img: 'https://via.placeholder.com/64',
     desc: 'The vile Venal Corruption has death and decay surrounding you. Don\'t be too loud or you might awaken the Eater of Worlds.',
-    flavor_text: 'Terrarias great',
+    flavor_text: 'Terraria\'s great',
     base_duration: 4 * HOUR,
+    boss: {
+      name: 'Swallower of Worlds',
+      hp: 10.479 * THOUSAND, // hp of eater of worlds in terraria
+      approaching_text: '"Screams echo around you..."'
+    },
     rewards: {
       achievement: 'worm_scarf',
       xp: 1000,

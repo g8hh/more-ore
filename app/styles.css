@@ -2877,9 +2877,7 @@ input:checked + .slider:before {
     -webkit-transition: all .1s;
     transition: all .1s; }
     .wrapper > #quest-sheet button:hover {
-      background: #df9205;
-      -webkit-transform: translate(-50%, -5px);
-      transform: translate(-50%, -5px); }
+      background: #df9205; }
 
 .wrapper > #quest-rewards-popup {
   background-color: #362108;
@@ -2958,12 +2956,15 @@ input:checked + .slider:before {
     cursor: pointer; }
 
 .quest-area-container {
-  position: relative; }
+  position: relative;
+  overflow: hidden; }
   .quest-area-container * {
     pointer-events: none; }
   .quest-area-container .quest-text-log {
     max-height: 80px;
-    width: 100%;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
     background: rgba(0, 0, 0, 0.5);
     position: absolute;
     pointer-events: none;
