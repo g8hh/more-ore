@@ -107,11 +107,16 @@ let quests = [
       }
     }
   }, {
-    name: 'Crystal Mines',
+    name: 'Crystal Caverns',
     img: 'https://via.placeholder.com/64',
-    desc: 'The lustrous Crystal Mines contains gems galore. Many ambitious miners are soon enveloped and overwhelmed, spending the rest of their lives mining.',
+    desc: 'The lustrous Crystal Caverns contains gems galore. Many ambitious miners are soon enveloped and overwhelmed, spending the rest of their lives mining.',
     flavor_text: 'Ooo shiny...',
     base_duration: 12 * HOUR,
+    boss: {
+      name: 'Crystallized Beast',
+      hp: 350 * THOUSAND,
+      approaching_text: 'You see a light at the end of the tunnel. Oh wait...'
+    },
     rewards: {
       achievement: 'crystallization',
       xp: 2.8 * THOUSAND,
