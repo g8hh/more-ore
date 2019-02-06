@@ -1,6 +1,6 @@
 const VERSION = 0.01
 
-let base_ore_max_hp = 50
+let base_ore_max_hp = 40
 
 const BODY = s( 'body' )
 const CONTAINER = s( '.container' )
@@ -2503,7 +2503,7 @@ let handle_manual_attack = ( event ) => {
 
   let bossHP = s( '.boss-hp' )
   let bossEl = s( '.boss' )
-  bossHP.innerHTML = beautify_number( S.quest.current_boss_hp ) + 'HP'
+  bossHP.innerHTML = beautify_number( S.quest.current_boss_hp ) + ' HP'
   bossHP.classList.add( 'damaged' )
   bossEl.classList.add( 'damaged' )
 
@@ -3208,7 +3208,7 @@ let update_ore_hp = ( amount ) => {
       }
     }
 
-    S.current_ore_max_hp = Math.pow( S.current_ore_max_hp, 1.09 )
+    S.current_ore_max_hp = Math.pow( S.current_ore_max_hp, 1.1 )
     S.current_ore_hp = S.current_ore_max_hp
 
     S.misc.current_ore_sprite = get_random_num( 1, S.misc.ore_sprite_amount )
