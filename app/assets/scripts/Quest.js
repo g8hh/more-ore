@@ -56,6 +56,10 @@ let quests = [
     desc: 'The harrowing Forgotten Cemetary houses the decomposed corpses of nobodies. It is told on nights where the moon shines bright, soft moans can be heard echoing the wasteland.',
     flavor_text: 'You\'ll end up here one day too...',
     base_duration: 1 * HOUR,
+    boss: {
+      name: 'Spooky Scary Skeleton',
+      hp: 1 * THOUSAND
+    },
     rewards: {
       achievement: 'spooky_scary_skeletons',
       xp: 450,
