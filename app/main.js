@@ -2331,7 +2331,7 @@ let quest_initialization = () => {
       boss_el_container.classList.add( 'boss-container' )
       boss_el_container.innerHTML = `
         <p class='boss-hp'>${ S.quest.current_boss_hp } HP</p>
-        <img class='boss' src="https://via.placeholder.com/64" alt="">
+        <img class='boss' src="./app/assets/images/boss-${ S.quest.current_quest.boss.name.toLowerCase() }.png" alt="">
       `
 
       QUEST_AREA_CONTAINER.append( boss_el_container )
@@ -2499,14 +2499,21 @@ let handle_manual_attack = ( event ) => {
   ]
 
   QL.append( `${ S.quest.adventurer.name } ${ select_random_from_arr( attack_synonyms ) } ${ S.quest.current_quest.boss.name } for ${ damage } damage.` )
+  
+  O.last_manual_attack = Date.now()
 
   let bossHP = s( '.boss-hp' )
-  s( '.boss-hp' ).innerHTML = beautify_number( S.quest.current_boss_hp ) + 'HP'
-  // s( '.boss-hp' ).classList.add( 'damaged' )
-  // setTimeout(() => {
-  //   if ( )
-  // }, 500)
+  let bossEl = s( '.boss' )
+  bossHP.innerHTML = beautify_number( S.quest.current_boss_hp ) + 'HP'
+  bossHP.classList.add( 'damaged' )
+  bossEl.classList.add( 'damaged' )
 
+  setTimeout(() => {
+    if ( Date.now() > O.last_manual_attack + 200 ) {
+      bossHP.classList.remove( 'damaged' )
+      bossEl.classList.remove( 'damaged' )
+    }
+  }, 210 )
 
   S.quest.current_boss_hp > 0 ? generate_manual_attack() : boss_defeated()
 }

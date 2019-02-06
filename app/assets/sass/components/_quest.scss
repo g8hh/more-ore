@@ -407,12 +407,17 @@
       color: white;
       transition: color .2s linear;
 
-      .damaged {
+      &.damaged {
         color: red;
       }
     }
 
     .boss {
+
+      &.damaged {
+        transform: rotate( 10deg ) translateX( 5px );
+        filter: grayscale( 30% );
+      }
 
       &.dead {
         animation: dead_boss 1s forwards linear;
