@@ -2271,6 +2271,8 @@ input:checked + .slider:before {
     image-rendering: -o-pixelated;
     image-rendering: pixelated;
     pointer-events: none; }
+    .pickaxe-sprite-container > img.pickaxe-fire {
+      opacity: .3; }
   .pickaxe-sprite-container .sockets-container {
     position: absolute;
     top: 50%;
@@ -2965,19 +2967,21 @@ input:checked + .slider:before {
     width: -webkit-fit-content;
     width: -moz-fit-content;
     width: fit-content;
-    background: rgba(0, 0, 0, 0.5);
     position: absolute;
     pointer-events: none;
     opacity: 0;
     padding: 5px;
     overflow: auto; }
     .quest-area-container .quest-text-log.active {
-      opacity: .4; }
-      .quest-area-container .quest-text-log.active:hover {
-        opacity: .5; }
+      opacity: 1; }
     .quest-area-container .quest-text-log p {
       pointer-events: none;
+      font-family: 'Abel';
+      -webkit-animation: fade_in .5s forwards linear;
+      animation: fade_in .5s forwards linear;
       color: white; }
+      .quest-area-container .quest-text-log p strong {
+        letter-spacing: .5px; }
   .quest-area-container .boost-notifier {
     position: absolute;
     left: 0;

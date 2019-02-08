@@ -33,14 +33,17 @@ let Pickaxe = function( item_level ) {
 
 _get_level = ( item_level ) => {
 
-    let level = S.generation.level
+    let level = item_level
 
-    level += get_random_num( 0, item_level )
+    if ( Math.random() <= .3 ) level -= get_random_num( 1, item_level / 2 )
+    if ( level < 1 ) level = 1
 
-    if ( level <= 1 ) level = 1
+    if ( S.generation.level > 0 ) {
+        level += S.generation.level * Math.random()
+
+    }
 
     return Math.floor( level )
-
 }
 
 _get_rarity = () => {

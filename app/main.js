@@ -1893,8 +1893,6 @@ let handle_item_drop_click = ( item_uuid ) => {
 
   let item = s( `#item_drop_${ item_uuid }` )
 
-  console.log( item.dataset )
-
   O.pickaxe = new Pickaxe( item.dataset.item_level )
 
   let wrapper = document.createElement( 'div' )
@@ -2081,6 +2079,10 @@ let build_pickaxe_sprite = ( pickaxe, size=320, is_inventory=false ) => {
         height: ${ size }px;
       '>
       `
+
+      if ( pickaxe.rarity.name == 'Legendary' || pickaxe.rarity.name == 'Mythic' ) {
+        str += `<img class='pickaxe-fire' src="./app/assets/images/misc-fire.gif" alt="">`
+      }
       
       if ( !is_empty( pickaxe.sockets ) ) {
 
@@ -2300,7 +2302,7 @@ let start_quest = ( code_name ) => {
   S.quest.current_quest_progress = 0
   S.quest.adventurer = new Adventurer()
 
-  QL.append( `The adventurer ${ S.quest.adventurer.name } has embarked on a quest.`)
+  QL.append( `The adventurer <strong>${ S.quest.adventurer.name }</strong> has embarked on a quest.`)
 
   quest_initialization()
 
@@ -2387,7 +2389,7 @@ let initiate_boss = () => {
   S.quest.state = 'boss'
   S.quest.time_limit = 30 * SECOND
   S.quest.current_boss_hp = S.quest.current_quest.boss.hp
-  QL.append( 'BOSS FIGHT STARTED' )
+  QL.append( '[ BOSS FIGHT STARTED ]', true )
   HERO.classList.remove( 'active' )
 
   let boss_approaching_div = s( '.boss-approaching' )
@@ -2497,7 +2499,7 @@ let handle_manual_attack = ( event ) => {
     'kicked'
   ]
 
-  QL.append( `${ S.quest.adventurer.name } ${ select_random_from_arr( attack_synonyms ) } ${ S.quest.current_quest.boss.name } for ${ damage } damage.` )
+  QL.append( `<strong>${ S.quest.adventurer.name }</strong> ${ select_random_from_arr( attack_synonyms ) } <strong>${ S.quest.current_quest.boss.name }</strong> for <strong>${ beautify_number( damage ) }</strong> damage.` )
   
   O.last_manual_attack = Date.now()
 
@@ -2529,7 +2531,7 @@ let boss_defeated = () => {
     'vanquished'
   ]
   
-  QL.append( `${ S.quest.adventurer.name } has ${ select_random_from_arr( synonyms ) } ${ S.quest.current_quest.boss.name } ` )
+  QL.append( `<strong>${ S.quest.adventurer.name }</strong> has ${ select_random_from_arr( synonyms ) } ${ S.quest.current_quest.boss.name } ` )
 
   let boss = s( '.boss' )
   boss.addEventListener( 'animationend', () => { remove_el( s( '.boss-container' ) ) } )

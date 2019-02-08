@@ -302,7 +302,7 @@
     max-height: 80px;
     // width: 100%;
     width: fit-content;
-    background: rgba( 0, 0, 0, 0.5 );
+    // background: rgba( 0, 0, 0, 0.5 );
     position: absolute;
     pointer-events: none;
     opacity: 0;
@@ -310,16 +310,18 @@
     overflow: auto;
 
     &.active {
-      opacity: .4;
-
-      &:hover {
-        opacity: .5;
-      }
+      opacity: 1;
     }
 
     p {
       pointer-events: none;
+      font-family: 'Abel';
+      animation: fade_in .5s forwards linear;
       color: white;
+
+      strong {
+        letter-spacing: .5px;
+      }
     }
   }
 

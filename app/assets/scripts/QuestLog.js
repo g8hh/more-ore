@@ -2,14 +2,19 @@ let QuestLog = function() {
 
     this.history = []
 
-    this.append = ( text ) => {
+    this.append = ( text, without_caret = false ) => {
 
         if ( !QUEST_TEXT_LOG.classList.contains( 'active' ) ) {
             QUEST_TEXT_LOG.classList.add( 'active' )
         }
 
         let p = document.createElement( 'p' )
-        p.innerHTML = `> ${ text }`
+
+        if ( without_caret ) {
+            p.innerHTML = `${ text }`
+        } else {
+            p.innerHTML = `> ${ text }`
+        }
 
         QUEST_TEXT_LOG.append( p )
         this.history.push( text )

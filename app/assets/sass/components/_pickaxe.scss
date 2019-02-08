@@ -251,6 +251,10 @@ $mythic-color: #c60000;
     width: 100%;
     image-rendering: pixelated;
     pointer-events: none;
+
+    &.pickaxe-fire {
+      opacity: .3;
+    }
   }
 
   .sockets-container {
@@ -275,3 +279,4 @@ $mythic-color: #c60000;
     }
   }
 }
+
