@@ -138,6 +138,11 @@ let quests = [
     desc: 'The deserted Ohara Athenaeum once housed the worlds greatest archaeologists. Stacks of timeless documents lay untouched. Scrolls lay everywhere.',
     flavor_text: 'Fear the buster call...',
     base_duration: 12 * HOUR,
+    boss: {
+      name: 'Saul the Giant',
+      hp: 1 * MILLION,
+      approaching_text: 'The ground shakes...'
+    },
     rewards: {
       achievement: 'poneglyph',
       xp: 3 * THOUSAND,
