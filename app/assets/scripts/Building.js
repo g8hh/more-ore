@@ -58,7 +58,7 @@ let buildings = [
         desc: 'Teach students about the wonders of ore',
         flavor_text: '"Jesus christ Marie, they\'re minerals!"',
         base_production: .5,
-        base_price: 50,
+        base_price: 12,
         price_scale: 1.15,
         hidden: 0,
         buy_functions: {
@@ -78,8 +78,8 @@ let buildings = [
         name_plural: 'Farms',
         desc: 'Cultivate the lands for higher quality ores',
         flavor_text: 'This totally makes sense',
-        base_production: 1,
-        base_price: 210,
+        base_production: 2,
+        base_price: 240,
         price_scale: 1.15,
         hidden: 1,
         buy_functions: {

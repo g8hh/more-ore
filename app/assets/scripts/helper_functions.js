@@ -161,8 +161,12 @@ let beautify_number = ( number, type=S.prefs.number_format) => {
     ];
   
     if (!number) return 0;
-    if (number < 10){
-        if (Math.round(number) === number) return number;
+    if (number <= 10){
+
+        // if ( number % 1 == 0 ) return number.toFixed( 0 )
+
+        if (Math.round(number) === number) return number
+        
         return number.toFixed(1);
     }
     // what tier? (determines SI prefix)
