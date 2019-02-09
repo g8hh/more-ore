@@ -16,6 +16,9 @@ let Achievement = function( obj ) {
   this.won = obj.won || 0
   this.time_won = obj.time_won || null
   if ( obj.flavor_text ) this.flavor_text = obj.flavor_text
+  
+  // obj.new == false ? this.new = false : this.new = true
+  this.new = obj.new == false ? false : true
 
   this.win = () => {
     this.won = 1

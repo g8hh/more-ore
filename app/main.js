@@ -3338,12 +3338,14 @@ let build_achievements = () => {
         Achievements.forEach( achievement => {
           str += `
           <div 
-            class="achievement-square ${ !achievement.won && 'locked' }"
+            class="achievement-square ${ !achievement.won ? 'locked' : '' }"
             `
 
           if ( achievement.won ) {
             str += `
-              onmouseover="TT.show( event, { name: '${ achievement.code_name }', type: 'achievement-square' } )"
+              onmouseover="
+                TT.show( event, { name: '${ achievement.code_name }', type: 'achievement-square' } );
+                handle_achievement_hover( event, '${ achievement.code_name }' )"
               onmouseout='TT.hide()'
             `
           }
@@ -3352,6 +3354,13 @@ let build_achievements = () => {
             
             style='background-image: url( ${ achievement.img } )'
             >
+          `
+
+          if ( achievement.new && achievement.won ) {
+            str += '<div class="new">New</div>'
+          }
+
+          str += `
           </div>
           `
         })
@@ -3363,6 +3372,17 @@ let build_achievements = () => {
 
   wrapper.innerHTML = str
   CONTAINER.append( wrapper )
+}
+
+let handle_achievement_hover = ( e, code_name ) => {
+
+  let achievement = select_from_arr( Achievements, code_name )
+
+  if ( achievement.new ) {
+    achievement.new = false
+    remove_el( e.target.children[ 0 ] )
+  }
+
 }
 
 let win_achievement = ( achievement_code_name ) => {
