@@ -12,8 +12,10 @@
   cursor: default; }
 
 ::-webkit-scrollbar {
-  width: 1px;
-  /* remove scrollbar space */ }
+  width: 0px;
+  /* remove scrollbar space */
+  background: transparent;
+  /* optional: just make scrollbar invisible */ }
 
 button {
   cursor: pointer; }
@@ -315,7 +317,7 @@ button {
         .container .game-container > .left .settings-container img {
           height: 50px; }
       .container .game-container > .left .text-scroller-container {
-        background: rgba(0, 0, 0, 0.6);
+        background: #111;
         position: relative;
         height: 30px; }
         .container .game-container > .left .text-scroller-container .text-scroller {
@@ -1373,7 +1375,8 @@ button {
         .smith-progress-container .actual-progress-container .bar-wrapper .progress-bar-container .progress-bar {
           width: 0%;
           height: 100%;
-          background: #31dd6c; }
+          background: #31dd6c;
+          border-top: 1px solid white; }
 
 .smith-upgrades-wrapper {
   height: calc( 100% - 33px);

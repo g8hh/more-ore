@@ -1464,46 +1464,54 @@ let tutorial_buy_building = () => {
 }
 
 let tutorial_smith_tab = () => {
-  let tutorial = document.createElement( 'div' )
 
-  tutorial.classList.add( 'tutorial-container' )
-  tutorial.id = 'tutorial-smith-tab'
-  tutorial.innerHTML = `
-    <div class="arrow up"></div>
-    <div class="tutorial-content">
-      <p>You unlocked the Smith tab!</p>
-      <p>View your inventory and buy upgrades with your refined ores!</p>
-    </div>
-  `
+  if ( !s( '#tutorial-smith-tab' ) ) {
+    let tutorial = document.createElement( 'div' )
 
-  let smith_tab_dimensions = s( '.smith-tab' ).getBoundingClientRect()
+    tutorial.classList.add( 'tutorial-container' )
+    tutorial.id = 'tutorial-smith-tab'
+    tutorial.innerHTML = `
+      <div class="arrow up"></div>
+      <div class="tutorial-content">
+        <p>You unlocked the Smith tab!</p>
+        <p>View your inventory and buy upgrades with your refined ores!</p>
+      </div>
+    `
 
-  CONTAINER.append( tutorial )
-
-  tutorial.style.top = smith_tab_dimensions.bottom + 'px'
-  tutorial.style.left = smith_tab_dimensions.left + 'px'
-
-}
-
-let tutorial_buy_fragility_spectacles = () => {
-  let tutorial = document.createElement( 'div' )
-
-  tutorial.classList.add( 'tutorial-container' )
-  tutorial.id = 'tutorial-buy-spectacles'
-  tutorial.innerHTML = `
-    <div class="tutorial-content">
-      <p>First upgrade on me :)</p>
-    </div>
-    <div class="arrow right"></div>
-  `
-  setTimeout(() => {
-    let fragility_dimensions = s( '.smith-upgrade.non-repeatable' ).getBoundingClientRect()
+    let smith_tab_dimensions = s( '.smith-tab' ).getBoundingClientRect()
 
     CONTAINER.append( tutorial )
 
-    tutorial.style.top = fragility_dimensions.top + 'px'
-    tutorial.style.left = fragility_dimensions.left - tutorial.offsetWidth - 30 + 'px'
-  }, 50)
+    tutorial.style.top = smith_tab_dimensions.bottom + 'px'
+    tutorial.style.left = smith_tab_dimensions.left + 'px'
+
+  }
+  
+}
+
+let tutorial_buy_fragility_spectacles = () => {
+
+  if ( !s( '#tutorial-buy-spectacles' ) ) {
+    let tutorial = document.createElement( 'div' )
+
+    tutorial.classList.add( 'tutorial-container' )
+    tutorial.id = 'tutorial-buy-spectacles'
+    tutorial.innerHTML = `
+      <div class="tutorial-content">
+        <p>First upgrade on me :)</p>
+      </div>
+      <div class="arrow right"></div>
+    `
+    setTimeout(() => {
+      let fragility_dimensions = s( '.smith-upgrade.non-repeatable' ).getBoundingClientRect()
+
+      CONTAINER.append( tutorial )
+
+      tutorial.style.top = fragility_dimensions.top + 'px'
+      tutorial.style.left = fragility_dimensions.left - tutorial.offsetWidth - 30 + 'px'
+    }, 50)
+  }
+  
 }
 
 // ==== COMBO SHIT =======================================================================
