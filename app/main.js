@@ -568,7 +568,6 @@ let build_smith_tab = () => {
   str += '<div class="smith-progress-container" onclick="SMITH.progress_click()">'
   str += build_pickaxe_update()
   str += '</div>'
-  str += "<div class='horizontal-separator thin dark'></div>"
 
   str += '<div class="smith-upgrades-wrapper">'
   str += '<div class="smith-upgrades-container">'
@@ -589,28 +588,18 @@ let build_pickaxe_update = ( direct = false ) => {
 
   if ( !is_empty( SMITH.upgrade_in_progress ) ) {
     str += `
-      <img src="./app/assets/images/${ SMITH.upgrade_in_progress.img }.png" alt="smith upgrade"/>
-      <div>
-        <p>${ SMITH.upgrade_in_progress.name }</p>
-        <div class="progress-bar-container">
-          <div class="progress-bar"></div>
+      <div class='actual-progress-container'>
+        <img src="./app/assets/images/${ SMITH.upgrade_in_progress.img }.png" alt="smith upgrade"/>
+        <div class='bar-wrapper'>
+          <p>${ SMITH.upgrade_in_progress.name }</p>
+          <div class="progress-bar-container">
+            <div class="progress-bar"></div>
+          </div>
         </div>
       </div>
+      <div class="horizontal-separator thin dark"></div>
     `
   }
-
-  // is_empty( SMITH.upgrade_in_progress ) ? 
-  //   str += '<p style="text-align: center; width: 100%; opacity: 0.5">No upgrade in progress</p>'
-  //   :
-  //   str += `
-  //     <img src="${ SMITH.upgrade_in_progress.img }" alt="smith upgrade"/>
-  //     <div>
-  //       <p>${ SMITH.upgrade_in_progress.name }</p>
-  //       <div class="progress-bar-container">
-  //         <div class="progress-bar"></div>
-  //       </div>
-  //     </div>
-  //   `
 
   if ( direct ) {
     if ( s( '.smith-progress-container' ) ) {
@@ -3704,7 +3693,7 @@ window.addEventListener('keyup', (e) => {
       win_achievement( 'who_am_i?' )
     }
     if ( pressed.join( '' ).includes( 'qq' ) ) {
-      Smith_Upgrades.forEach( upgrade => { upgrade.duration = 2000 })
+      // Smith_Upgrades.forEach( upgrade => { upgrade.duration = 2000 })
       S.pickaxe.item.damage *= 1000
       S.refined_ores += 100
       Quests.forEach( quest => quest.duration = 1 * SECOND )

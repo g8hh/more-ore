@@ -1,60 +1,59 @@
 .smith-progress-container {
-  display: flex;
-  flex-flow: row nowrap;
-  padding: 10px;
+  flex-flow: column nowrap;
   box-shadow: 0 0 40px #222 inset;
   background: #989898;
+  display: none;
 
-  > img {
-    // border: 1px solid black;
-    height: 64px;
-    width: 64px;
-    image-rendering: pixelated;
+  &.active {
+    display: flex;
   }
 
-  > div {
+  .actual-progress-container {
     display: flex;
-    flex-flow: column nowrap;
-    padding-left: 10px;
+    flex-flow: row nowrap;
     flex-grow: 1;
-    justify-content: flex-end;
+    padding: 10px;
 
-    .progress-bar-container {
-      margin-top: 5px;
-      border: 3px solid #222;
-      height: 30px;
-      background: #222;
-      overflow: hidden;
-
-      .progress-bar {
-        width: 0%;
-        height: 100%;
-        background: #31dd6c;
-        background: linear-gradient(270deg, #ffffff, #31dd6c);
-        background-size: 600% 600%;
-
-        -webkit-animation: progress_bar 5s linear infinite;
-        -moz-animation: progress_bar 5s linear infinite;
-        animation: progress_bar 5s linear infinite;
-
-        @-webkit-keyframes progress_bar {
-            0%{background-position:0% 50%}
-            50%{background-position:100% 50%}
-            100%{background-position:0% 50%}
-        }
-        @-moz-keyframes progress_bar {
-            0%{background-position:0% 50%}
-            50%{background-position:100% 50%}
-            100%{background-position:0% 50%}
-        }
-        @keyframes progress_bar { 
-            0%{background-position:0% 50%}
-            50%{background-position:100% 50%}
-            100%{background-position:0% 50%}
+    > img {
+      // border: 1px solid black;
+      height: 64px;
+      width: 64px;
+      image-rendering: pixelated;
+    }
+  
+    .bar-wrapper {
+      display: flex;
+      flex-flow: column nowrap;
+      padding-left: 10px;
+      flex-grow: 1;
+      justify-content: flex-end;
+  
+      p {
+        font-family: 'Germania One';
+        font-size: 20px;
+        color: white;
+        text-shadow: 0 0 10px #222;
+      }
+  
+      .progress-bar-container {
+        margin-top: 5px;
+        border: 2px solid #222;
+        height: 30px;
+        background: #222;
+        overflow: hidden;
+        border-radius: 3px;
+        box-shadow: 0 0 2px white inset;
+  
+        .progress-bar {
+          width: 0%;
+          height: 100%;
+          background: #31dd6c;
         }
       }
     }
   }
+
+  
 }
 
 

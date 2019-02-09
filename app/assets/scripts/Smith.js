@@ -8,6 +8,8 @@ let Smith = function( obj = {} ) {
 
     this.start_upgrade = ( upgrade ) => {
 
+        s( '.smith-progress-container' ).classList.add( 'active' )
+
         this.current_progress = 0
 
         if ( S.refined_ores >= upgrade.price ) {
@@ -32,6 +34,10 @@ let Smith = function( obj = {} ) {
 
     this._update_progress = ( tick_ms = 0 ) => {
 
+        if ( s( '.smith-progress-container' ) ) {
+            s( '.smith-progress-container' ).classList.add( 'active' )
+        }
+
         build_pickaxe_update( true )
     
         let bar = s( '.progress-bar' )
@@ -52,6 +58,10 @@ let Smith = function( obj = {} ) {
 
     this._update_complete = () => {
 
+        if ( s( '.smith-progress-container' ) ) {
+            s( '.smith-progress-container' ).classList.remove( 'active' )
+        }
+        
         let upgrade = select_from_arr( Smith_Upgrades, this.upgrade_in_progress.code_name )
 
         if ( upgrade.unlock_functions ) {

@@ -1309,71 +1309,71 @@ button {
         margin: 3px; }
 
 .smith-progress-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
+  -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -ms-flex-flow: row nowrap;
-  flex-flow: row nowrap;
-  padding: 10px;
+  -ms-flex-flow: column nowrap;
+  flex-flow: column nowrap;
   -webkit-box-shadow: 0 0 40px #222 inset;
   box-shadow: 0 0 40px #222 inset;
-  background: #989898; }
-  .smith-progress-container > img {
-    height: 64px;
-    width: 64px;
-    -ms-interpolation-mode: nearest-neighbor;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -o-pixelated;
-    image-rendering: pixelated; }
-  .smith-progress-container > div {
+  background: #989898;
+  display: none; }
+  .smith-progress-container.active {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex; }
+  .smith-progress-container .actual-progress-container {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-orient: vertical;
+    -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
-    -ms-flex-flow: column nowrap;
-    flex-flow: column nowrap;
-    padding-left: 10px;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
     -webkit-box-flex: 1;
     -ms-flex-positive: 1;
     flex-grow: 1;
-    -webkit-box-pack: end;
-    -ms-flex-pack: end;
-    justify-content: flex-end; }
-    .smith-progress-container > div .progress-bar-container {
-      margin-top: 5px;
-      border: 3px solid #222;
-      height: 30px;
-      background: #222;
-      overflow: hidden; }
-      .smith-progress-container > div .progress-bar-container .progress-bar {
-        width: 0%;
-        height: 100%;
-        background: #31dd6c;
-        background: -webkit-gradient(linear, right top, left top, from(#ffffff), to(#31dd6c));
-        background: linear-gradient(270deg, #ffffff, #31dd6c);
-        background-size: 600% 600%;
-        -webkit-animation: progress_bar 5s linear infinite;
-        animation: progress_bar 5s linear infinite; }
-
-@-webkit-keyframes progress_bar {
-  0% {
-    background-position: 0% 50%; }
-  50% {
-    background-position: 100% 50%; }
-  100% {
-    background-position: 0% 50%; } }
-
-@keyframes progress_bar {
-  0% {
-    background-position: 0% 50%; }
-  50% {
-    background-position: 100% 50%; }
-  100% {
-    background-position: 0% 50%; } }
+    padding: 10px; }
+    .smith-progress-container .actual-progress-container > img {
+      height: 64px;
+      width: 64px;
+      -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -o-pixelated;
+      image-rendering: pixelated; }
+    .smith-progress-container .actual-progress-container .bar-wrapper {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+      flex-flow: column nowrap;
+      padding-left: 10px;
+      -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+      flex-grow: 1;
+      -webkit-box-pack: end;
+      -ms-flex-pack: end;
+      justify-content: flex-end; }
+      .smith-progress-container .actual-progress-container .bar-wrapper p {
+        font-family: 'Germania One';
+        font-size: 20px;
+        color: white;
+        text-shadow: 0 0 10px #222; }
+      .smith-progress-container .actual-progress-container .bar-wrapper .progress-bar-container {
+        margin-top: 5px;
+        border: 2px solid #222;
+        height: 30px;
+        background: #222;
+        overflow: hidden;
+        border-radius: 3px;
+        -webkit-box-shadow: 0 0 2px white inset;
+        box-shadow: 0 0 2px white inset; }
+        .smith-progress-container .actual-progress-container .bar-wrapper .progress-bar-container .progress-bar {
+          width: 0%;
+          height: 100%;
+          background: #31dd6c; }
 
 .smith-upgrades-wrapper {
   height: calc( 100% - 33px);
