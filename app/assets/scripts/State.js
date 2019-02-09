@@ -51,10 +51,10 @@ let State = function( s = {} ) {
     current_ore_hp: s.current_ore_hp || base_ore_max_hp,
     current_ore_max_hp: s.current_ore_max_hp || base_ore_max_hp,
 
-    tabs: [],
+    tabs: s.tabs || [],
 
-    max_ore_away_gain: 1 * HOUR,
-    away_gain_percentage: .25,
+    max_ore_away_gain: s.max_ore_away_gain || 1 * HOUR,
+    away_gain_percentage: s.away_gain_percentage || .25,
 
     gold_nugget_spawn_rate: s.gold_nugget_spawn_rate || 60, // 
     gold_nugget_chance_to_spawn: s.gold_nugget_chance_to_spawn || 30, // 30% chance to spawn
