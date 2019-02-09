@@ -340,7 +340,7 @@ let smith_upgrades = [
         requires: [ 'warehouse_watchdogs' ],
         unlock_functions: {
             increase_away_gain_percentage: .2,
-            unlock_smith_upgrades: [ 'warehouse robotics' ]
+            unlock_smith_upgrades: [ 'warehouse_robotics' ]
         }
     }, {
         name: 'Warehouse Robotics',
