@@ -257,6 +257,102 @@ let smith_upgrades = [
             increase_gold_nugget_chance_of_spawn: 10
         }
     }, 
+
+    // ORE WAREHOUSE UPGRADES
+    {
+        name: 'Reinforced Warehouse',
+        desc: 'Increases maximum away storage by 3 hours',
+        duration: 30 * SECOND,
+        price: 3,
+        unlock_functions: {
+            increase_max_ore_away_gain: 3 * HOUR,
+            unlock_smith_upgrades: [ 'fortified_warehouse' ]
+        }
+    }, {
+        name: 'Fortified Warehouse',
+        desc: 'Increases maximum away storage by 4 hours',
+        duration: 1 * MINUTE,
+        price: 10,
+        locked: 1,
+        requires: [ 'reinforced_warehouse' ],
+        unlock_functions: {
+            increase_max_ore_away_gain: 4 * HOUR,
+            unlock_smith_upgrades: [ 'warehouse_expansion' ]
+        }
+    }, {
+        name: 'Warehouse Expansion',
+        desc: 'Increase maximum away storage by 8 hours',
+        duration: 3 * MINUTE,
+        price: 40,
+        locked: 1,
+        requires: [ 'fortified_warehouse' ],
+        unlock_functions: {
+            increase_max_ore_away_gain: 8 * HOUR,
+            unlock_smith_upgrades: [ 'double_decker_warehouse' ]
+        }
+    }, {
+        name: 'Double Decker Warehouse',
+        desc: 'Increase maximum away storage by 8 hours',
+        duration: 5 * MINUTE,
+        price: 100,
+        locked: 1,
+        requires: [ 'warehouse_expansion' ],
+        unlock_functions: {
+            increase_max_ore_away_gain: 8 * HOUR,
+            unlock_smith_upgrades: [ 'infinity_warehouse' ]
+        }
+    }, {
+        name: 'Infinity Warehouse',
+        desc: 'Increase maximum away storage to infinity',
+        duration: 10 * MINUTE,
+        price: 1000,
+        locked: 1,
+        requires: [ 'double_decker_warehouse' ],
+        unlock_functions: {
+            increase_max_ore_away_gain: 'infinity'
+        }
+    }, {
+        name: 'Warehouse Supervisor',
+        desc: 'Increases away gain percentage by 15%',
+        duration: 30 * SECOND,
+        price: 5,
+        unlock_functions: {
+            increase_away_gain_percentage: .15,
+            unlock_smith_upgrades: [ 'warehouse_watchdogs' ]
+        }
+    }, {
+        name: 'Warehouse Watchdogs',
+        desc: 'Increases away gain percentage by 15%',
+        duration: 1 * MINUTE,
+        price: 20,
+        locked: 1,
+        requires: [ 'warehouse_supervisor' ],
+        unlock_functions: {
+            increase_away_gain_percentage: .15,
+            unlock_smith_upgrades: [ 'warehouse_overseer' ]
+        }
+    }, {
+        name: 'Warehouse Overseer',
+        desc: 'Increases away gain percentage by 20%',
+        duration: 3 * MINUTE,
+        price: 100,
+        locked: 1,
+        requires: [ 'warehouse_watchdogs' ],
+        unlock_functions: {
+            increase_away_gain_percentage: .2,
+            unlock_smith_upgrades: [ 'warehouse robotics' ]
+        }
+    }, {
+        name: 'Warehouse Robotics',
+        desc: 'Increases away gain percentage to 100%',
+        duration: 5 * MINUTE,
+        price: 1000,
+        locked: 1,
+        requires: [ 'warehouse_overseer' ],
+        unlock_functions: {
+            increase_away_gain_percentage: 1
+        }
+    }
 ]
 
 let unlock_smith_upgrade = ( code_name ) => {

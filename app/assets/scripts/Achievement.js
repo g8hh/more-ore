@@ -96,9 +96,10 @@ let achievements = [
   { name: 'Combo King', desc: 'Reach a 200 hit combo', type: 'combo', reward: { increase_weak_hit_multi: 1 } },
   { name: 'Combo Master', desc: 'Reach a 350 hit combo', type: 'combo', reward: { increase_weak_hit_multi: 2 } },
   { name: 'Combo Devil', desc: 'Reach a 666 hit combo', type: 'combo', reward: { increase_weak_hit_mutli: 3 } },
-  { name: 'Combo God', desc: 'Reach a 777 hit combo', type: 'combo', reward: { increase_weak_hit_multi: 3 } },
-  { name: 'Combo Saiyan', desc: 'Read a 1000 hit combo', type: 'combo', reward: { increase_weak_hit_multi: 4 } },
-  { name: 'Combo Saitama', desc: 'Reach a 10000 hit combo', type: 'combo', reward: { increase_weak_hit_multi: 5 } },
+  { name: 'Combo Jackpot', desc: 'Reach a 777 hit combo', type: 'combo', reward: { increase_weak_hit_multi: 3 } },
+  { name: 'Combo God', desc: 'Reach a 1000 hit combo', type: 'combo', reward: { increase_weak_hit_multi: 4 } },
+  { name: 'Combo Saiyan', desc: 'Reach a 5000 hit combo', type: 'combo', reward: { increase_weak_hit_multi: 4 } },
+  { name: 'Combo Saitama', desc: 'Reach a 10000 hit combo', flavor_text: 'This is the last one...', type: 'combo', reward: { increase_weak_hit_multi: 5 } },
 
   // CRIT CLICK RELATED ACHIEVEMENTS
   { name: 'Critical Strike', desc: 'Deal a critical strike', type: 'crit' },

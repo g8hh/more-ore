@@ -21,7 +21,7 @@ let State = function( s = {} ) {
     opc_from_ops: 0,
 
     weak_hit_multi: s.weak_hit_multi || 7,
-    weak_hit_crit_chance: .02,
+    weak_hit_crit_chance: .01,
     weak_hit_crit_multi: 1.5,
 
     current_combo: s.current_combo || 0,
@@ -53,7 +53,8 @@ let State = function( s = {} ) {
 
     tabs: [],
 
-    max_ore_away_gain: s.max_ore_away_gain || 1 * MILLION, 
+    max_ore_away_gain: 1 * HOUR,
+    away_gain_percentage: .25,
 
     gold_nugget_spawn_rate: s.gold_nugget_spawn_rate || 60, // 
     gold_nugget_chance_to_spawn: s.gold_nugget_chance_to_spawn || 30, // 30% chance to spawn

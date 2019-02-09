@@ -40,6 +40,8 @@ let Smith = function( obj = {} ) {
 
         if ( bar ) {
             let percentage = ( this.current_progress / this.duration ) * 100
+
+            bar.style.filter = `grayscale( ${ 100 - percentage}% )`
             bar.style.width = percentage + '%'
         }
 
@@ -113,8 +115,21 @@ let Smith = function( obj = {} ) {
                 })
             }
 
-            if ( fn.increase_maximum_ore_away_gain ) {
-                S.max_ore_away_gain *= fn.increase_maximum_ore_away_gain
+            if ( fn.increase_max_ore_away_gain ) {
+                if ( fn.increase_max_ore_away_gain == 'infinity' ) {
+                    S.max_ore_away_gain = 'infinity'
+                } else {
+                    S.max_ore_away_gain += fn.increase_max_ore_away_gain
+                }
+            }
+
+            if ( fn.increase_away_gain_percentage ) {
+                if ( fn.increase_away_gain_percentage == 1 ) {
+                    S.away_gain_percentage = 1
+                } else {
+                    S.away_gain_percentage += fn.increase_away_gain_percentage
+                }
+                
             }
 
             if ( fn.unlock_automater ) {

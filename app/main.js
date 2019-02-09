@@ -208,15 +208,22 @@ let on_focus = () => { O.window_blurred = false }
 
 let earn_offline_resources = () => {
 
-  console.log( 'earn offline resources firing', S )
-
   let last_time = S.misc.last_save
   let current_time = Date.now()
 
   if ( last_time ) {
     let amount_of_time_passed_ms = current_time - last_time
     let amount_of_time_passed_seconds = amount_of_time_passed_ms / 1000
-    let amount_to_gain = amount_of_time_passed_seconds * S.ops
+    
+    let ore_away_limit_reached = false
+    if ( S.max_ore_away_gain != 'infinity' ) {
+      if ( amount_of_time_passed_ms > S.max_ore_away_gain ) {
+        amount_of_time_passed_seconds = S.max_ore_away_gain / 1000
+        ore_away_limit_reached = true
+      }
+    }
+
+    let amount_to_gain = ( amount_of_time_passed_seconds * S.ops ) * S.away_gain_percentage
 
     SMITH.current_progress += amount_of_time_passed_ms
     if ( S.quest.state == 'in progress' ) S.quest.current_quest_progress += amount_of_time_passed_ms
@@ -226,16 +233,21 @@ let earn_offline_resources = () => {
       if ( !s( '.offline-gain-popup' ) ) {
         let wrapper = document.createElement( 'div' )
         wrapper.classList.add( 'wrapper' )
-        wrapper.innerHTML = `
-          <div class='offline-gain-popup'>
-            <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
-            <h1>Ore Warehouse</h1>
-            <hr />
-            <small>- while away for <strong>${ beautify_ms( amount_of_time_passed_ms ) }</strong> -</small>
-            <p>You earned <strong>${ beautify_number( amount_to_gain ) }</strong> ores!</p>
-            <button onclick='remove_wrapper()'>ok</button>
-          </div>
-        `
+        let str = `
+        <div class='offline-gain-popup'>
+          <i onclick='remove_wrapper()' class='fa fa-times fa-1x'></i>
+          <h1>Ore Warehouse</h1>
+          <hr />
+          <small>- You were away for <strong>${ beautify_ms( amount_of_time_passed_ms ) }</strong>${ ore_away_limit_reached ? `. Your warehouse was only able to store <strong>${ beautify_ms( S.max_ore_away_gain ) }</strong> of work.` : '' } -</small>
+          `
+          str += `
+          <p>You earned <strong>${ beautify_number( amount_to_gain ) }</strong> ores!</p>
+          <button onclick='remove_wrapper()'>ok</button>
+          <br/>
+          <small>• You are currently earning ${ S.away_gain_percentage * 100 }% of your OpS while away. </small>
+        </div>
+      `
+        wrapper.innerHTML = str
 
         CONTAINER.append( wrapper )
       }
@@ -1252,8 +1264,9 @@ let handle_click = ( e, type ) => {
     if ( S.current_combo == 200 ) win_achievement( 'combo_king' )
     if ( S.current_combo == 350 ) win_achievement( 'combo_king' )
     if ( S.current_combo == 666 ) win_achievement( 'combo_devil' )
-    if ( S.current_combo == 777 ) win_achievement( 'combo_god' )
-    if ( S.current_combo == 1000 ) win_achievement( 'combo_saiyan' )
+    if ( S.current_combo == 777 ) win_achievement( 'combo_jackpot' )
+    if ( S.current_combo == 1000 ) win_achievement( 'combo_god' )
+    if ( S.current_combo == 5000 ) win_achievement( 'combo_saiyan' )
     if ( S.current_combo == 10000 ) win_achievement( 'combo_saitama' )
 
     if ( S.current_combo > S.stats.highest_combo ) S.stats.highest_combo = S.current_combo
@@ -1265,7 +1278,7 @@ let handle_click = ( e, type ) => {
       S.stats.total_weak_hit_crit_clicks++
 
       if ( S.stats.total_weak_hit_crit_clicks == 1 ) win_achievement( 'critical_strike' )
-      if ( S.current_combo == 7 ) win_achievement( 'lucky_number_7')
+      if ( S.current_combo == 7 ) win_achievement( 'lucky_number_7' )
 
     } else {
       RN.new( event, 'weak-hit-click', opc )
@@ -1515,7 +1528,7 @@ let build_combo_sign = () => {
     </div>
     <div class='combo-sign'>
       <p>Current Combo</p>
-      <h1 class='combo-sign-number'>${ S.current_combo }</h1>
+      <h1 class='combo-sign-number'>${ S.current_combo.toLocaleString() }</h1>
       `
     if ( S.opc_combo_multiplier > 0 ) {
       str += `
@@ -1576,7 +1589,7 @@ let build_combo_shields = () => {
 
 let update_combo_sign_number = () => {
   let combo_sign_number = s( '.combo-sign-number' )
-  combo_sign_number.innerHTML = S.current_combo
+  combo_sign_number.innerHTML = S.current_combo.toLocaleString()
 
   if ( S.opc_combo_multiplier > 0 ) {
     s( '.opc_combo_multi' ).innerHTML = `OpC Bonus: ${ ( S.current_combo * S.opc_combo_multiplier ).toFixed( 2 ) }x`
@@ -2531,7 +2544,7 @@ let boss_defeated = () => {
     'vanquished'
   ]
   
-  QL.append( `<strong>${ S.quest.adventurer.name }</strong> has ${ select_random_from_arr( synonyms ) } ${ S.quest.current_quest.boss.name } ` )
+  QL.append( `<strong>${ S.quest.adventurer.name }</strong> has ${ select_random_from_arr( synonyms ) } <strong>${ S.quest.current_quest.boss.name }</strong> ` )
 
   let boss = s( '.boss' )
   boss.addEventListener( 'animationend', () => { remove_el( s( '.boss-container' ) ) } )
@@ -3691,7 +3704,7 @@ window.addEventListener('keyup', (e) => {
       win_achievement( 'who_am_i?' )
     }
     if ( pressed.join( '' ).includes( 'qq' ) ) {
-      Smith_Upgrades.forEach( upgrade => { upgrade.duration = 200 })
+      Smith_Upgrades.forEach( upgrade => { upgrade.duration = 2000 })
       S.pickaxe.item.damage *= 1000
       S.refined_ores += 100
       Quests.forEach( quest => quest.duration = 1 * SECOND )
