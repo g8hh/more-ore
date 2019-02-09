@@ -1494,6 +1494,7 @@ button {
         position: relative; }
         .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .non-repeatable img, .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .owned img {
           height: 64px;
+          width: 64px;
           -ms-interpolation-mode: nearest-neighbor;
           image-rendering: -webkit-optimize-contrast;
           image-rendering: -moz-crisp-edges;
