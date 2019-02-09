@@ -1525,7 +1525,8 @@ button {
             -ms-flex-align: center;
             align-items: center; }
             .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .non-repeatable > div > p img, .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .owned > div > p img {
-              height: 15px; }
+              height: 15px;
+              width: 15px; }
         .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .non-repeatable .new, .smith-upgrades-wrapper .smith-upgrades-container .smith-upgrades .owned .new {
           position: absolute;
           top: -5px;
