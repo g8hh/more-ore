@@ -326,7 +326,8 @@ button {
           padding: 0 20px;
           min-width: -webkit-max-content;
           min-width: -moz-max-content;
-          min-width: max-content; }
+          min-width: max-content;
+          font-family: 'Abel'; }
       .container .game-container > .left .quest-area-container {
         height: 150px;
         width: 100%;
@@ -1917,9 +1918,9 @@ input:checked + .slider:before {
     -webkit-box-direction: normal;
     -ms-flex-flow: row wrap;
     flex-flow: row wrap;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center; }
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start; }
     .wrapper > .stats-container .achievement-container h1 {
       width: 100%; }
     .wrapper > .stats-container .achievement-container .achievement-square {
@@ -2547,7 +2548,8 @@ input:checked + .slider:before {
     padding: 5px 10px;
     text-align: center; }
     .combo-sign-container .combo-sign > p {
-      opacity: .5; }
+      opacity: .5;
+      font-family: 'Abel'; }
     .combo-sign-container .combo-sign .combo-sign-number {
       padding: 5px 0;
       font-family: 'Germania One';
