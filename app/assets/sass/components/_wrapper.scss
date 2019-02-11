@@ -210,4 +210,23 @@
     }
 
   }
+
+  &#better-pickaxes-popup {
+
+    div {
+      text-align: center;
+      
+      p {
+        font-family: 'Germania One';
+      }
+      
+      button {
+        margin-top: 5px;
+        border: 1px solid white;
+        background: transparent;
+        color: white;
+        padding: 3px;
+      }
+    }
+  }
 }

@@ -1717,6 +1717,7 @@ let refine = async () => {
     if ( S.stats.times_refined == 1 ) {
       win_achievement( 'babies_first_refine' )
       unlock_smith_upgrade( 'quest_board' )
+      show_better_pickaxes_popup()
     }
 
     if ( Tabs[ 2 ].hidden == 1 ) { 
@@ -1816,6 +1817,24 @@ let gain_generation_level = () => {
   S.generation.current_xp = 0
   S.generation.needed_xp = S.generation.needed_xp * Math.pow( xp_needed_scaling, S.generation.level )
 
+}
+
+let show_better_pickaxes_popup = () => {
+
+  let popup = document.createElement( 'div' )
+  popup.classList.add( 'wrapper' )
+  popup.id = 'better-pickaxes-popup'
+
+  let str = `
+    <div>
+      <p>Better pickaxes are now dropping</p>
+      <button onclick='remove_wrapper()'>OK</button>
+    </div>
+  `
+
+  popup.innerHTML = str
+
+  CONTAINER.append( popup )
 }
 
 // ==== ITEM DROP SHIT ===================================================================

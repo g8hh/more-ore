@@ -1310,6 +1310,16 @@ button {
         color: white;
         border: 1px solid white;
         margin: 3px; }
+  .wrapper#better-pickaxes-popup div {
+    text-align: center; }
+    .wrapper#better-pickaxes-popup div p {
+      font-family: 'Germania One'; }
+    .wrapper#better-pickaxes-popup div button {
+      margin-top: 5px;
+      border: 1px solid white;
+      background: transparent;
+      color: white;
+      padding: 3px; }
 
 .smith-progress-container {
   -webkit-box-orient: vertical;

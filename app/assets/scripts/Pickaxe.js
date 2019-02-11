@@ -24,7 +24,6 @@ let Pickaxe = function( item_level ) {
 
 }
 
-
 // IDEAS
 /*
     Rage stat - adds damage specifically in quests
@@ -374,7 +373,7 @@ let _get_pickaxe_hardness = ( level, multiplier ) => {
 let _get_pickaxe_damage = ( bonus, level ) => {
 
     let damage = 1
-    let max_damage = level * ( 5 + bonus )
+    let max_damage = level * ( 2 + bonus )
 
     damage += get_random_num( max_damage / 5, max_damage )
 
