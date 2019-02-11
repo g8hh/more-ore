@@ -17,7 +17,8 @@ let Pickaxe = function( item_level ) {
     this.sharpness = _get_pickaxe_sharpness( this.level, this.multiplier.sharpness )
     this.hardness = _get_pickaxe_hardness( this.level, this.multiplier.hardness )
     this.damage = _get_pickaxe_damage( this.generation_bonus, this.level )
-    this.num_upgrades = _get_pickaxe_num_upgrades( this.rarity.name )
+    this.num_of_upgrades = _get_pickaxe_num_upgrades( this.rarity.name )
+    this.used_upgrades = 0
 
     this.name = _get_pickaxe_name( this )
 
@@ -53,6 +54,7 @@ let _get_pickaxe_level = ( item_level ) => {
     if ( level < 1 ) level = 1
 
     if ( S.generation.level > 0 )  level += S.generation.level * Math.random()
+
 
     return Math.round( level )
 }
@@ -372,16 +374,16 @@ let _get_pickaxe_hardness = ( level, multiplier ) => {
 let _get_pickaxe_damage = ( bonus, level ) => {
 
     let damage = 1
-    let max_damage = level * ( 10 + bonus )
+    let max_damage = level * ( 5 + bonus )
 
-    damage += get_random_num( max_damage / 2, max_damage )
+    damage += get_random_num( max_damage / 5, max_damage )
 
     return damage
 }
 
 let _get_pickaxe_num_upgrades = ( rarity ) => {
 
-    let base_amount = 3
+    let num = 3
 
     switch ( rarity ) {
 
