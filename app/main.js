@@ -3244,8 +3244,11 @@ let update_ore_hp = ( amount ) => {
 
     S.misc.current_ore_sprite = get_random_num( 1, S.misc.ore_sprite_amount )
 
-    if ( Math.random() <= S.pickaxe_drop_chance || S.stats.total_rocks_destroyed == 1 ) {
+    if ( Math.random() <= S.pickaxe_drop_chance || S.stats.total_rocks_destroyed == 1 || S.misc.last_pickaxe_drop >= 5 ) {
       generate_item_drop()
+      S.misc.last_pickaxe_drop = 0
+    } else {
+      S.misc.last_pickaxe_drop++
     }
 
     current_sprite = 0

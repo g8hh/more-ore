@@ -184,7 +184,8 @@ let State = function( s = {} ) {
       current_ore_sprite: 1,
       ore_sprite_amount: 5,
       show_gem_warning: true,
-      last_save: null
+      last_save: null,
+      last_pickaxe_drop: 0,
     }
   }
 }
