@@ -1,5 +1,4 @@
 let chance_for_prefix = .6
-let chance_for_good_prefix = .8
 let chance_for_suffix = .1
 
 
@@ -37,7 +36,7 @@ let _get_pickaxe_generation_bonus = () => {
 
     let bonus = 0
 
-    if ( S.stats.times_defined >= 1 ) bonus++
+    if ( S.stats.times_refined >= 1 ) bonus++
     if ( S.stats.times_refined >= 5 ) bonus++
     if ( S.stats.times_refined >= 10 ) bonus++
     if ( S.stats.times_refined >= 20 ) bonus++
@@ -261,18 +260,40 @@ let _get_pickaxe_prefix = () => {
                     }
                 ]
             }
-        ]
+        ],
     ]
 
+    if ( S.stats.times_refined >= 1 ) {
+        let more_prefixes = [
+            {
+                name: 'Idlers',
+                modifier: [
+                    {
+                        stat: 'OpS',
+                        amount: get_random_num( 60, 120 )
+                    }
+                ]
+            }, {
+                name: 'Questers',
+                modifier: [
+                    {
+                        stat: 'quest-speed',
+                        amount: get_random_num( 60, 120 )
+                    }
+                ]
+            }
+        ]
+        prefixes[ 0 ].push( ...more_prefixes )
+    }
+
     if ( Math.random() <= chance_for_prefix ) {
+
+        let chance = Math.random()
         
         let prefix = {}
 
-        if ( Math.random() <= chance_for_good_prefix ) {
-            prefix = select_random_from_arr( prefixes[ 0 ] )
-        } else {
-            prefix = select_random_from_arr( prefixes[ 1 ] )
-        }
+        prefix = select_random_from_arr( prefixes[ 0 ] )
+        if ( chance <= .2 ) select_random_from_arr( prefixes[ 1 ] )
 
         return prefix
     }
@@ -310,6 +331,23 @@ let _get_pickaxe_suffix = ( rarity ) => {
             ]
         }
     ]
+
+    if ( S.stats.times_refined >= 1 ) {
+        let more_suffixes = [
+            {
+                name: 'of Idling',
+                modifier: [
+                    {
+                        stat: 'OpS',
+                        amount: get_random_num( 100, 200 )
+                    }
+                ]
+            }
+        ]
+
+        suffixes.push( ...more_suffixes )
+    }
+
 
     if ( Math.random() < chance_for_suffix || rarity.name == 'Legendary' || rarity.name == 'Mythic' ) {
         return select_random_from_arr( suffixes )
