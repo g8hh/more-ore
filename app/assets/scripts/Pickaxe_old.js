@@ -1,128 +1,117 @@
-let chance_for_prefix = .6
-let chance_for_good_prefix = .8
-let chance_for_suffix = .1
-
-
 let Pickaxe = function( item_level ) {
 
-    this.generation_bonus = _get_pickaxe_generation_bonus()
+    this.level = _get_level( item_level )
 
-    this.level = _get_pickaxe_level( item_level )
-    this.rarity = _get_pickaxe_rarity()
-    this.sockets = _get_pickaxe_sockets( this.rarity )
-    this.material = _get_pickaxe_material()
-    this.prefix = _get_pickaxe_prefix()
-    this.suffix = _get_pickaxe_suffix( this.rarity )
-    this.multiplier = _get_pickaxe_multiplier( this )
-    this.sharpness = _get_pickaxe_sharpness( this.level, this.multiplier.sharpness )
-    this.hardness = _get_pickaxe_hardness( this.level, this.multiplier.hardness )
-    this.damage = _get_pickaxe_damage( this.generation_bonus, this.level )
-    this.num_upgrades = _get_pickaxe_num_upgrades( this.rarity.name )
+    this.rarity = _get_rarity()
+    this.sockets = _get_sockets( this )
+    this.material = _get_material()
+    this.prefix = _get_prefix()
+    this.suffix = _get_suffix( this )
 
-    this.name = _get_pickaxe_name( this )
+    this.multiplier = _get_multiplier( this )
 
+    this.damage = _get_damage( this )
+    this.sharpness = _get_sharpness( this )
+    this.hardness = _get_hardness( this )
+
+    this.num_of_upgrades = _get_num_upgrades( this )
+    this.used_upgrades = 0
+
+    this.name = _get_name( this )
+    
+    return this
 }
 
 
-// IDEAS
-/*
-    Rage stat - adds damage specifically in quests
-    Luck stat - Crits?
-    Endurance - quest speed?
-
-    After first refine, pickaxes drop with more stats. 
-*/
-
-let _get_pickaxe_generation_bonus = () => {
-
-    let bonus = 0
-
-    if ( S.stats.times_defined >= 1 ) bonus++
-    if ( S.stats.times_refined >= 5 ) bonus++
-    if ( S.stats.times_refined >= 10 ) bonus++
-    if ( S.stats.times_refined >= 20 ) bonus++
-
-    return bonus
-}
-
-let _get_pickaxe_level = ( item_level ) => {
+_get_level = ( item_level ) => {
 
     let level = item_level
 
-    if ( Math.random() <= .2 ) level -= get_random_num( 1, item_level / 2 )
+    if ( Math.random() <= .3 ) level -= get_random_num( 1, item_level / 2 )
     if ( level < 1 ) level = 1
 
-    if ( S.generation.level > 0 )  level += S.generation.level * Math.random()
+    if ( S.generation.level > 0 ) {
+        level += S.generation.level * Math.random()
 
-    return Math.round( level )
+    }
+
+    return Math.floor( level )
 }
 
-let _get_pickaxe_rarity = () => {
+_get_rarity = () => {
 
     let chance = Math.random() + S.pickaxe_quality_bonus
 
     let rarities = [
-        {
+        { 
             name: 'Common',
-            multiplier: 0
-        }, {
+            multiplier: 0 
+        }, { 
             name: 'Uncommon',
             multiplier: .02
-        }, {
+        }, { 
             name: 'Rare',
             multiplier: .05
-        }, {
+        }, { 
+            name: 'Unique',
+            multiplier: .1
+        }, { 
             name: 'Epic',
             multiplier: .3
-        }, {
+        }, { 
             name: 'Legendary',
             multiplier: .5
-        }, {
+        }, { 
             name: 'Mythic',
             multiplier: 1
         }
     ]
 
-    let rarity
-    if ( chance <= 1 ) rarity = rarities[ 0 ]
+    let rarity = rarities[ 0 ]
+
     if ( chance < .6 )  rarity = rarities[ 1 ]
-    if ( chance < .3 )  rarity = rarities[ 2 ]
-    if ( chance < .1 )  rarity = rarities[ 3 ]
-    if ( chance < .03 ) rarity = rarities[ 4 ]
-    if ( chance < .01 ) rarity = rarities[ 5 ]
+    if ( chance < .4 )  rarity = rarities[ 2 ]
+    if ( chance < .3 )  rarity = rarities[ 3 ]
+    if ( chance < .1 )  rarity = rarities[ 4 ]
+    if ( chance < .03 ) rarity = rarities[ 5 ]
+    if ( chance < .01 ) rarity = rarities[ 6 ]
 
     return rarity
 }
 
-let _get_pickaxe_sockets = ( rarity ) => {
+_get_sockets = ( p ) => {
 
     let sockets = {}
     let amount = 0
 
-    switch ( rarity ) {
+    switch ( p.rarity.name ) {
 
         case 'Common':
-            amount = select_random_from_arr( [ 0, 0, 1 ] )
+            amount = select_random_from_arr( [ 0, 0, 0, 1 ] )
             break
 
         case 'Uncommon':
-            amount = select_random_from_arr( [ 1, 1, 2 ] )
+            amount = select_random_from_arr( [ 0, 1, 1, 1, 2 ] )
             break
 
         case 'Rare':
-            amount = select_random_from_arr( [ 1, 2, 2 ] )
+            amount = select_random_from_arr( [ 1, 1, 1, 2 ] )
             break
-        
+
+        case 'Unique':
+            amount = select_random_from_arr( [ 1, 2, 2, 2, 3 ] )
+            break
+
         case 'Epic':
-            amount = select_random_from_arr( [ 2, 2, 3 ] )
+            amount = select_random_from_arr( [ 2, 3, 3, 3, 4 ] )
             break
 
         case 'Legendary':
-            amount = select_random_from_arr( [ 3, 4, 5, 6 ] )
+            amount = select_random_from_arr( [ 3, 4, 4, 5 ] )
             break
-
+        
         case 'Mythic':
-            amount = select_random_from_arr( [ 4, 5, 6 ] )
+            amount = select_random_from_arr( [ 3, 4, 4, 4, 4, 5, 5, 5, 6 ] )
             break
     }
 
@@ -136,9 +125,9 @@ let _get_pickaxe_sockets = ( rarity ) => {
     return sockets
 }
 
-let _get_pickaxe_material = () => {
-    
-    let chance = Math.random() + S.pickaxe_quality_bonus
+_get_material = () => {
+
+    let chance = Math.random()
 
     let materials = [
         {
@@ -172,12 +161,13 @@ let _get_pickaxe_material = () => {
         name: material.name,
         multiplier: material.multiplier
     }
+
 }
 
-let _get_pickaxe_prefix = () => {
+_get_prefix = () => {
 
     let prefixes = [
-        // positive prefixes
+        // NOT STRAIGHT UP BAD PREFIXES
         [
             {
                 name: select_random_from_arr( [ 'Superior', 'Greater', 'Refined', 'Gigantic', 'Polished' ] ),
@@ -200,10 +190,10 @@ let _get_pickaxe_prefix = () => {
                 ]
             }, {
                 name: select_random_from_arr( [ 'Durable', 'Hefty', 'Hard', 'Reliable', 'Strong' ] ),
-                modifer: [
+                modifier: [
                     {
                         stat: 'hardness',
-                        amount: .05 
+                        amount: .05
                     }
                 ]
             }, {
@@ -211,10 +201,10 @@ let _get_pickaxe_prefix = () => {
                 modifier: [
                     {
                         stat: 'sharpness',
-                        amount: .2
+                        amount: .1
                     }, {
                         stat: 'hardness',
-                        amount: -.5
+                        amount: -.25
                     }
                 ]
             }, {
@@ -222,15 +212,15 @@ let _get_pickaxe_prefix = () => {
                 modifier: [
                     {
                         stat: 'sharpness',
-                        amount: -.5
+                        amount: -.25
                     }, {
                         stat: 'hardness',
-                        amount: .2
+                        amount: .1
                     }
                 ]
             }
         ],
-        // negative prefixes
+        // STRAIGHT UP BAD PREFIXES
         [
             {
                 name: select_random_from_arr( [ 'Tiny', 'Awkward', 'Shoddy', 'Broken', 'Busted', 'Cracked', 'Chipped', 'Damaged', 'Defective' ] ),
@@ -263,13 +253,15 @@ let _get_pickaxe_prefix = () => {
         ]
     ]
 
-    if ( Math.random() <= chance_for_prefix ) {
-        
+    // spawn a prefix at a 60% chance
+    if ( Math.random() <= .6 ) {
         let prefix = {}
 
-        if ( Math.random() <= chance_for_good_prefix ) {
+        if ( Math.random() <= .8 ) {
+            // 80% chance for a good prefix
             prefix = select_random_from_arr( prefixes[ 0 ] )
         } else {
+            // 20% chance for a bad prefix
             prefix = select_random_from_arr( prefixes[ 1 ] )
         }
 
@@ -277,7 +269,7 @@ let _get_pickaxe_prefix = () => {
     }
 }
 
-let _get_pickaxe_suffix = ( rarity ) => {
+_get_suffix = ( p ) => {
 
     let suffixes = [
         {
@@ -296,26 +288,21 @@ let _get_pickaxe_suffix = ( rarity ) => {
             modifier: [
                 {
                     stat: 'sharpness',
-                    amount: 1.5
-                }
-            ]
-        }, {
-            name: 'of Durability',
-            modifier: [
-                {
+                    amount: 1
+                }, {
                     stat: 'hardness',
-                    amount: 1.5
+                    amount: -1
                 }
             ]
         }
     ]
 
-    if ( Math.random() < chance_for_suffix || rarity.name == 'Legendary' || rarity.name == 'Mythic' ) {
+    if ( p.rarity.name == 'Mythic' ) {
         return select_random_from_arr( suffixes )
     }
 }
 
-let _get_pickaxe_multiplier = ( p ) => {
+_get_multiplier = ( p ) => {
 
     let multiplier = {
         sharpness: 0,
@@ -327,101 +314,112 @@ let _get_pickaxe_multiplier = ( p ) => {
 
     multiplier.sharpness += p.material.multiplier
     multiplier.hardness += p.material.multiplier
-
+    
     if ( p.prefix ) {
 
         p.prefix.modifier.forEach( modification => {
             multiplier[ modification.stat ] += modification.amount
-        })
-    }
+        } )
 
-    if ( p.suffix ) {
-
-        p.suffix.modifier.forEach( modification => {
-            multiplier[ modification.stat ] += modification.amount
-        })
     }
 
     return multiplier
-}
-
-let _get_pickaxe_sharpness = ( level, multiplier ) => {
-
-    let level_bonus = Math.round( level / 10 )
-    let sharpness = get_random_num( 80, 120 )
-
-    sharpness += sharpness * level_bonus
-    sharpness += sharpness * multiplier
-
-    return sharpness
 
 }
 
-let _get_pickaxe_hardness = ( level, multiplier ) => {
+_get_damage = ( p ) => {
 
-    let level_bonus = Math.round( level / 10 )
-    let hardness = get_random_num( 80, 120 )
+    let damage = p.level + ( get_random_num( -p.level, p.level ))
 
-    hardness += hardness * level_bonus
-    hardness += hardness * multiplier
+    if ( damage <= 0 ) damage = 1
 
-    return hardness
-
-}
-
-let _get_pickaxe_damage = ( bonus, level ) => {
-
-    let damage = 1
-    let max_damage = level * ( 10 + bonus )
-
-    damage += get_random_num( max_damage / 2, max_damage )
-
-    return damage
-}
-
-let _get_pickaxe_num_upgrades = ( rarity ) => {
-
-    let base_amount = 3
-
-    switch ( rarity ) {
-
-        case 'Common':
-            num += select_random_from_arr( [ 0, 1, 1, 2 ] )
-            break
-        
-        case 'Uncommon':
-            num += select_random_from_arr( [ 1, 2, 2, 3 ] )
-            break
-        
-        case 'Rare':
-            num += select_random_from_arr( [ 2, 3, 3, 4 ] )
-            break
-
-        case 'Epic':
-            num += select_random_from_arr( [ 3, 4, 4, 5 ] )
-            break
-
-        case 'Legendary':
-            num += select_random_from_arr( [ 4, 5, 5, 6 ] )
-            break
-
-        case 'Mythic':
-            num += select_random_from_arr( [ 5, 6, 6, 7 ] )
-            break
+    if ( p.multiplier.sharpness > p.multiplier.hardness ) {
+        damage += damage * p.multiplier.sharpness
+    } else {
+        damage += damage * p.multiplier.hardness
     }
 
-    return num
+    return damage
+
 }
 
-let _get_pickaxe_name = ( p ) => {
+_get_sharpness = ( p ) => {
+
+    let level = Math.floor( p.level / 10 )
+
+    let sharpness = get_random_num( 80 + level * 5, 100 + level * 5 )
+
+    sharpness += sharpness * p.multiplier.sharpness
+
+    return sharpness
+}
+
+_get_hardness = ( p ) => {
+
+    let level = Math.floor( p.level / 10 )
+
+    let hardness = get_random_num( 80 + level * 5, 100 + level * 5 )
+
+    hardness += hardness * p.multiplier.hardness
+
+    return hardness
+}
+
+_get_name = ( p ) => {
 
     let name = ''
 
-    if ( p.prefix ) name += p.prefix.name + ' '
+    if ( p.prefix ) {
+        name += p.prefix.name + ' '
+    }
 
     name += `${ p.material.name } Pickaxe`
 
-    if ( p.suffix ) name += ` ${ p.suffix.name }`
+    if ( p.suffix ) {
+        name += ` ${ p.suffix.name }`
+    }
 
     return name
+
+}
+
+_get_num_upgrades = ( p ) => {
+
+    let num = 3
+
+    switch ( p.rarity.name ) {
+
+        case 'Common':
+            num += select_random_from_arr( [ 0, 1, 2 ] )
+            break
+    
+        case 'Uncommon':
+            num += select_random_from_arr( [ 0, 1, 2, 3 ] )
+            break
+
+        case 'Rare':
+            num += select_random_from_arr( [ 1, 2, 3, 4 ] )
+            break
+
+        case 'Unique':
+            num += select_random_from_arr( [ 2, 3, 4 ] )
+            break
+
+        case 'Epic':
+            num += select_random_from_arr( [ 2, 3, 3, 5 ] )
+            break
+
+        case 'Legendary':
+            num += select_random_from_arr( [ 4, 5, 6 ] )
+            break
+
+        case 'Mythic':
+            num += select_random_from_arr( [ 5, 6, 7 ] )
+            break
+
+    }
+
+
+    return num
+
 }

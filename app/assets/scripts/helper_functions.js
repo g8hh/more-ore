@@ -21,7 +21,11 @@ let remove_wrapper = () => {
     }
 }
 
-let get_random_num = ( min, max ) => {
+let get_random_num = ( min, max, is_decimal = false ) => {
+
+  if ( is_decimal ) {
+    return ( Math.random() * ( max - min ) + min )
+  }
   return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
 }
 
