@@ -371,7 +371,7 @@ let _get_pickaxe_hardness = ( level, multiplier ) => {
 let _get_pickaxe_damage = ( bonus, level ) => {
 
     let damage = 1
-    let max_damage = level * ( 2 + bonus )
+    let max_damage = level * ( 1.3 + bonus )
 
     damage += get_random_num( max_damage / 5, max_damage )
 

@@ -58,7 +58,8 @@ let smith_upgrades = [
         duration: 10 * SECOND,
         price: 0,
         unlock_functions: {
-            unlock_fragility_spectacles: 1
+            unlock_fragility_spectacles: 1,
+            unlock_smith_upgrades: [ 'reinforced_warehouse', 'warehouse_supervisor' ]
         }
     }, {
         name: 'Quest Board',
@@ -66,7 +67,7 @@ let smith_upgrades = [
         flavor_text: 'Fetch quests are the greatest',
         duration: 4 * HOUR,
         price: 1, //50
-        locked: 1,
+        locked: 0,
         unlock_functions: {
             unlock_quest_board: 1
         }
@@ -264,6 +265,8 @@ let smith_upgrades = [
         desc: 'Increases maximum away storage by 3 hours',
         duration: 30 * SECOND,
         price: 3,
+        locked: 1,
+        requires: [ 'fragility_spectacles' ],
         unlock_functions: {
             increase_max_ore_away_gain: 3 * HOUR,
             unlock_smith_upgrades: [ 'fortified_warehouse' ]
@@ -316,6 +319,8 @@ let smith_upgrades = [
         desc: 'Increases away gain percentage by 15%',
         duration: 30 * SECOND,
         price: 5,
+        locked: 1,
+        requires: [ 'fragility_spectacles' ],
         unlock_functions: {
             increase_away_gain_percentage: .15,
             unlock_smith_upgrades: [ 'warehouse_watchdogs' ]
