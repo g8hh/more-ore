@@ -1,19 +1,158 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+body {
+  font-family: 'Asap Condensed';
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  /* remove scrollbar space */
+  background: transparent;
+  /* optional: just make scrollbar invisible */
 }
 
 .page-container {
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+}
+
+footer {
+  background: black;
+  color: white;
+  text-align: center;
+}
+
+.game-container {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  grid-template-rows: 1fr;
+  border: 15px solid saddlebrown;
+
+  .game-container-left {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr min-content;
+    grid-template-rows: 1fr 200px;
 
-    footer {
-        background-color: black;
-        color: white;
+    .game-container-left-top {
+      display: grid;
+      grid-template-rows: 150px 1fr 50px;
+      background-image: url('./../../static/images/bg-test.png');
+      background-size: cover;
+
+      .game-container-left-top-top {
+        position: relative;
+
+        .topbar-inventory {
+          --gap: 50px;
+
+          width: calc(100% - calc(var(--gap) * 2));
+          height: calc(100% - var(--gap));
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          bottom: 0;
+          background-color: black;
+          color: white;
+          display: flex;
+          flex-flow: row nowrap;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 var(--gap);
+          font-size: 24px;
+
+          .topbar-inventory-generation-wrapper {
+            position: relative;
+
+            .topbar-inventory-generation {
+              .level-on-refine {
+                opacity: 0.5;
+              }
+            }
+
+            .topbar-inventory-generation-xp {
+              width: 100px;
+              height: 5px;
+              position: absolute;
+              bottom: -8px;
+              right: 0;
+              border: 1px solid white;
+
+              .bar {
+                height: 100%;
+                background: white;
+                left: 0;
+                width: 0;
+              }
+            }
+          }
+        }
+      }
+
+      .game-container-left-top-middle {
+        display: grid;
+        align-items: center;
+        justify-content: center;
+
+        .ore-wrapper {
+          position: relative;
+
+          .ore-sprite-container {
+            height: 300px;
+            width: 300px;
+            position: relative;
+
+            .ore-sprite {
+              position: absolute;
+              bottom: 0;
+              width: 100%;
+              image-rendering: pixelated;
+              cursor: pointer;
+              transition: transform 0.05s ease-out;
+
+              &:hover {
+                transform: scale(1.05);
+              }
+
+              &:active {
+                transform: scale(1);
+              }
+            }
+          }
+
+          .ore-hp {
+            position: absolute;
+            bottom: -32px;
+            width: 100%;
+            text-align: center;
+            color: white;
+          }
+        }
+      }
+
+      .game-container-left-top-bottom {}
     }
+
+    .game-container-left-bottom {
+      border-top: 15px solid saddlebrown;
+      background-image: url('./../../static/images/misc-mineshaft.png');
+      background-size: auto 100%;
+      image-rendering: pixelated;
+    }
+  }
+
+  .game-container-right {
+    border-left: 15px solid saddlebrown;
+  }
 }
+
+@import './components/particles';

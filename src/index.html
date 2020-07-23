@@ -7,11 +7,46 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>More Ore</title>
         <link rel="stylesheet" type="text/css" href="./styles/styles.scss" />
+
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Asap+Condensed:400,700" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Germania+One" rel="stylesheet" />
     </head>
 
     <body>
+        <div class="fps" style="position: absolute; font-size: 40px; background: red;"></div>
         <div class="page-container">
-            <div class="game-container"></div>
+            <div class="game-container">
+                <div class="game-container-left">
+                    <div class="game-container-left-top">
+                        <div class="game-container-left-top-top">
+                            <div class="topbar-inventory">
+                                <p class="topbar-inventory-ores">Ores: <span class="amount"></span></p>
+                                <div class="topbar-inventory-generation-wrapper">
+                                    <p class="topbar-inventory-generation">
+                                        Generation: <span class="level"></span> <span class="level-on-refine"></span>
+                                    </p>
+                                    <div class="topbar-inventory-generation-xp">
+                                        <div class="bar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="game-container-left-top-middle">
+                            <div class="ore-wrapper">
+                                <div class="ore-sprite-container">
+                                    <img class="ore-sprite" />
+                                </div>
+                                <div class="ore-hp"></div>
+                            </div>
+                        </div>
+                        <div class="game-container-left-top-botttom"></div>
+                    </div>
+                    <div class="game-container-left-bottom"></div>
+                </div>
+                <div class="game-container-right"></div>
+            </div>
             <footer>More Ore</footer>
         </div>
 
