@@ -6,9 +6,13 @@ import {
     oreHpEl,
     topbarInventoryGenerationLv,
     topbarInventoryGenerationLvOnRefine,
-    topbarInventoryGenerationXpBarEl
+    topbarInventoryGenerationXpBarEl,
+    particlesCanvasEl,
+    particlesCanvasContext as ctx
 } from './elements';
 import { getPercentage, formatNumber, getRandomNum, removeEl } from './utils';
+import { generateOreParticles, oreParticlesList } from './OreParticle';
+import { generateRisingText } from './RisingText';
 
 const gainOre = (amount: number, damageOre: boolean = true) => {
     state.inventory.ores += amount;
@@ -40,54 +44,8 @@ const handleOreClick = (event: MouseEvent) => {
     gainOre(state.opc);
     gainGenerationXp(1);
     generateOreParticles(event);
+    generateRisingText(event, null, state.opc);
     state.updates.updateOres = true;
-};
-
-const generateOreParticles = (event?: MouseEvent, amount: number = 2) => {
-    for (let i = 0; i < amount; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-
-        // DETERMINE COLOR
-        const color = getRandomNum(150, 200);
-        particle.style.background = `rgb( ${color}, ${color}, ${color} )`;
-
-        // DETERMINE SIZE OF PARTICLES
-        let size = getRandomNum(2, 4);
-
-        // DETERMINE PLACEMENT OF PARTICLES
-        let x: number, y: number;
-        if (event) {
-            x = event.clientX;
-            y = event.clientY;
-        } else {
-            size = getRandomNum(3, 5);
-            const oreSpriteDimensions = oreSpriteEl.getBoundingClientRect();
-            x = getRandomNum(oreSpriteDimensions.left, oreSpriteDimensions.right);
-            y = oreSpriteDimensions.top;
-        }
-
-        particle.style.height = size + 'px';
-        particle.style.width = size + 'px';
-
-        particle.style.left = x + 'px';
-        particle.style.top = y + getRandomNum(-10, 10) + 'px';
-
-        particle.style.transitionDuration = getRandomNum(5, 10) * 0.1 + 's';
-
-        const animationDuration = getRandomNum(5, 10) * 0.1;
-        particle.style.animation = `particle_fall ${animationDuration}s forwards ease-in`;
-
-        particle.addEventListener('animationend', () => removeEl(particle));
-
-        pageContainer.append(particle);
-
-        //reflow
-        particle.getBoundingClientRect();
-
-        const moveAmount = getRandomNum(10, 40) * (Math.round(Math.random()) * 2 - 1);
-        particle.style.left = x + moveAmount + 'px';
-    }
 };
 
 // - -----------------------------------------------------------------------------------
@@ -105,7 +63,6 @@ const handleGenerationLvlUp = () => {
     state.generation.xp = 0;
     state.generation.lvOnRefine += 1;
 
-    console.log('state', state);
     state.updates.updateGenerationLvOnRefine = true;
 };
 
@@ -177,6 +134,17 @@ const gameLoop = () => {
     if (state.updates.updateGenerationLv) updateGenerationLv();
     if (state.updates.updateGenerationXp) updateGenerationXp();
     if (state.updates.updateGenerationLvOnRefine) updateGenerationLvOnRefine();
+
+    if (Object.keys(oreParticlesList).length > 0) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        for (let i in oreParticlesList) oreParticlesList[i].draw();
+    }
+};
+
+const initiateCanvasParticles = () => {
+    particlesCanvasEl.height = window.innerHeight;
+    particlesCanvasEl.width = window.innerWidth;
+    // const ctx = particlesCanvasEl.getContext('2d');
 };
 
 const initialLoad = () => {
@@ -187,6 +155,8 @@ const initialLoad = () => {
     updateOreSprite();
     updateGenerationLv();
     updateGenerationLvOnRefine();
+
+    initiateCanvasParticles();
 
     oreSpriteEl.onclick = handleOreClick;
 };

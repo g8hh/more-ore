@@ -36,7 +36,10 @@ footer {
   display: grid;
   grid-template-columns: 1fr 350px;
   grid-template-rows: 1fr;
-  border: 15px solid saddlebrown;
+  // border: 15px solid saddlebrown;
+  border: 20px solid transparent;
+  border-image: url('./../../static/images/misc-border.png') 10 round;
+  image-rendering: crisp-edges;
 
   .game-container-left {
     display: grid;
@@ -144,6 +147,7 @@ footer {
 
     .game-container-left-bottom {
       border-top: 15px solid saddlebrown;
+      // border-image: url('./../../static/images/misc-horizontal_separator.png');
       background-image: url('./../../static/images/misc-mineshaft.png');
       background-size: auto 100%;
       image-rendering: pixelated;
@@ -155,4 +159,13 @@ footer {
   }
 }
 
+#particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
 @import './components/particles';
+@import './components/animations';

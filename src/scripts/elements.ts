@@ -11,3 +11,6 @@ export const topbarInventoryGenerationLvOnRefine: HTMLElement = s('.topbar-inven
 export const topbarInventoryGenerationXpBarEl: HTMLElement = s('.topbar-inventory-generation-xp .bar');
 
 export const oreHpEl: HTMLElement = s('.ore-hp');
+
+export const particlesCanvasEl: HTMLCanvasElement = s('#particles');
+export const particlesCanvasContext: CanvasRenderingContext2D = particlesCanvasEl.getContext('2d');

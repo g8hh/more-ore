@@ -1,3 +1,9 @@
+import Inventory from './interfaces/Inventory';
+import Generation from './interfaces/Generation';
+import Ore from './interfaces/Ore';
+import Updates from './interfaces/Updates';
+import Settings from './interfaces/Settings';
+
 interface State {
     opc: number;
     ops: number;
@@ -6,38 +12,6 @@ interface State {
     ore: Ore;
     updates: Updates;
     settings: Settings;
-}
-
-interface Inventory {
-    ores: number;
-}
-
-interface Generation {
-    lv: number;
-    lvOnRefine: number;
-    xp: number;
-    maxXp: number;
-}
-
-interface Ore {
-    hp: number;
-    maxHp: number;
-    spriteType: number;
-    spriteHp: number;
-}
-
-interface Updates {
-    updateOres: boolean;
-    updateOreHp: boolean;
-    updateOreSprite: boolean;
-    updateGenerationLv: boolean;
-    updateGenerationLvOnRefine: boolean;
-    updateGenerationXp: boolean;
-}
-
-interface Settings {
-    tick: 15 | 30 | 60;
-    oreHpType: 'none' | 'percentage' | 'number' | 'bar-percentage' | 'bar-number';
 }
 
 export const state: State = {
@@ -72,7 +46,7 @@ export const state: State = {
     },
 
     settings: {
-        tick: 15,
+        tick: 30,
         oreHpType: 'number'
     }
 };
