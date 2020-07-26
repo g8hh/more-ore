@@ -50,9 +50,11 @@ export const State: State = {
 interface InstanceState {
     selectedTab: string;
     buyAmount: 1 | 10 | 100 | 'max';
+    oreParticles: {};
 }
 
 export const InstanceState = {
     selectedTab: 'store',
-    buyAmount: 1
+    buyAmount: 1,
+    oreParticles: {}
 };

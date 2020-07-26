@@ -33,7 +33,7 @@ const OreParticle = function (event?: MouseEvent) {
 
     // Adding particle to index
     oreParticlesIndex += 1;
-    InstanceState[oreParticlesIndex] = this;
+    InstanceState.oreParticles[oreParticlesIndex] = this;
     this.id = oreParticlesIndex;
     this.life = 0;
     this.opacity = 1;
@@ -52,7 +52,7 @@ OreParticle.prototype.draw = function () {
     this.opacity -= 0.02;
 
     if (this.life > settings.maxLife || this.y >= window.innerHeight) {
-        delete InstanceState[this.id];
+        delete InstanceState.oreParticles[this.id];
     }
 
     // Draw particle
