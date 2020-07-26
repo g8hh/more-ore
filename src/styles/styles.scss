@@ -8,6 +8,7 @@
 
 body {
   font-family: 'Asap Condensed';
+  image-rendering: pixelated;
 }
 
 ::-webkit-scrollbar {
@@ -34,7 +35,7 @@ footer {
 
 .game-container {
   display: grid;
-  grid-template-columns: 1fr 350px;
+  grid-template-columns: 1fr 320px;
   grid-template-rows: 1fr;
   // border: 15px solid saddlebrown;
   border: 20px solid transparent;
@@ -64,7 +65,7 @@ footer {
           left: 50%;
           transform: translateX(-50%);
           bottom: 0;
-          background-color: black;
+          background-color: #322011;
           color: white;
           display: flex;
           flex-flow: row nowrap;
@@ -72,6 +73,29 @@ footer {
           align-items: center;
           padding: 0 var(--gap);
           font-size: 24px;
+          box-shadow: 0 0 40px #222 inset;
+          border: 6px ridge #42250f;
+          box-sizing: border-box;
+
+          &::after,
+          &::before {
+            content: '';
+            position: absolute;
+            height: var(--gap);
+            width: 20px;
+            background: red;
+            background-image: url('./../../static/images/misc-vertical_separator.png');
+            background-size: 100% auto;
+            top: -56px;
+          }
+
+          &::before {
+            left: var(--gap);
+          }
+
+          &::after {
+            right: var(--gap);
+          }
 
           .topbar-inventory-ores {
 
@@ -169,6 +193,8 @@ footer {
   .game-container-right {
     border-left: 15px solid saddlebrown;
     border-image: url('./../../static/images/misc-vertical_separator.png') 10 round;
+    display: flex;
+    flex-flow: column nowrap;
   }
 }
 
@@ -184,3 +210,4 @@ footer {
 @import './components/animations';
 @import './components/tabs';
 @import './components/store';
+@import './components/tooltip';

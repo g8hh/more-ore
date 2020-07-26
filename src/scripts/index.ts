@@ -28,6 +28,7 @@ import { generateOreParticles } from './OreParticle';
 import { generateRisingText } from './RisingText';
 import { instantiateTabs, TabName, Tab } from './Tabs';
 import { instantiateBuildings } from './Buildings';
+import { showTooltip, hideTooltip } from './Tooltip';
 
 const gainOre = (amount: number, damageOre: boolean = true) => {
     State.inventory.ores += amount;
@@ -222,8 +223,6 @@ const buildStoreTabContent = () => {
     storeTabContainer.append(buyAmountContainer);
     storeTabContainer.append(buildingsContainer);
 
-    // console.log(buyAmountContainer.parentElement.append(buildingsContainer));
-
     return storeTabContainer;
 };
 
@@ -277,6 +276,9 @@ const buildBuildings = () => {
 
         let buildingEl = createEl('div', ['building', `building-${building.codeName}`], str);
         buildingEl.addEventListener('click', () => building.buy());
+        buildingEl.addEventListener('mousemove', (event) => showTooltip(event, { type: 'building', building }));
+        buildingEl.addEventListener('mouseleave', () => hideTooltip());
+
         buildingsContainer.append(buildingEl);
     });
 

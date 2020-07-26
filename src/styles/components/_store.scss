@@ -1,4 +1,6 @@
 .tab-content-store {
+    display: flex;
+    flex-flow: column nowrap;
 
     .buy-amount-container {
         display: flex;
@@ -34,6 +36,11 @@
     }
 
     .buildings-container {
+        flex: 1 1 auto;
+        background-color: #614938;
+        box-shadow: 0 0 5px #222 inset;
+        overflow-y: auto;
+        height: 300px;
 
         .building {
             background-image: url('./../../static/images/misc-building_button.png');

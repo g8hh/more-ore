@@ -8,15 +8,28 @@
             flex-grow: 1;
             text-align: center;
             padding: 30px;
-            background-color: #522610;
+            background-color: darken(#4e3013, 10%);
             color: rgba(255, 255, 255, 0.5);
             cursor: pointer;
             font-size: 24px;
+            box-shadow: 0 0 40px #222 inset;
 
             &.tab-selected {
                 color: white;
-                background-color: #773515;
+                background-color: #4e3013;
             }
+        }
+    }
+}
+
+.tabs-content-wrapper {
+    flex-grow: 1;
+
+    .tabs-content-container {
+        height: 100%;
+
+        .tab-content {
+            height: 100%;
         }
     }
 }

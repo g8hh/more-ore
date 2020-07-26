@@ -1,6 +1,7 @@
 import { select as s } from './utils';
 
 export const pageContainer: HTMLElement = s('.page-container');
+export const gameContainerRight: HTMLElement = s('.game-container-right');
 
 export const oreSpriteEl: HTMLImageElement = s('.ore-sprite');
 
@@ -17,3 +18,5 @@ export const particlesCanvasContext: CanvasRenderingContext2D = particlesCanvasE
 
 export const tabsWrapperEl: HTMLElement = s('.tabs-wrapper');
 export const tabsContentWrapperEl: HTMLElement = s('.tabs-content-wrapper');
+
+export const tooltipWrapperEl: HTMLElement = s('.tooltip-wrapper');
