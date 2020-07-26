@@ -1,8 +1,9 @@
 import Inventory from './interfaces/Inventory';
 import Generation from './interfaces/Generation';
 import Ore from './interfaces/Ore';
-import Updates from './interfaces/Updates';
 import Settings from './interfaces/Settings';
+import { Tab } from './Tabs';
+import { Building } from './Buildings';
 
 interface State {
     opc: number;
@@ -10,13 +11,14 @@ interface State {
     inventory: Inventory;
     generation: Generation;
     ore: Ore;
-    updates: Updates;
+    tabs: Tab[];
+    buildings: Building[];
     settings: Settings;
 }
 
-export const state: State = {
+export const State: State = {
     opc: 1,
-    ops: 1,
+    ops: 0,
 
     inventory: {
         ores: 0
@@ -32,21 +34,25 @@ export const state: State = {
     ore: {
         hp: 50,
         maxHp: 50,
-        spriteType: 1,
+        spriteType: 5,
         spriteHp: 1
     },
 
-    updates: {
-        updateOres: false,
-        updateOreHp: false,
-        updateOreSprite: false,
-        updateGenerationLv: false,
-        updateGenerationLvOnRefine: false,
-        updateGenerationXp: false
-    },
+    tabs: [],
+    buildings: [],
 
     settings: {
-        tick: 30,
+        tick: 60,
         oreHpType: 'number'
     }
+};
+
+interface InstanceState {
+    selectedTab: string;
+    buyAmount: 1 | 10 | 100 | 'max';
+}
+
+export const InstanceState = {
+    selectedTab: 'store',
+    buyAmount: 1
 };

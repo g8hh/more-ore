@@ -73,12 +73,24 @@ footer {
           padding: 0 var(--gap);
           font-size: 24px;
 
+          .topbar-inventory-ores {
+
+            .amount {
+
+              .ops {
+                font-size: 16px;
+                opacity: .5;
+              }
+            }
+          }
+
           .topbar-inventory-generation-wrapper {
             position: relative;
 
             .topbar-inventory-generation {
               .level-on-refine {
                 opacity: 0.5;
+                font-size: 16px;
               }
             }
 
@@ -147,7 +159,7 @@ footer {
 
     .game-container-left-bottom {
       border-top: 15px solid saddlebrown;
-      // border-image: url('./../../static/images/misc-horizontal_separator.png');
+      border-image: url('./../../static/images/misc-horizontal_separator.png') 10 round;
       background-image: url('./../../static/images/misc-mineshaft.png');
       background-size: auto 100%;
       image-rendering: pixelated;
@@ -156,6 +168,7 @@ footer {
 
   .game-container-right {
     border-left: 15px solid saddlebrown;
+    border-image: url('./../../static/images/misc-vertical_separator.png') 10 round;
   }
 }
 
@@ -169,3 +182,5 @@ footer {
 
 @import './components/particles';
 @import './components/animations';
+@import './components/tabs';
+@import './components/store';

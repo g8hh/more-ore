@@ -1,0 +1,87 @@
+.tab-content-store {
+
+    .buy-amount-container {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        font-family: 'Germania One';
+        padding: 4px 8px;
+        color: white;
+        background-color: black;
+        background-image: url('./../../static/images/misc-horizontal_separator.png');
+        background-size: auto 100%;
+        image-rendering: pixelated;
+        font-size: 14px;
+
+        .buy-amount-text {
+            letter-spacing: .6px;
+        }
+
+        .buy-amounts {
+            display: grid;
+            grid-template-columns: min-content min-content min-content min-content;
+            column-gap: 10px;
+
+            .buy-amount {
+                color: darken(white, 40%);
+                cursor: pointer;
+
+                &.selected {
+                    color: white;
+                }
+            }
+        }
+    }
+
+    .buildings-container {
+
+        .building {
+            background-image: url('./../../static/images/misc-building_button.png');
+            background-size: 100% 100%;
+            padding-right: 16px;
+            height: 74px; // 64 + 10px from padding
+            font-family: 'Germania One';
+            color: white;
+            display: grid;
+            grid-template-columns: 64px auto min-content;
+            column-gap: 10px;
+            align-items: center;
+            text-shadow: 0 0 1px black;
+            letter-spacing: .5px;
+            cursor: pointer;
+
+            .building-left {
+
+                .building-name {
+                    font-size: 24px;
+                }
+
+                .building-price {
+                    display: flex;
+                    flex-flow: row nowrap;
+                    align-items: center;
+                    color: black;
+                    text-shadow: none;
+
+                    &.not-enough {
+                        color: crimson;
+                    }
+
+                    img {
+                        height: 16px;
+                        margin-right: 4px;
+                    }
+                }
+            }
+
+            .building-owned {
+                font-size: 48px;
+                letter-spacing: 0;
+            }
+
+            &:hover {
+                box-shadow: 0 0 5px #fff inset;
+            }
+        }
+    }
+}

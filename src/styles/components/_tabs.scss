@@ -1,0 +1,22 @@
+.tabs-wrapper {
+
+    .tabs-container {
+        display: flex;
+        flex-flow: row nowrap;
+
+        .tab {
+            flex-grow: 1;
+            text-align: center;
+            padding: 30px;
+            background-color: #522610;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            font-size: 24px;
+
+            &.tab-selected {
+                color: white;
+                background-color: #773515;
+            }
+        }
+    }
+}

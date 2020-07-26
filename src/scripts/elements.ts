@@ -14,3 +14,6 @@ export const oreHpEl: HTMLElement = s('.ore-hp');
 
 export const particlesCanvasEl: HTMLCanvasElement = s('#particles');
 export const particlesCanvasContext: CanvasRenderingContext2D = particlesCanvasEl.getContext('2d');
+
+export const tabsWrapperEl: HTMLElement = s('.tabs-wrapper');
+export const tabsContentWrapperEl: HTMLElement = s('.tabs-content-wrapper');

@@ -1,4 +1,6 @@
-import { state } from './state';
+import { State, InstanceState } from './State';
+import { UpdatesState } from './Updates';
+
 import {
     pageContainer,
     oreSpriteEl,
@@ -8,44 +10,66 @@ import {
     topbarInventoryGenerationLvOnRefine,
     topbarInventoryGenerationXpBarEl,
     particlesCanvasEl,
-    particlesCanvasContext as ctx
+    particlesCanvasContext as ctx,
+    tabsWrapperEl,
+    tabsContentWrapperEl
 } from './elements';
-import { getPercentage, formatNumber, getRandomNum, removeEl } from './utils';
+import {
+    getPercentage,
+    formatNumber,
+    getRandomNum,
+    removeEl,
+    updateEl,
+    createEl,
+    beautifyNumber,
+    getGeometricSequencePrice
+} from './utils';
 import { generateOreParticles, oreParticlesList } from './OreParticle';
 import { generateRisingText } from './RisingText';
+import { instantiateTabs, TabName, Tab } from './Tabs';
+import { instantiateBuildings } from './Buildings';
 
 const gainOre = (amount: number, damageOre: boolean = true) => {
-    state.inventory.ores += amount;
+    State.inventory.ores += amount;
 
     if (damageOre) handleOreDamage(amount);
+    UpdatesState.updateOres = true;
+};
+
+export const spend = (amount: number): boolean => {
+    if (State.inventory.ores >= amount) {
+        State.inventory.ores -= amount;
+        return true;
+    }
+
+    return false;
 };
 
 const handleOreDamage = (damage: number) => {
-    state.ore.hp -= damage;
+    State.ore.hp -= damage;
 
-    if (state.ore.hp <= 0) handleBrokenOre();
+    if (State.ore.hp <= 0) handleBrokenOre();
 
-    state.updates.updateOreSprite = true;
-    state.updates.updateOreHp = true;
+    UpdatesState.updateOreSprite = true;
+    UpdatesState.updateOreHp = true;
 };
 
 const handleBrokenOre = () => {
     gainGenerationXp(50);
     generateNewOre();
-    state.ore.spriteType = getRandomNum(1, 5);
+    State.ore.spriteType = getRandomNum(1, 5);
 };
 
 const generateNewOre = () => {
-    state.ore.maxHp *= 1.13;
-    state.ore.hp = state.ore.maxHp;
+    State.ore.maxHp *= 1.13;
+    State.ore.hp = State.ore.maxHp;
 };
 
 const handleOreClick = (event: MouseEvent) => {
-    gainOre(state.opc);
+    gainOre(State.opc);
     gainGenerationXp(1);
     generateOreParticles(event);
-    generateRisingText(event, null, state.opc);
-    state.updates.updateOres = true;
+    generateRisingText(event, null, State.opc);
 };
 
 // - -----------------------------------------------------------------------------------
@@ -53,17 +77,17 @@ const handleOreClick = (event: MouseEvent) => {
 // - -----------------------------------------------------------------------------------
 
 const gainGenerationXp = (amount: number) => {
-    state.generation.xp += amount;
-    if (state.generation.xp >= state.generation.maxXp) handleGenerationLvlUp();
-    state.updates.updateGenerationXp = true;
+    State.generation.xp += amount;
+    if (State.generation.xp >= State.generation.maxXp) handleGenerationLvlUp();
+    UpdatesState.updateGenerationXp = true;
 };
 
 const handleGenerationLvlUp = () => {
-    state.generation.maxXp *= 1.15;
-    state.generation.xp = 0;
-    state.generation.lvOnRefine += 1;
+    State.generation.maxXp *= 1.15;
+    State.generation.xp = 0;
+    State.generation.lvOnRefine += 1;
 
-    state.updates.updateGenerationLvOnRefine = true;
+    UpdatesState.updateGenerationLvOnRefine = true;
 };
 
 // - -----------------------------------------------------------------------------------
@@ -71,56 +95,203 @@ const handleGenerationLvlUp = () => {
 // - -----------------------------------------------------------------------------------
 
 const updateOres = () => {
-    topbarInventoryOresEl.innerHTML = state.inventory.ores;
-    state.updates.updateOres = false;
+    let str = beautifyNumber(State.inventory.ores);
+
+    if (State.ops > 0) {
+        str += ` <span class='ops'>(${State.ops}/s)</span>`;
+    }
+
+    topbarInventoryOresEl.innerHTML = str;
+
+    UpdatesState.updateOres = false;
 };
 
 const updateOreHp = () => {
-    switch (state.settings.oreHpType) {
+    switch (State.settings.oreHpType) {
         case 'percentage':
-            oreHpEl.innerHTML = formatNumber(getPercentage(state.ore.hp, state.ore.maxHp));
+            oreHpEl.innerHTML = formatNumber(getPercentage(State.ore.hp, State.ore.maxHp));
             break;
         case 'number':
-            oreHpEl.innerHTML = `${formatNumber(state.ore.hp)}/${formatNumber(state.ore.maxHp)}`;
+            oreHpEl.innerHTML = `${formatNumber(State.ore.hp)}/${formatNumber(State.ore.maxHp)}`;
             break;
         case 'none':
         default:
             return;
     }
-    state.updates.updateOreHp = false;
+    UpdatesState.updateOreHp = false;
 };
 
 const updateOreSprite = () => {
-    oreSpriteEl.src = `./images/ore${state.ore.spriteType}-${state.ore.spriteHp}.png`;
+    oreSpriteEl.src = `./images/ore${State.ore.spriteType}-${State.ore.spriteHp}.png`;
 
     const differentOreSprites = 5;
-    const percentage = getPercentage(state.ore.hp, state.ore.maxHp);
+    const percentage = getPercentage(State.ore.hp, State.ore.maxHp);
     const calcSprite = Math.min(differentOreSprites, 6 - Math.ceil(percentage / 20));
 
-    if (state.ore.spriteHp !== calcSprite) {
-        state.ore.spriteHp = calcSprite;
-        oreSpriteEl.src = `./images/ore${state.ore.spriteType}-${state.ore.spriteHp}.png`;
+    if (State.ore.spriteHp !== calcSprite) {
+        State.ore.spriteHp = calcSprite;
+        oreSpriteEl.src = `./images/ore${State.ore.spriteType}-${State.ore.spriteHp}.png`;
         generateOreParticles(null, 5);
     }
 
-    state.updates.updateOreSprite = false;
+    UpdatesState.updateOreSprite = false;
 };
 
 const updateGenerationLv = () => {
-    topbarInventoryGenerationLv.innerHTML = state.generation.lv;
-    state.updates.updateGenerationLv = false;
+    topbarInventoryGenerationLv.innerHTML = State.generation.lv;
+    UpdatesState.updateGenerationLv = false;
 };
 
 const updateGenerationLvOnRefine = () => {
-    if (state.generation.lv < state.generation.lvOnRefine) {
-        topbarInventoryGenerationLvOnRefine.innerHTML = `(${state.generation.lvOnRefine})`;
+    if (State.generation.lv < State.generation.lvOnRefine) {
+        topbarInventoryGenerationLvOnRefine.innerHTML = `(${State.generation.lvOnRefine})`;
     }
-    state.updates.updateGenerationLvOnRefine = false;
+    UpdatesState.updateGenerationLvOnRefine = false;
 };
 
 const updateGenerationXp = () => {
-    topbarInventoryGenerationXpBarEl.style.width = getPercentage(state.generation.xp, state.generation.maxXp) + '%';
-    state.updates.updateGenerationXp = false;
+    topbarInventoryGenerationXpBarEl.style.width = getPercentage(State.generation.xp, State.generation.maxXp) + '%';
+    UpdatesState.updateGenerationXp = false;
+};
+
+const updateOPS = () => {
+    let ops = 0;
+
+    State.buildings.forEach((b) => {
+        ops += b.baseProduction * b.owned;
+    });
+
+    State.ops = ops;
+    UpdatesState.updateOPS = false;
+};
+
+const updateTabs = () => {
+    const tabsContainer = document.createElement('div');
+    tabsContainer.classList.add('tabs-container');
+
+    State.tabs
+        .filter((tab: Tab) => !tab.isLocked)
+        .forEach((tab: Tab) => {
+            const tabEl = document.createElement('div');
+            tabEl.addEventListener('click', () => changeTab(tab.codeName));
+
+            tabEl.classList.add('tab', `tab-${tab.codeName}`);
+            if (InstanceState.selectedTab === tab.codeName) tabEl.classList.add('tab-selected');
+            tabEl.innerHTML = tab.name;
+
+            tabsContainer.append(tabEl);
+        });
+
+    updateEl(tabsWrapperEl, tabsContainer);
+
+    UpdatesState.updateTabs = false;
+};
+
+const changeTab = (tab: TabName) => {
+    InstanceState.selectedTab = tab;
+    UpdatesState.updateTabs = true;
+    updateTabContent();
+};
+
+const updateTabContent = () => {
+    const tabsContentContainer = document.createElement('div');
+    tabsContentContainer.classList.add('tabs-content-container');
+
+    let tabContent;
+
+    switch (InstanceState.selectedTab) {
+        case 'store':
+            tabContent = buildStoreTabContent();
+            break;
+        default:
+            console.log('not built yet');
+    }
+
+    tabsContentContainer.append(tabContent);
+    updateEl(tabsContentWrapperEl, tabsContentContainer);
+
+    UpdatesState.updateTabContent = false;
+};
+
+const buildStoreTabContent = () => {
+    const storeTabContainer = createEl('div', ['tab-content', 'tab-content-store']);
+
+    const buyAmountContainer = buildBuyAmountContainer();
+    const buildingsContainer = buildBuildings();
+
+    storeTabContainer.append(buyAmountContainer);
+    storeTabContainer.append(buildingsContainer);
+
+    // console.log(buyAmountContainer.parentElement.append(buildingsContainer));
+
+    return storeTabContainer;
+};
+
+const buildBuyAmountContainer = () => {
+    const buyAmountContainer = document.createElement('div');
+    buyAmountContainer.classList.add('buy-amount-container');
+
+    const buyAmountText = createEl('p', ['buy-amount-text'], 'Buy Amount');
+
+    const buyAmounts = document.createElement('div');
+    buyAmounts.classList.add('buy-amounts');
+
+    const buyAmountChoices = [1, 10, 100, 'max'];
+    buyAmountChoices.forEach((amount) => {
+        const buyAmount = createEl('p', ['buy-amount'], amount);
+        buyAmount.addEventListener('click', () => changeBuyAmount(amount));
+        if (amount === InstanceState.buyAmount) {
+            buyAmount.classList.add('selected');
+        }
+        buyAmounts.append(buyAmount);
+    });
+
+    buyAmountContainer.append(buyAmountText);
+    buyAmountContainer.append(buyAmounts);
+
+    return buyAmountContainer;
+};
+
+const changeBuyAmount = (amount) => {
+    InstanceState.buyAmount = amount;
+    UpdatesState.updateTabContent = true;
+};
+
+const buildBuildings = () => {
+    const buildingsContainer = createEl('div', ['buildings-container']);
+
+    State.buildings.forEach((building) => {
+        const price = getGeometricSequencePrice(building);
+
+        let str = `
+            <img class='building-img' src='./../images/building-${building.codeName}.png' />
+            <div class='building-left'>
+                <p class='building-name'>${building.name} ${InstanceState.buyAmount != 1 ? `x${InstanceState.buyAmount}` : ''}</p>
+                <p class='building-price'>
+                    <img src='./../images/ore.png' />
+                    ${beautifyNumber(price)}
+                </p>
+            </div>
+            <p class='building-owned'>${building.owned}</p>
+        `;
+
+        let buildingEl = createEl('div', ['building', `building-${building.codeName}`], str);
+        buildingEl.addEventListener('click', () => building.buy());
+        buildingsContainer.append(buildingEl);
+    });
+
+    return buildingsContainer;
+};
+
+const updateBuildingPriceClass = () => {
+    State.buildings.forEach((building) => {
+        const buildingPriceEl = document.querySelector(`.building-${building.codeName} .building-price`);
+        if (State.inventory.ores >= getGeometricSequencePrice(building)) {
+            if (buildingPriceEl.classList.contains('not-enough')) buildingPriceEl.classList.remove('not-enough');
+        } else {
+            if (!buildingPriceEl.classList.contains('not-enough')) buildingPriceEl.classList.add('not-enough');
+        }
+    });
 };
 
 // - -----------------------------------------------------------------------------------
@@ -128,12 +299,21 @@ const updateGenerationXp = () => {
 // - -----------------------------------------------------------------------------------
 
 const gameLoop = () => {
-    if (state.updates.updateOres) updateOres();
-    if (state.updates.updateOreHp) updateOreHp();
-    if (state.updates.updateOreSprite) updateOreSprite();
-    if (state.updates.updateGenerationLv) updateGenerationLv();
-    if (state.updates.updateGenerationXp) updateGenerationXp();
-    if (state.updates.updateGenerationLvOnRefine) updateGenerationLvOnRefine();
+    if (UpdatesState.updateOres) updateOres();
+    if (UpdatesState.updateOreHp) updateOreHp();
+    if (UpdatesState.updateOreSprite) updateOreSprite();
+    if (UpdatesState.updateGenerationLv) updateGenerationLv();
+    if (UpdatesState.updateGenerationXp) updateGenerationXp();
+    if (UpdatesState.updateGenerationLvOnRefine) updateGenerationLvOnRefine();
+    if (UpdatesState.updateTabs) updateTabs();
+    if (UpdatesState.updateTabContent) updateTabContent();
+    if (UpdatesState.updateOPS) updateOPS();
+
+    if (InstanceState.selectedTab === 'store') {
+        updateBuildingPriceClass();
+    }
+
+    gainOre(State.ops / State.settings.tick, false);
 
     if (Object.keys(oreParticlesList).length > 0) {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -148,20 +328,14 @@ const initiateCanvasParticles = () => {
 };
 
 const initialLoad = () => {
-    setInterval(gameLoop, 1000 / state.settings.tick);
-
-    updateOres();
-    updateOreHp();
-    updateOreSprite();
-    updateGenerationLv();
-    updateGenerationLvOnRefine();
-
     initiateCanvasParticles();
+    instantiateTabs();
+    instantiateBuildings();
 
     oreSpriteEl.onclick = handleOreClick;
-};
 
-initialLoad();
+    setInterval(gameLoop, 1000 / State.settings.tick);
+};
 
 window.onload = () => initialLoad();
 

@@ -28,6 +28,9 @@ const OreParticle = function (event?: MouseEvent) {
     this.vx = getRandomNum(-2, 2, 5);
     this.vy = getRandomNum(-2, -1, 5);
 
+    // Size
+    this.size = getRandomNum(0.5, 2.5, 3);
+
     // Adding particle to index
     oreParticlesIndex += 1;
     oreParticlesList[oreParticlesIndex] = this;
@@ -46,7 +49,7 @@ OreParticle.prototype.draw = function () {
 
     // Age particle
     this.life += 1;
-    this.opacity -= 0.025;
+    this.opacity -= 0.02;
 
     if (this.life > settings.maxLife || this.y >= window.innerHeight) {
         delete oreParticlesList[this.id];
@@ -58,7 +61,7 @@ OreParticle.prototype.draw = function () {
     ctx.beginPath();
     ctx.fillStyle = `rgba( 255, 255, 255, ${this.opacity} )`;
     // ctx.fillStyle = `rgba( ${color}, ${color}, ${color}, ${this.opacity} )`;
-    ctx.arc(this.x, this.y, getRandomNum(0.5, 2.5, 5), 0, Math.PI * 2, true);
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, true);
     ctx.closePath();
     ctx.fill();
 };
