@@ -1,7 +1,7 @@
 import { getRandomNum } from './utils';
 import { particlesCanvasContext as ctx, oreSpriteEl } from './elements';
+import { InstanceState } from './State';
 
-export const oreParticlesList = {};
 let oreParticlesIndex = 0;
 
 const settings = {
@@ -33,7 +33,7 @@ const OreParticle = function (event?: MouseEvent) {
 
     // Adding particle to index
     oreParticlesIndex += 1;
-    oreParticlesList[oreParticlesIndex] = this;
+    InstanceState[oreParticlesIndex] = this;
     this.id = oreParticlesIndex;
     this.life = 0;
     this.opacity = 1;
@@ -52,7 +52,7 @@ OreParticle.prototype.draw = function () {
     this.opacity -= 0.02;
 
     if (this.life > settings.maxLife || this.y >= window.innerHeight) {
-        delete oreParticlesList[this.id];
+        delete InstanceState[this.id];
     }
 
     // Draw particle

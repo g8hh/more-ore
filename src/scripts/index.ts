@@ -24,7 +24,7 @@ import {
     beautifyNumber,
     getGeometricSequencePrice
 } from './utils';
-import { generateOreParticles, oreParticlesList } from './OreParticle';
+import { generateOreParticles } from './OreParticle';
 import { generateRisingText } from './RisingText';
 import { instantiateTabs, TabName, Tab } from './Tabs';
 import { instantiateBuildings } from './Buildings';
@@ -315,9 +315,9 @@ const gameLoop = () => {
 
     gainOre(State.ops / State.settings.tick, false);
 
-    if (Object.keys(oreParticlesList).length > 0) {
+    if (Object.keys(InstanceState.oreParticles).length > 0) {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        for (let i in oreParticlesList) oreParticlesList[i].draw();
+        for (let i in InstanceState.oreParticles) InstanceState.oreParticles[i].draw();
     }
 };
 
