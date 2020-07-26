@@ -1,6 +1,7 @@
 import { tooltipWrapperEl, gameContainerRight } from './elements';
 import { getGeometricSequencePrice, beautifyNumber } from './utils';
 import { Building } from './Buildings';
+import { State } from './State';
 
 interface Tooltip {
     type: 'building';
@@ -21,11 +22,15 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
 
     switch (tt.type) {
         case 'building':
+            const price = getGeometricSequencePrice(tt.building);
             str += `
                 <div class='tooltip-container tooltip-building tooltip-building-${tt.building.codeName}'>
                     <div class='tooltip-top'>
                         <p>${tt.building.name}</p>
-                        <p class='building-price'>${beautifyNumber(getGeometricSequencePrice(tt.building))} Ores</p>
+                        <p class='building-price' style='${State.inventory.ores < price ? 'color: crimson' : ''}'>
+                            <img src='./../images/ore.png'/>
+                            ${beautifyNumber(price)}
+                        </p>
                     </div>
                     <div class='tooltip-middle'>
                         <p>${tt.building.desc}</p>

@@ -275,7 +275,7 @@ const buildBuildings = () => {
         `;
 
         let buildingEl = createEl('div', ['building', `building-${building.codeName}`], str);
-        buildingEl.addEventListener('click', () => building.buy());
+        buildingEl.addEventListener('click', (event) => building.buy(event));
         buildingEl.addEventListener('mousemove', (event) => showTooltip(event, { type: 'building', building }));
         buildingEl.addEventListener('mouseleave', () => hideTooltip());
 

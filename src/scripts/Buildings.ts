@@ -2,6 +2,7 @@ import { camelcase, getGeometricSequencePrice } from './utils';
 import { spend } from './index';
 import { State, InstanceState } from './State';
 import { UpdatesState } from './Updates';
+import { showTooltip } from './Tooltip';
 
 export interface Building {
     name: string;
@@ -33,7 +34,7 @@ const Building = function (b) {
     this.owned = b.owned || 0;
     this.buyCallback = b.buyCallback;
 
-    this.buy = () => {
+    this.buy = (event) => {
         if (spend(getGeometricSequencePrice(this))) {
             this.owned += InstanceState.buyAmount;
             this.buyCallback();
@@ -42,6 +43,8 @@ const Building = function (b) {
             UpdatesState.updateOPS = true;
             UpdatesState.updateOres = true;
             UpdatesState.updateTabContent = true;
+
+            showTooltip(event, { type: 'building', building: this });
         }
     };
 };
