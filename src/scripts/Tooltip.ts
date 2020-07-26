@@ -1,5 +1,5 @@
 import { tooltipWrapperEl, gameContainerRight } from './elements';
-import { getGeometricSequencePrice, beautifyNumber } from './utils';
+import { getGeometricSequencePrice, beautifyNumber, getPercentage } from './utils';
 import { Building } from './Buildings';
 import { State } from './State';
 
@@ -9,13 +9,11 @@ interface Tooltip {
 }
 
 export const hideTooltip = () => {
-    console.log('hiding tooltip');
     tooltipWrapperEl.innerHTML = '';
     tooltipWrapperEl.classList.remove('visible');
 };
 
 export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
-    console.log('showing tooltip', event, tt);
     tooltipWrapperEl.classList.add('visible');
 
     let str = '';
@@ -42,7 +40,11 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
                     <p><strong>${tt.building.owned}</strong> ${tt.building.name}${
                     tt.building.owned > 1 ? 's are' : ' is'
                 } generating <strong>${tt.building.owned * tt.building.baseProduction}</strong> ore per second.</p>
-                `;
+                    <p class='building-percentage'>${tt.building.name}s are currently generating <strong>${getPercentage(
+                    tt.building.owned * tt.building.baseProduction,
+                    State.ops
+                )}%</strong> of your total OpS</p>
+                    `;
             }
 
             str += `
@@ -63,8 +65,10 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
 
     switch (tt.type) {
         case 'building':
-            tooltipWrapperEl.style.width = '300px';
+            const tooltipWidth = 350;
+
+            tooltipWrapperEl.style.width = tooltipWidth + 'px';
             tooltipWrapperEl.style.top = event.clientY - tooltipWrapperEl.getBoundingClientRect().height / 2 + 'px';
-            tooltipWrapperEl.style.left = gameContainerRight.getBoundingClientRect().left - 300 + 'px';
+            tooltipWrapperEl.style.left = gameContainerRight.getBoundingClientRect().left - tooltipWidth + 'px';
     }
 };

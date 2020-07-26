@@ -17,7 +17,7 @@ export interface Building {
     isHidden: boolean;
     owned: number;
     buy: Function;
-    buyCallback: Function;
+    buyCallback?: Function;
 }
 
 const Building = function (b) {
@@ -32,13 +32,14 @@ const Building = function (b) {
     this.locked = b.isLocked;
     this.isHidden = b.isHidden;
     this.owned = b.owned || 0;
-    this.buyCallback = b.buyCallback;
+    this.buyCallback = b.buyCallback || null;
 
     this.buy = (event) => {
         if (spend(getGeometricSequencePrice(this))) {
             this.owned += InstanceState.buyAmount;
-            this.buyCallback();
             this.currentPrice = this.basePrice * Math.pow(this.priceScale, this.owned);
+
+            if (this.buyCallback) this.buyCallback();
 
             UpdatesState.updateOPS = true;
             UpdatesState.updateOres = true;
@@ -58,8 +59,7 @@ const buildings = [
         baseProduction: 0.5,
         priceScale: 1.12,
         isLocked: false,
-        isHidden: false,
-        buyCallback: () => console.log('yerr')
+        isHidden: false
     }
 ];
 
