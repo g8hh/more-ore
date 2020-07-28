@@ -18,6 +18,7 @@ import { instantiateTabs, TabName, Tab } from './Tabs';
 import { instantiateBuildings } from './Buildings';
 import { showTooltip, hideTooltip } from './Tooltip';
 import { Toast } from './Toast';
+import { instantiateSmithUpgrades } from './SmithUpgrades';
 
 const gainOre = (amount: number, damageOre: boolean = true) => {
     State.inventory.ores += amount;
@@ -48,6 +49,9 @@ const handleBrokenOre = () => {
     gainGenerationXp(50);
     generateNewOre();
     State.ore.spriteType = getRandomNum(1, 5);
+    State.stats.rocksDestroyed++;
+
+    if (State.stats.rocksDestroyed === 1) unlockTab('smith');
 };
 
 const generateNewOre = () => {
@@ -60,6 +64,8 @@ const handleOreClick = (event: MouseEvent) => {
     gainGenerationXp(1);
     generateOreParticles(event);
     generateRisingText(event, null, State.opc);
+
+    State.stats.oreClicks++;
 };
 
 // - -----------------------------------------------------------------------------------
@@ -144,7 +150,7 @@ const updateGenerationXp = () => {
     UpdatesState.updateGenerationXp = false;
 };
 
-const updateOPS = () => {
+export const updateOPS = () => {
     let ops = 0;
 
     State.buildings.forEach((b) => {
@@ -154,6 +160,28 @@ const updateOPS = () => {
     State.ops = ops;
     UpdatesState.updateOPS = false;
 };
+
+const changeBuyAmount = (amount) => {
+    InstanceState.buyAmount = amount;
+    UpdatesState.updateTabContent = true;
+};
+
+const updateBuildingPriceClass = () => {
+    State.buildings
+        .filter((building) => !building.isHidden && !building.isLocked)
+        .forEach((building) => {
+            const buildingPriceEl = document.querySelector(`.building-${building.codeName} .building-price`);
+            if (State.inventory.ores >= getGeometricSequencePrice(building)) {
+                if (buildingPriceEl.classList.contains('not-enough')) buildingPriceEl.classList.remove('not-enough');
+            } else {
+                if (!buildingPriceEl.classList.contains('not-enough')) buildingPriceEl.classList.add('not-enough');
+            }
+        });
+};
+
+// - -----------------------------------------------------------------------------------
+// - TAB BUILD STUFF -------------------------------------------------------------------
+// - -----------------------------------------------------------------------------------
 
 const updateTabs = () => {
     const tabsContainer = document.createElement('div');
@@ -177,10 +205,22 @@ const updateTabs = () => {
     UpdatesState.updateTabs = false;
 };
 
-const changeTab = (tab: TabName) => {
-    InstanceState.selectedTab = tab;
-    UpdatesState.updateTabs = true;
-    updateTabContent();
+const changeTab = (tab: TabName): void => {
+    if (InstanceState.selectedTab !== tab) {
+        InstanceState.selectedTab = tab;
+        UpdatesState.updateTabs = true;
+        updateTabContent();
+    }
+};
+
+const unlockTab = (tabName: string): void => {
+    State.tabs.forEach((tab) => {
+        if (tab.codeName === tabName) {
+            tab.isLocked = false;
+            UpdatesState.updateTabs = true;
+            return;
+        }
+    });
 };
 
 const updateTabContent = () => {
@@ -193,6 +233,9 @@ const updateTabContent = () => {
         case 'store':
             tabContent = buildStoreTabContent();
             break;
+        case 'smith':
+            tabContent = buildSmithTabContent();
+            break;
         default:
             console.log('not built yet');
     }
@@ -203,7 +246,7 @@ const updateTabContent = () => {
     UpdatesState.updateTabContent = false;
 };
 
-const buildStoreTabContent = () => {
+const buildStoreTabContent = (): HTMLElement => {
     const storeTabContainer = createEl('div', ['tab-content', 'tab-content-store']);
 
     const buyAmountContainer = buildBuyAmountContainer();
@@ -215,7 +258,45 @@ const buildStoreTabContent = () => {
     return storeTabContainer;
 };
 
-const buildBuyAmountContainer = () => {
+const buildBuildings = (): HTMLElement => {
+    const buildingsContainer = createEl('div', ['buildings-container']);
+
+    State.buildings
+        .filter((building) => !building.isHidden)
+        .forEach((building) => {
+            const buildingEl = createEl('div', ['building', `building-${building.codeName}`, `${building.isLocked && 'locked'}`]);
+            const price = getGeometricSequencePrice(building);
+
+            let str = `<img class='building-img' src='./../images/building-${building.codeName}.png' />`;
+
+            if (!building.isLocked) {
+                str += `
+                    <div class='building-left'>
+                        <p class='building-name'>${building.name} ${InstanceState.buyAmount != 1 ? `x${InstanceState.buyAmount}` : ''}</p>
+                        <p class='building-price'>
+                            <img src='./../images/ore.png' />
+                            ${beautifyNumber(price)}
+                        </p>
+                    </div>
+                    <p class='building-owned'>${building.owned}</p>
+                `;
+            }
+
+            buildingEl.innerHTML = str;
+
+            if (!building.isLocked) {
+                buildingEl.addEventListener('click', (event) => building.buy(event));
+                buildingEl.addEventListener('mousemove', (event) => showTooltip(event, { type: 'building', building }));
+                buildingEl.addEventListener('mouseleave', () => hideTooltip());
+            }
+
+            buildingsContainer.append(buildingEl);
+        });
+
+    return buildingsContainer;
+};
+
+const buildBuyAmountContainer = (): HTMLElement => {
     const buyAmountContainer = document.createElement('div');
     buyAmountContainer.classList.add('buy-amount-container');
 
@@ -240,58 +321,38 @@ const buildBuyAmountContainer = () => {
     return buyAmountContainer;
 };
 
-const changeBuyAmount = (amount) => {
-    InstanceState.buyAmount = amount;
-    UpdatesState.updateTabContent = true;
+const buildSmithTabContent = () => {
+    const smithTabContainer = createEl('div', ['tab-content', 'tab-content-smith']);
+    const underTabBar = createEl('div', ['under-tab-bar']);
+
+    const smithUpgradesContainer = buildSmithUpgrades();
+
+    smithTabContainer.append(underTabBar);
+    smithTabContainer.append(smithUpgradesContainer);
+
+    return smithTabContainer;
 };
 
-const buildBuildings = () => {
-    const buildingsContainer = createEl('div', ['buildings-container']);
+const buildSmithUpgrades = (): HTMLElement => {
+    const smithUpgradesContainer = createEl('div', ['smith-upgrades-container']);
 
-    State.buildings
-        .filter((building) => !building.isHidden)
-        .forEach((building) => {
-            const price = getGeometricSequencePrice(building);
+    InstanceState.smithUpgrades
+        .filter((upgrade) => !upgrade.locked)
+        .forEach((upgrade) => {
+            const upgradeEl = createEl('div', ['smith-upgrade']);
 
-            let str = `<img class='building-img' src='./../images/building-${building.codeName}.png' />`;
+            let str = `
+                <p>${upgrade.name}</p>
+                <p>${upgrade.cost}</p>
+            `;
 
-            if (!building.isLocked) {
-                str += `
-                    <div class='building-left'>
-                        <p class='building-name'>${building.name} ${InstanceState.buyAmount != 1 ? `x${InstanceState.buyAmount}` : ''}</p>
-                        <p class='building-price'>
-                            <img src='./../images/ore.png' />
-                            ${beautifyNumber(price)}
-                        </p>
-                    </div>
-                    <p class='building-owned'>${building.owned}</p>
-                `;
-            }
+            // upgradeEl.addEventListener('click', () => upgrade.start())
 
-            let buildingEl = createEl('div', ['building', `building-${building.codeName}`, `${building.isLocked && 'locked'}`], str);
-            if (!building.isLocked) {
-                buildingEl.addEventListener('click', (event) => building.buy(event));
-                buildingEl.addEventListener('mousemove', (event) => showTooltip(event, { type: 'building', building }));
-                buildingEl.addEventListener('mouseleave', () => hideTooltip());
-            }
-
-            buildingsContainer.append(buildingEl);
+            upgradeEl.innerHTML = str;
+            smithUpgradesContainer.append(upgradeEl);
         });
 
-    return buildingsContainer;
-};
-
-const updateBuildingPriceClass = () => {
-    State.buildings
-        .filter((building) => !building.isHidden && !building.isLocked)
-        .forEach((building) => {
-            const buildingPriceEl = document.querySelector(`.building-${building.codeName} .building-price`);
-            if (State.inventory.ores >= getGeometricSequencePrice(building)) {
-                if (buildingPriceEl.classList.contains('not-enough')) buildingPriceEl.classList.remove('not-enough');
-            } else {
-                if (!buildingPriceEl.classList.contains('not-enough')) buildingPriceEl.classList.add('not-enough');
-            }
-        });
+    return smithUpgradesContainer;
 };
 
 // - -----------------------------------------------------------------------------------
@@ -335,6 +396,7 @@ const initialLoad = () => {
     initiateCanvasParticles();
     instantiateTabs();
     instantiateBuildings();
+    instantiateSmithUpgrades();
     constants.oreSpriteEl.onclick = handleOreClick;
 
     setInterval(gameLoop, 1000 / State.settings.tick);

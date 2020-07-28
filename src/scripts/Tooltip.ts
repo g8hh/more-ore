@@ -41,9 +41,8 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
                     <p><strong>${tt.building.owned}</strong>${
                     tt.building.owned > 1 ? `${tt.building.namePlural} are` : `${tt.building.name} is`
                 }generating <strong>${tt.building.owned * tt.building.production}</strong> ore per second.</p>
-                    <p class='building-percentage'>${tt.building.name}s are currently generating <strong>${getPercentage(
-                    tt.building.owned * tt.building.production,
-                    State.ops
+                    <p class='building-percentage'>${tt.building.name}s are currently generating <strong>${beautifyNumber(
+                    getPercentage(tt.building.owned * tt.building.production, State.ops)
                 )}%</strong> of your total OpS</p>
                     `;
             }

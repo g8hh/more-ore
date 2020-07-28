@@ -1,5 +1,5 @@
 import { getCodeName, getGeometricSequencePrice } from './utils';
-import { spend } from './index';
+import { spend, updateOPS } from './index';
 import { State, InstanceState } from './State';
 import { UpdatesState } from './Updates';
 import { showTooltip } from './Tooltip';
@@ -42,7 +42,8 @@ const Building = function (b) {
             this.owned += InstanceState.buyAmount;
             this.currentPrice = this.basePrice * Math.pow(this.priceScale, this.owned);
 
-            UpdatesState.updateOPS = true;
+            updateOPS(); // Need to call the function directly so OPS gets calculated instantly
+
             UpdatesState.updateOres = true;
             UpdatesState.updateTabContent = true;
 
@@ -51,8 +52,6 @@ const Building = function (b) {
             showTooltip(event, { type: 'building', building: this });
         }
     };
-
-    console.log('this building', this);
 };
 
 const updateBuildingsVisibility = (index: number) => {

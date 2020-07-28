@@ -17,6 +17,7 @@
             &.tab-selected {
                 color: white;
                 background-color: #4e3013;
+                cursor: default;
             }
         }
     }
@@ -32,4 +33,11 @@
             height: 100%;
         }
     }
+}
+
+.under-tab-bar {
+    height: 20px;
+    width: 100%;
+    background-image: url('./../../static/images/misc-horizontal_separator.png');
+    background-size: auto 100%;
 }

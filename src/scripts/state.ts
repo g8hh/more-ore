@@ -4,6 +4,8 @@ import Ore from './interfaces/Ore';
 import Settings from './interfaces/Settings';
 import { Tab } from './Tabs';
 import { Building } from './Buildings';
+import { Stats } from './interfaces/Stats';
+import { SmithUpgrade } from './SmithUpgrades';
 
 interface State {
     opc: number;
@@ -13,11 +15,12 @@ interface State {
     ore: Ore;
     tabs: Tab[];
     buildings: Building[];
+    stats: Stats;
     settings: Settings;
 }
 
 export const State: State = {
-    opc: 1,
+    opc: 10,
     ops: 0,
 
     inventory: {
@@ -41,6 +44,11 @@ export const State: State = {
     tabs: [],
     buildings: [],
 
+    stats: {
+        oreClicks: 0,
+        rocksDestroyed: 0
+    },
+
     settings: {
         tick: 60,
         oreHpType: 'number'
@@ -52,11 +60,13 @@ interface InstanceState {
     buyAmount: 1 | 10 | 100 | 'max';
     oreParticles: {};
     toasts: [];
+    smithUpgrades: SmithUpgrade[];
 }
 
-export const InstanceState = {
+export const InstanceState: InstanceState = {
     selectedTab: 'store',
     buyAmount: 1,
     oreParticles: {},
-    toasts: []
+    toasts: [],
+    smithUpgrades: []
 };

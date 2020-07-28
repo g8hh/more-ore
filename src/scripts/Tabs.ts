@@ -1,5 +1,6 @@
 import { getCodeName } from './utils';
 import { State } from './State';
+import { UpdatesState } from './Updates';
 
 export interface Tab {
     name: string;
@@ -26,7 +27,7 @@ const tabs = [
     }
 ];
 
-export function instantiateTabs(t: Tab[] = JSON.parse(localStorage.getItem('tabs')) || tabs): void {
+export const instantiateTabs = (t: Tab[] = JSON.parse(localStorage.getItem('tabs')) || tabs): void => {
     const builtTabs = [];
 
     t.forEach((tab: Tab) => {
@@ -34,4 +35,4 @@ export function instantiateTabs(t: Tab[] = JSON.parse(localStorage.getItem('tabs
     });
 
     State.tabs = builtTabs;
-}
+};
