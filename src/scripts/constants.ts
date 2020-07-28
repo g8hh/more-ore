@@ -3,6 +3,11 @@ import { select as s } from './utils';
 export const pageContainer: HTMLElement = s('.page-container');
 export const gameContainerRight: HTMLElement = s('.game-container-right');
 
+export const torchLeft: HTMLElement = s('.torch-left');
+export const torchRight: HTMLElement = s('.torch-right');
+
+export const toastsContainerEl: HTMLElement = s('.toasts-container');
+
 export const oreSpriteEl: HTMLImageElement = s('.ore-sprite');
 
 export const topbarInventoryEl: HTMLElement = s('.topbar-inventory');

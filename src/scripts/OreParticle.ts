@@ -1,5 +1,5 @@
 import { getRandomNum } from './utils';
-import { particlesCanvasContext as ctx, oreSpriteEl } from './elements';
+import { particlesCanvasContext as ctx, oreSpriteEl } from './constants';
 import { InstanceState } from './State';
 
 let oreParticlesIndex = 0;

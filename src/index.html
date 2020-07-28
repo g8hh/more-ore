@@ -17,10 +17,13 @@
     <body>
         <div class="fps" style="position: absolute; font-size: 40px; background: red;"></div>
         <div class="page-container">
-            <canvas id="particles"></canvas>
             <div class="game-container">
+                <canvas id="particles"></canvas>
+                <div class="toasts-container"></div>
                 <div class="tooltip-wrapper"></div>
                 <div class="game-container-left">
+                    <div class="torch torch-left"></div>
+                    <div class="torch torch-right"></div>
                     <div class="game-container-left-top">
                         <div class="game-container-left-top-top">
                             <div class="topbar-inventory">
@@ -52,7 +55,9 @@
                     <div class="tabs-content-wrapper"></div>
                 </div>
             </div>
-            <footer>More Ore</footer>
+            <footer>
+                <div class="more-ore-logo"></div>
+            </footer>
         </div>
 
         <script src="./scripts/index.ts"></script>

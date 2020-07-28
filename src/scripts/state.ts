@@ -51,10 +51,12 @@ interface InstanceState {
     selectedTab: string;
     buyAmount: 1 | 10 | 100 | 'max';
     oreParticles: {};
+    toasts: [];
 }
 
 export const InstanceState = {
     selectedTab: 'store',
     buyAmount: 1,
-    oreParticles: {}
+    oreParticles: {},
+    toasts: []
 };

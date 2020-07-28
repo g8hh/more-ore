@@ -1,19 +1,7 @@
 import { State, InstanceState } from './State';
 import { UpdatesState } from './Updates';
 
-import {
-    pageContainer,
-    oreSpriteEl,
-    topbarInventoryOresEl,
-    oreHpEl,
-    topbarInventoryGenerationLv,
-    topbarInventoryGenerationLvOnRefine,
-    topbarInventoryGenerationXpBarEl,
-    particlesCanvasEl,
-    particlesCanvasContext as ctx,
-    tabsWrapperEl,
-    tabsContentWrapperEl
-} from './elements';
+import * as constants from './constants';
 import {
     getPercentage,
     formatNumber,
@@ -29,6 +17,7 @@ import { generateRisingText } from './RisingText';
 import { instantiateTabs, TabName, Tab } from './Tabs';
 import { instantiateBuildings } from './Buildings';
 import { showTooltip, hideTooltip } from './Tooltip';
+import { Toast } from './Toast';
 
 const gainOre = (amount: number, damageOre: boolean = true) => {
     State.inventory.ores += amount;
@@ -102,7 +91,7 @@ const updateOres = () => {
         str += ` <span class='ops'>(${State.ops}/s)</span>`;
     }
 
-    topbarInventoryOresEl.innerHTML = str;
+    constants.topbarInventoryOresEl.innerHTML = `${str}`;
 
     UpdatesState.updateOres = false;
 };
@@ -110,10 +99,10 @@ const updateOres = () => {
 const updateOreHp = () => {
     switch (State.settings.oreHpType) {
         case 'percentage':
-            oreHpEl.innerHTML = formatNumber(getPercentage(State.ore.hp, State.ore.maxHp));
+            constants.oreHpEl.innerHTML = `${formatNumber(getPercentage(State.ore.hp, State.ore.maxHp))}`;
             break;
         case 'number':
-            oreHpEl.innerHTML = `${formatNumber(State.ore.hp)}/${formatNumber(State.ore.maxHp)}`;
+            constants.oreHpEl.innerHTML = `${formatNumber(State.ore.hp)}/${formatNumber(State.ore.maxHp)}`;
             break;
         case 'none':
         default:
@@ -123,7 +112,7 @@ const updateOreHp = () => {
 };
 
 const updateOreSprite = () => {
-    oreSpriteEl.src = `./images/ore${State.ore.spriteType}-${State.ore.spriteHp}.png`;
+    constants.oreSpriteEl.src = `./images/ore${State.ore.spriteType}-${State.ore.spriteHp}.png`;
 
     const differentOreSprites = 5;
     const percentage = getPercentage(State.ore.hp, State.ore.maxHp);
@@ -131,7 +120,7 @@ const updateOreSprite = () => {
 
     if (State.ore.spriteHp !== calcSprite) {
         State.ore.spriteHp = calcSprite;
-        oreSpriteEl.src = `./images/ore${State.ore.spriteType}-${State.ore.spriteHp}.png`;
+        constants.oreSpriteEl.src = `./images/ore${State.ore.spriteType}-${State.ore.spriteHp}.png`;
         generateOreParticles(null, 5);
     }
 
@@ -139,19 +128,19 @@ const updateOreSprite = () => {
 };
 
 const updateGenerationLv = () => {
-    topbarInventoryGenerationLv.innerHTML = State.generation.lv;
+    constants.topbarInventoryGenerationLv.innerHTML = `${State.generation.lv}`;
     UpdatesState.updateGenerationLv = false;
 };
 
 const updateGenerationLvOnRefine = () => {
     if (State.generation.lv < State.generation.lvOnRefine) {
-        topbarInventoryGenerationLvOnRefine.innerHTML = `(${State.generation.lvOnRefine})`;
+        constants.topbarInventoryGenerationLvOnRefine.innerHTML = `(${State.generation.lvOnRefine})`;
     }
     UpdatesState.updateGenerationLvOnRefine = false;
 };
 
 const updateGenerationXp = () => {
-    topbarInventoryGenerationXpBarEl.style.width = getPercentage(State.generation.xp, State.generation.maxXp) + '%';
+    constants.topbarInventoryGenerationXpBarEl.style.width = getPercentage(State.generation.xp, State.generation.maxXp) + '%';
     UpdatesState.updateGenerationXp = false;
 };
 
@@ -159,7 +148,7 @@ const updateOPS = () => {
     let ops = 0;
 
     State.buildings.forEach((b) => {
-        ops += b.baseProduction * b.owned;
+        ops += b.production * b.owned;
     });
 
     State.ops = ops;
@@ -183,7 +172,7 @@ const updateTabs = () => {
             tabsContainer.append(tabEl);
         });
 
-    updateEl(tabsWrapperEl, tabsContainer);
+    updateEl(constants.tabsWrapperEl, tabsContainer);
 
     UpdatesState.updateTabs = false;
 };
@@ -209,7 +198,7 @@ const updateTabContent = () => {
     }
 
     tabsContentContainer.append(tabContent);
-    updateEl(tabsContentWrapperEl, tabsContentContainer);
+    updateEl(constants.tabsContentWrapperEl, tabsContentContainer);
 
     UpdatesState.updateTabContent = false;
 };
@@ -259,41 +248,50 @@ const changeBuyAmount = (amount) => {
 const buildBuildings = () => {
     const buildingsContainer = createEl('div', ['buildings-container']);
 
-    State.buildings.forEach((building) => {
-        const price = getGeometricSequencePrice(building);
+    State.buildings
+        .filter((building) => !building.isHidden)
+        .forEach((building) => {
+            const price = getGeometricSequencePrice(building);
 
-        let str = `
-            <img class='building-img' src='./../images/building-${building.codeName}.png' />
-            <div class='building-left'>
-                <p class='building-name'>${building.name} ${InstanceState.buyAmount != 1 ? `x${InstanceState.buyAmount}` : ''}</p>
-                <p class='building-price'>
-                    <img src='./../images/ore.png' />
-                    ${beautifyNumber(price)}
-                </p>
-            </div>
-            <p class='building-owned'>${building.owned}</p>
-        `;
+            let str = `<img class='building-img' src='./../images/building-${building.codeName}.png' />`;
 
-        let buildingEl = createEl('div', ['building', `building-${building.codeName}`], str);
-        buildingEl.addEventListener('click', (event) => building.buy(event));
-        buildingEl.addEventListener('mousemove', (event) => showTooltip(event, { type: 'building', building }));
-        buildingEl.addEventListener('mouseleave', () => hideTooltip());
+            if (!building.isLocked) {
+                str += `
+                    <div class='building-left'>
+                        <p class='building-name'>${building.name} ${InstanceState.buyAmount != 1 ? `x${InstanceState.buyAmount}` : ''}</p>
+                        <p class='building-price'>
+                            <img src='./../images/ore.png' />
+                            ${beautifyNumber(price)}
+                        </p>
+                    </div>
+                    <p class='building-owned'>${building.owned}</p>
+                `;
+            }
 
-        buildingsContainer.append(buildingEl);
-    });
+            let buildingEl = createEl('div', ['building', `building-${building.codeName}`, `${building.isLocked && 'locked'}`], str);
+            if (!building.isLocked) {
+                buildingEl.addEventListener('click', (event) => building.buy(event));
+                buildingEl.addEventListener('mousemove', (event) => showTooltip(event, { type: 'building', building }));
+                buildingEl.addEventListener('mouseleave', () => hideTooltip());
+            }
+
+            buildingsContainer.append(buildingEl);
+        });
 
     return buildingsContainer;
 };
 
 const updateBuildingPriceClass = () => {
-    State.buildings.forEach((building) => {
-        const buildingPriceEl = document.querySelector(`.building-${building.codeName} .building-price`);
-        if (State.inventory.ores >= getGeometricSequencePrice(building)) {
-            if (buildingPriceEl.classList.contains('not-enough')) buildingPriceEl.classList.remove('not-enough');
-        } else {
-            if (!buildingPriceEl.classList.contains('not-enough')) buildingPriceEl.classList.add('not-enough');
-        }
-    });
+    State.buildings
+        .filter((building) => !building.isHidden && !building.isLocked)
+        .forEach((building) => {
+            const buildingPriceEl = document.querySelector(`.building-${building.codeName} .building-price`);
+            if (State.inventory.ores >= getGeometricSequencePrice(building)) {
+                if (buildingPriceEl.classList.contains('not-enough')) buildingPriceEl.classList.remove('not-enough');
+            } else {
+                if (!buildingPriceEl.classList.contains('not-enough')) buildingPriceEl.classList.add('not-enough');
+            }
+        });
 };
 
 // - -----------------------------------------------------------------------------------
@@ -318,23 +316,26 @@ const gameLoop = () => {
     gainOre(State.ops / State.settings.tick, false);
 
     if (Object.keys(InstanceState.oreParticles).length > 0) {
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        constants.particlesCanvasContext.clearRect(
+            0,
+            0,
+            constants.particlesCanvasContext.canvas.width,
+            constants.particlesCanvasContext.canvas.height
+        );
         for (let i in InstanceState.oreParticles) InstanceState.oreParticles[i].draw();
     }
 };
 
 const initiateCanvasParticles = () => {
-    particlesCanvasEl.height = window.innerHeight;
-    particlesCanvasEl.width = window.innerWidth;
-    // const ctx = particlesCanvasEl.getContext('2d');
+    constants.particlesCanvasEl.height = window.innerHeight;
+    constants.particlesCanvasEl.width = window.innerWidth;
 };
 
 const initialLoad = () => {
     initiateCanvasParticles();
     instantiateTabs();
     instantiateBuildings();
-
-    oreSpriteEl.onclick = handleOreClick;
+    constants.oreSpriteEl.onclick = handleOreClick;
 
     setInterval(gameLoop, 1000 / State.settings.tick);
 };

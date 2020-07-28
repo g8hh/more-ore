@@ -1,4 +1,4 @@
-import { camelcase } from './utils';
+import { getCodeName } from './utils';
 import { State } from './State';
 
 export interface Tab {
@@ -11,7 +11,7 @@ export type TabName = 'store' | 'smith';
 
 const Tab = function (o) {
     this.name = o.name;
-    this.codeName = camelcase(o.name);
+    this.codeName = getCodeName(o.name);
     this.isLocked = o.isLocked;
 };
 
@@ -26,7 +26,7 @@ const tabs = [
     }
 ];
 
-export function instantiateTabs(t: Tab[] = tabs): void {
+export function instantiateTabs(t: Tab[] = JSON.parse(localStorage.getItem('tabs')) || tabs): void {
     const builtTabs = [];
 
     t.forEach((tab: Tab) => {

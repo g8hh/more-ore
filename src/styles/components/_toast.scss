@@ -1,0 +1,24 @@
+.toasts-container {
+    position: absolute;
+    pointer-events: none;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    overflow: hidden;
+
+    display: flex;
+    flex-flow: column-reverse nowrap;
+}
+
+.toast {
+    pointer-events: all;
+    flex-shrink: 0;
+    height: 150px;
+    width: 380px;
+    border-radius: 5px;
+    margin-top: 8px;
+    border: 1px solid white;
+    background: black;
+}

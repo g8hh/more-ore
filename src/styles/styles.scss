@@ -30,10 +30,19 @@ body {
 footer {
   background: black;
   color: white;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+
+  .more-ore-logo {
+    height: 17px;
+    width: 78px;
+    background-image: url('./../../static/images/misc-logo.png');
+    background-size: 100% 100%;
+  }
 }
 
 .game-container {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 320px;
   grid-template-rows: 1fr;
@@ -43,6 +52,7 @@ footer {
   image-rendering: crisp-edges;
 
   .game-container-left {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 200px;
@@ -211,3 +221,5 @@ footer {
 @import './components/tabs';
 @import './components/store';
 @import './components/tooltip';
+@import './components/toast';
+@import './components/torches';

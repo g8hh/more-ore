@@ -86,7 +86,16 @@
                 letter-spacing: 0;
             }
 
-            &:hover {
+            &.locked {
+                cursor: not-allowed;
+                opacity: .4;
+
+                img {
+                    filter: brightness(0%);
+                }
+            }
+
+            &:hover:not(.locked) {
                 box-shadow: 0 0 5px #fff inset;
             }
         }

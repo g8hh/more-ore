@@ -1,5 +1,5 @@
 import { getRandomNum, removeEl } from './utils';
-import { pageContainer } from './elements';
+import { pageContainer } from './constants';
 
 export const generateRisingText = (event: MouseEvent, type: string, amount: number) => {
     const el = document.createElement('div');

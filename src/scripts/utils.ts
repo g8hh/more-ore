@@ -24,12 +24,13 @@ export const getRandomNum = (min = 0, max = 1, fractionDigits = 0, inclusive = t
     return num / precision;
 };
 
-export const camelcase = (str: string): string => {
+export const getCodeName = (str: string): string => {
     return str
         .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
             return index === 0 ? word.toLowerCase() : word.toUpperCase();
         })
-        .replace(/\s+/g, '');
+        .replace(/\s+/g, '')
+        .replace(/\./g, '');
 };
 
 export const updateEl = (targetEl: HTMLElement, updates: HTMLElement): void => {

@@ -1,4 +1,4 @@
-import { tooltipWrapperEl, gameContainerRight } from './elements';
+import { tooltipWrapperEl, gameContainerRight } from './constants';
 import { getGeometricSequencePrice, beautifyNumber, getPercentage } from './utils';
 import { Building } from './Buildings';
 import { State } from './State';
@@ -24,6 +24,7 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
             str += `
                 <div class='tooltip-container tooltip-building tooltip-building-${tt.building.codeName}'>
                     <div class='tooltip-top'>
+                        <img src='./../images/building-${tt.building.name}.png'/>
                         <p>${tt.building.name}</p>
                         <p class='building-price' style='${State.inventory.ores < price ? 'color: crimson' : ''}'>
                             <img src='./../images/ore.png'/>
@@ -33,15 +34,15 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
                     <div class='tooltip-middle'>
                         <p>${tt.building.desc}</p>
                         <div class='building-stats'>
-                            <p>Each ${tt.building.name} generates <strong>${tt.building.baseProduction}</strong> ores per second.</p>`;
+                            <p>Each ${tt.building.name} generates <strong>${tt.building.production}</strong> ores per second.</p>`;
 
             if (tt.building.owned > 0) {
                 str += `
-                    <p><strong>${tt.building.owned}</strong> ${tt.building.name}${
-                    tt.building.owned > 1 ? 's are' : ' is'
-                } generating <strong>${tt.building.owned * tt.building.baseProduction}</strong> ore per second.</p>
+                    <p><strong>${tt.building.owned}</strong>${
+                    tt.building.owned > 1 ? `${tt.building.namePlural} are` : `${tt.building.name} is`
+                }generating <strong>${tt.building.owned * tt.building.production}</strong> ore per second.</p>
                     <p class='building-percentage'>${tt.building.name}s are currently generating <strong>${getPercentage(
-                    tt.building.owned * tt.building.baseProduction,
+                    tt.building.owned * tt.building.production,
                     State.ops
                 )}%</strong> of your total OpS</p>
                     `;
