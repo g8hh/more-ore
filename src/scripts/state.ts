@@ -13,18 +13,24 @@ interface State {
     inventory: Inventory;
     generation: Generation;
     ore: Ore;
-    tabs: Tab[];
-    buildings: Building[];
+    smith: {
+        inProgress: boolean;
+        currentProgress: number;
+        currentUpgrade: SmithUpgrade;
+        power: number;
+        maxPower: number;
+    };
     stats: Stats;
     settings: Settings;
 }
 
 export const State: State = {
-    opc: 10,
+    opc: 50,
     ops: 0,
 
     inventory: {
-        ores: 0
+        ores: 0,
+        refined: 0
     },
 
     generation: {
@@ -41,12 +47,17 @@ export const State: State = {
         spriteHp: 1
     },
 
-    tabs: [],
-    buildings: [],
-
     stats: {
         oreClicks: 0,
         rocksDestroyed: 0
+    },
+
+    smith: {
+        inProgress: false,
+        currentProgress: null,
+        currentUpgrade: null,
+        power: 1,
+        maxPower: 1
     },
 
     settings: {
@@ -59,7 +70,9 @@ interface InstanceState {
     selectedTab: string;
     buyAmount: 1 | 10 | 100 | 'max';
     oreParticles: {};
-    toasts: [];
+    tabs: Tab[];
+    buildings: Building[];
+    toasts: any[];
     smithUpgrades: SmithUpgrade[];
 }
 
@@ -67,6 +80,8 @@ export const InstanceState: InstanceState = {
     selectedTab: 'store',
     buyAmount: 1,
     oreParticles: {},
+    tabs: [],
+    buildings: [],
     toasts: [],
     smithUpgrades: []
 };

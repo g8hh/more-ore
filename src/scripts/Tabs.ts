@@ -1,5 +1,5 @@
 import { getCodeName } from './utils';
-import { State } from './State';
+import { State, InstanceState } from './State';
 import { UpdatesState } from './Updates';
 
 export interface Tab {
@@ -34,5 +34,5 @@ export const instantiateTabs = (t: Tab[] = JSON.parse(localStorage.getItem('tabs
         builtTabs.push(new Tab(tab));
     });
 
-    State.tabs = builtTabs;
+    InstanceState.tabs = builtTabs;
 };

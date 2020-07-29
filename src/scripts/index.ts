@@ -3,6 +3,7 @@ import { UpdatesState } from './Updates';
 
 import * as constants from './constants';
 import {
+    select,
     getPercentage,
     formatNumber,
     getRandomNum,
@@ -27,8 +28,8 @@ const gainOre = (amount: number, damageOre: boolean = true) => {
     UpdatesState.updateOres = true;
 };
 
-export const spend = (amount: number): boolean => {
-    if (State.inventory.ores >= amount) {
+export const spend = (amount: number, type: 'ores' | 'refined' = 'ores'): boolean => {
+    if (State.inventory[type] >= amount) {
         State.inventory.ores -= amount;
         return true;
     }
@@ -153,7 +154,7 @@ const updateGenerationXp = () => {
 export const updateOPS = () => {
     let ops = 0;
 
-    State.buildings.forEach((b) => {
+    InstanceState.buildings.forEach((b) => {
         ops += b.production * b.owned;
     });
 
@@ -167,7 +168,7 @@ const changeBuyAmount = (amount) => {
 };
 
 const updateBuildingPriceClass = () => {
-    State.buildings
+    InstanceState.buildings
         .filter((building) => !building.isHidden && !building.isLocked)
         .forEach((building) => {
             const buildingPriceEl = document.querySelector(`.building-${building.codeName} .building-price`);
@@ -187,15 +188,24 @@ const updateTabs = () => {
     const tabsContainer = document.createElement('div');
     tabsContainer.classList.add('tabs-container');
 
-    State.tabs
+    InstanceState.tabs
         .filter((tab: Tab) => !tab.isLocked)
         .forEach((tab: Tab) => {
-            const tabEl = document.createElement('div');
+            const tabEl = createEl('div', ['tab', `tab-${tab.codeName}`]);
+
             tabEl.addEventListener('click', () => changeTab(tab.codeName));
 
-            tabEl.classList.add('tab', `tab-${tab.codeName}`);
             if (InstanceState.selectedTab === tab.codeName) tabEl.classList.add('tab-selected');
+
             tabEl.innerHTML = tab.name;
+            if (tab.codeName === 'smith' && State.smith.inProgress) {
+                tabEl.innerHTML = `
+                    ${tab.name}
+                    <div class='smith-tab-progress-bar'>
+                        <div class='bar'></div>
+                    </div>
+                `;
+            }
 
             tabsContainer.append(tabEl);
         });
@@ -214,7 +224,7 @@ const changeTab = (tab: TabName): void => {
 };
 
 const unlockTab = (tabName: string): void => {
-    State.tabs.forEach((tab) => {
+    InstanceState.tabs.forEach((tab) => {
         if (tab.codeName === tabName) {
             tab.isLocked = false;
             UpdatesState.updateTabs = true;
@@ -261,7 +271,7 @@ const buildStoreTabContent = (): HTMLElement => {
 const buildBuildings = (): HTMLElement => {
     const buildingsContainer = createEl('div', ['buildings-container']);
 
-    State.buildings
+    InstanceState.buildings
         .filter((building) => !building.isHidden)
         .forEach((building) => {
             const buildingEl = createEl('div', ['building', `building-${building.codeName}`, `${building.isLocked && 'locked'}`]);
@@ -322,31 +332,112 @@ const buildBuyAmountContainer = (): HTMLElement => {
 };
 
 const buildSmithTabContent = () => {
-    const smithTabContainer = createEl('div', ['tab-content', 'tab-content-smith']);
+    const smithTabContentContainer = createEl('div', ['tab-content', 'tab-content-smith']);
     const underTabBar = createEl('div', ['under-tab-bar']);
 
+    const smithProgressContainer = State.smith.inProgress ? buildSmithProgressContainer() : '';
     const smithUpgradesContainer = buildSmithUpgrades();
 
-    smithTabContainer.append(underTabBar);
-    smithTabContainer.append(smithUpgradesContainer);
+    smithTabContentContainer.append(underTabBar);
+    smithTabContentContainer.append(smithProgressContainer);
+    smithTabContentContainer.append(smithUpgradesContainer);
 
-    return smithTabContainer;
+    return smithTabContentContainer;
+};
+
+const buildSmithProgressContainer = (): HTMLElement => {
+    const smithProgressContainer = createEl('div', ['smith-progress-container']);
+    const upgrade = State.smith.currentUpgrade;
+    const percentage = getPercentage(State.smith.currentProgress, upgrade.powerNeeded);
+
+    const smithProgressTopEl = createEl(
+        'div',
+        ['smith-progress-top'],
+        `
+        <p class='smith-upgrade-name'>${upgrade.name}</p>
+        <p class='smith-progress-percentage'>${beautifyNumber(percentage)}%</p>
+        `
+    );
+
+    const collectBtn = createEl('button', ['collect-btn'], 'COLLECT');
+    collectBtn.addEventListener('click', () => upgrade.complete());
+
+    const smithProgressBottom =
+        percentage > 100
+            ? collectBtn
+            : createEl(
+                  'div',
+                  ['smith-progress-bar'],
+                  ` <div class='smith-progress-bar'>
+                        <div class='bar'></div>
+                    </div>`
+              );
+
+    const div = createEl('div');
+    div.append(smithProgressTopEl);
+    div.append(smithProgressBottom);
+
+    const upgradeImg = document.createElement('img');
+    upgradeImg.src = `./../images/smithUpgrade-${upgrade.codeName}.png`;
+
+    smithProgressContainer.append(upgradeImg);
+    smithProgressContainer.append(div);
+
+    return smithProgressContainer;
+};
+
+const updateSmithProgress = () => {
+    if (State.smith.currentProgress >= State.smith.currentUpgrade.powerNeeded) return;
+
+    const powerPerTick = State.smith.power / State.settings.tick;
+
+    if (spend(powerPerTick)) {
+        State.smith.currentProgress += powerPerTick;
+
+        updateSmithProgressBar();
+    }
+};
+
+const updateSmithProgressBar = () => {
+    const tabProgressBar = select('.smith-tab-progress-bar .bar');
+    const percentage = getPercentage(State.smith.currentProgress, State.smith.currentUpgrade.powerNeeded);
+
+    tabProgressBar.style.width = percentage + '%';
+
+    if (InstanceState.selectedTab === 'smith') {
+        if (percentage > 100) {
+            UpdatesState.updateTabContent = true;
+            return;
+        }
+
+        const progressBar = select('.smith-progress-bar .bar');
+        const progressPercentage = select('.smith-progress-percentage');
+
+        progressBar.style.width = percentage + '%';
+        progressPercentage.innerHTML = beautifyNumber(percentage) + '%';
+    }
 };
 
 const buildSmithUpgrades = (): HTMLElement => {
     const smithUpgradesContainer = createEl('div', ['smith-upgrades-container']);
 
     InstanceState.smithUpgrades
-        .filter((upgrade) => !upgrade.locked)
+        .filter((upgrade) => !upgrade.isLocked && !upgrade.isInProgress)
         .forEach((upgrade) => {
             const upgradeEl = createEl('div', ['smith-upgrade']);
 
             let str = `
-                <p>${upgrade.name}</p>
-                <p>${upgrade.cost}</p>
+                <img src='./../images/smithUpgrade-${upgrade.codeName}.png'/>
+                <div>
+                    <p class='smith-upgrade-name'>${upgrade.name}</p>
+                    <p class='smith-upgrade-cost'>
+                        <img src='./../images/refined-ore.png' />
+                        ${upgrade.cost > 0 ? upgrade.cost : 'FREE'}
+                    </p>
+                </div>
             `;
 
-            // upgradeEl.addEventListener('click', () => upgrade.start())
+            upgradeEl.addEventListener('click', () => upgrade.buy());
 
             upgradeEl.innerHTML = str;
             smithUpgradesContainer.append(upgradeEl);
@@ -373,6 +464,8 @@ const gameLoop = () => {
     if (InstanceState.selectedTab === 'store') {
         updateBuildingPriceClass();
     }
+
+    if (State.smith.inProgress) updateSmithProgress();
 
     gainOre(State.ops / State.settings.tick, false);
 
@@ -409,7 +502,8 @@ window.onload = () => initialLoad();
 // - -----------------------------------------------------------------------------------
 
 var before, now, fps;
-let fpsEl = document.querySelector('.fps');
+let fpsEl: HTMLElement = document.querySelector('.fps');
+fpsEl.style.zIndex = '5';
 before = Date.now();
 fps = 0;
 requestAnimationFrame(function loop() {

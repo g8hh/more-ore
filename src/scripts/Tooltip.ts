@@ -38,9 +38,9 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
 
             if (tt.building.owned > 0) {
                 str += `
-                    <p><strong>${tt.building.owned}</strong>${
+                    <p><strong>${tt.building.owned} </strong>${
                     tt.building.owned > 1 ? `${tt.building.namePlural} are` : `${tt.building.name} is`
-                }generating <strong>${tt.building.owned * tt.building.production}</strong> ore per second.</p>
+                } generating <strong>${tt.building.owned * tt.building.production}</strong> ore per second.</p>
                     <p class='building-percentage'>${tt.building.name}s are currently generating <strong>${beautifyNumber(
                     getPercentage(tt.building.owned * tt.building.production, State.ops)
                 )}%</strong> of your total OpS</p>
@@ -69,6 +69,6 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
 
             tooltipWrapperEl.style.width = tooltipWidth + 'px';
             tooltipWrapperEl.style.top = event.clientY - tooltipWrapperEl.getBoundingClientRect().height / 2 + 'px';
-            tooltipWrapperEl.style.left = gameContainerRight.getBoundingClientRect().left - tooltipWidth + 'px';
+            tooltipWrapperEl.style.left = gameContainerRight.getBoundingClientRect().left - tooltipWidth - 20 + 'px';
     }
 };

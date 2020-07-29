@@ -55,8 +55,8 @@ const Building = function (b) {
 };
 
 const updateBuildingsVisibility = (index: number) => {
-    const nextBuilding = State.buildings[index + 1];
-    const nextNextNextBuilding = State.buildings[index + 3];
+    const nextBuilding = InstanceState.buildings[index + 1];
+    const nextNextNextBuilding = InstanceState.buildings[index + 3];
     if (nextBuilding) nextBuilding.isLocked = false;
     if (nextNextNextBuilding) nextNextNextBuilding.isHidden = false;
 };
@@ -225,5 +225,5 @@ export function instantiateBuildings(b = JSON.parse(localStorage.getItem('buildi
         builtBuildings.push(new Building(building));
     });
 
-    State.buildings = builtBuildings;
+    InstanceState.buildings = builtBuildings;
 }

@@ -124,10 +124,12 @@ export const beautifyNumber = (number: number) => {
 export const getGeometricSequencePrice = (b: Building) => {
     // 10 = 211
 
-    const alreadyOwned = (b.basePrice * (1 - Math.pow(b.priceScale, b.owned))) / (1 - b.priceScale);
-    const total = (b.basePrice * (1 - Math.pow(b.priceScale, InstanceState.buyAmount + b.owned))) / (1 - b.priceScale);
+    if (InstanceState.buyAmount !== 'max') {
+        const alreadyOwned = (b.basePrice * (1 - Math.pow(b.priceScale, b.owned))) / (1 - b.priceScale);
+        const total = (b.basePrice * (1 - Math.pow(b.priceScale, InstanceState.buyAmount + b.owned))) / (1 - b.priceScale);
 
-    return total - alreadyOwned;
+        return total - alreadyOwned;
+    }
 
     // return (
     //     b.currentPrice * ((Math.pow(b.priceScale, InstanceState.buyAmount - b.owned + 1) - Math.pow(1, InstanceState.buyAmount)) / 1.12 - 1)

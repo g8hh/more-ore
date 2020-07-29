@@ -13,11 +13,27 @@
             cursor: pointer;
             font-size: 24px;
             box-shadow: 0 0 40px #222 inset;
+            position: relative;
 
             &.tab-selected {
                 color: white;
                 background-color: #4e3013;
                 cursor: default;
+            }
+
+            .smith-tab-progress-bar {
+                height: 2px;
+                width: 100%;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                background: rgba(255, 255, 255, .2);
+
+                .bar {
+                    background: rgba(255, 255, 255, .4);
+                    height: 100%;
+                    width: 0;
+                }
             }
         }
     }
