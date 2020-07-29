@@ -51,6 +51,8 @@ export const State: State = {
         weakSpotMultiplier: 5,
         oreClicks: 0,
         weakSpotClicks: 0,
+        currentCombo: 0,
+        highestCombo: 0,
         rocksDestroyed: 0
     },
 
@@ -64,7 +66,7 @@ export const State: State = {
 
     settings: {
         tick: 60,
-        oreHpType: 'number'
+        oreHpType: 'percentage'
     }
 };
 

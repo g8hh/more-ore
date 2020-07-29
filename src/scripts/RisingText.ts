@@ -1,5 +1,5 @@
-import { getRandomNum, removeEl } from './utils';
-import { pageContainer } from './constants';
+import { getRandomNum, removeEl, getRandomColor } from './utils';
+import { pageContainer, oreSpriteEl } from './constants';
 
 export const generateRisingText = (event: MouseEvent, type: string, amount?: number) => {
     const el = document.createElement('div');
@@ -23,6 +23,21 @@ export const generateRisingText = (event: MouseEvent, type: string, amount?: num
         case 'weakSpot':
             el.style.fontSize = '28px';
             el.style.animationDuration = '2.5s';
+            el.innerHTML = `+${amount}`;
+            break;
+
+        case 'combo':
+            el.innerHTML = `${amount} hit combo`;
+            el.style.color = getRandomColor();
+            el.style.fontSize = '35px';
+            el.style.animationDuration = '3s';
+            break;
+
+        case 'buildingOps':
+            let oreSpriteDimensions = oreSpriteEl.getBoundingClientRect();
+            el.style.animation = 'buildingFlyingNumber 1.2s ease-out';
+            el.style.left = (oreSpriteDimensions.left + oreSpriteDimensions.right) / 2 + 'px';
+            el.style.top = (oreSpriteDimensions.top + oreSpriteDimensions.bottom) / 2 + 'px';
             el.innerHTML = `+${amount}`;
             break;
 

@@ -38,12 +38,12 @@ export const updateEl = (targetEl: HTMLElement, updates: HTMLElement): void => {
     targetEl.append(updates);
 };
 
-export const createEl = (type: string, classes: string[] = [], content: string | number = null) => {
+export const createEl = (type: string, classes: string[] = [], content: string | number = ''): HTMLElement => {
     const el = document.createElement(type);
 
     classes.forEach((c: string) => el.classList.add(c));
 
-    el.innerHTML = content;
+    el.innerHTML = content + '';
 
     return el;
 };
@@ -142,4 +142,13 @@ export const findCodeNameInArr = (codeName: string, arr: []) => {
             return obj;
         }
     });
+};
+
+export const getRandomColor = () => {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 };

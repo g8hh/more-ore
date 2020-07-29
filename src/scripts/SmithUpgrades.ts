@@ -1,4 +1,4 @@
-import { getCodeName } from './utils';
+import { getCodeName, removeEl } from './utils';
 import { InstanceState, State } from './State';
 import { spend, unlockSmithUpgrade } from '.';
 import { UpdatesState } from './Updates';
@@ -27,6 +27,7 @@ export interface SmithUpgrade {
     complete?: () => void;
     start?: () => void;
     buy?: (event: MouseEvent) => void;
+    removeNew?: (event: MouseEvent) => void;
     startedOn?: Date;
     completedOn?: Date;
 }
@@ -82,6 +83,13 @@ const SmithUpgrade = function (u) {
             }
         }
     };
+
+    this.removeNew = (event: any) => {
+        this.isNew = false;
+        if (event.target.children[1]) {
+            removeEl(event.target.children[1]);
+        }
+    };
 };
 
 const smithUpgrades: SmithUpgrade[] = [
@@ -89,7 +97,7 @@ const smithUpgrades: SmithUpgrade[] = [
         name: 'Fragility Spectacles',
         desc: 'Allows you to spot "weak spots" within the ore. Hitting the weak spot generates 5x the normal amount.',
         flavorText: 'I can see... I can FIGHT!',
-        powerNeeded: 10,
+        powerNeeded: 150,
         cost: 0,
         isLocked: false
     },

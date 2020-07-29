@@ -66,11 +66,19 @@ const handleOreClick = (event: MouseEvent, weakSpotClick: boolean = false) => {
 
     if (weakSpotClick) {
         amount *= State.stats.weakSpotMultiplier;
+        State.stats.weakSpotClicks++;
+        State.stats.currentCombo++;
+
         gainGenerationXp(3);
         generateRisingText(event, 'weakSpot', amount);
+
+        if (State.stats.currentCombo % 5 === 0) generateRisingText(event, 'combo', State.stats.currentCombo);
+        if (State.stats.currentCombo > State.stats.highestCombo) State.stats.highestCombo = State.stats.currentCombo;
         generateWeakSpot();
-        State.stats.weakSpotClicks++;
     } else {
+        if (State.stats.currentCombo > 0) {
+            State.stats.currentCombo = 0;
+        }
         gainGenerationXp(1);
         generateRisingText(event, null, amount);
     }
@@ -89,8 +97,8 @@ const generateWeakSpot = () => {
         constants.oreSpriteContainerEl.append(weakSpot);
     }
 
-    const x = getRandomNum(0, constants.oreSpriteEl.offsetWidth - 20);
-    const y = getRandomNum(0, constants.oreSpriteEl.offsetHeight - 20);
+    const x = getRandomNum(0, constants.oreSpriteContainerEl.offsetWidth - 20);
+    const y = getRandomNum(0, constants.oreSpriteContainerEl.offsetHeight - 20);
 
     weakSpot.style.left = x + 'px';
     weakSpot.style.bottom = y + 'px';
@@ -133,7 +141,7 @@ const updateOres = () => {
 const updateOreHp = () => {
     switch (State.settings.oreHpType) {
         case 'percentage':
-            constants.oreHpEl.innerHTML = `${formatNumber(getPercentage(State.ore.hp, State.ore.maxHp))}`;
+            constants.oreHpEl.innerHTML = `${formatNumber(getPercentage(State.ore.hp, State.ore.maxHp))}%`;
             break;
         case 'number':
             constants.oreHpEl.innerHTML = `${formatNumber(State.ore.hp)}/${formatNumber(State.ore.maxHp)}`;
@@ -252,6 +260,12 @@ export const unlockSmithUpgrade = (codeName: string) => {
             return;
         }
     });
+};
+
+const updateSmithPower = (power) => {
+    const el = select('.smith-power');
+    State.smith.power = power;
+    el.innerHTML = power;
 };
 
 // - -----------------------------------------------------------------------------------
@@ -409,10 +423,12 @@ const buildSmithTabContent = () => {
     const smithTabContentContainer = createEl('div', ['tab-content', 'tab-content-smith']);
     const underTabBar = createEl('div', ['under-tab-bar']);
 
+    const smithSettingsContainer = buildSmithSettings();
     const smithProgressContainer = State.smith.inProgress ? buildSmithProgressContainer() : '';
     const smithUpgradesContainer = buildSmithUpgrades();
 
     smithTabContentContainer.append(underTabBar);
+    smithTabContentContainer.append(smithSettingsContainer);
     smithTabContentContainer.append(smithProgressContainer);
     smithTabContentContainer.append(smithUpgradesContainer);
 
@@ -463,34 +479,96 @@ const buildSmithUpgrades = (): HTMLElement => {
     const smithUpgradesWrapper = createEl('div', ['smith-upgrades-wrapper']);
 
     const availableUpgradesHeader = createEl('p', ['smith-header-text'], 'Available Upgrades');
-    const smithUpgradesContainer = createEl('div', ['smith-upgrades-container']);
+    const lockedUpgradesHeader = createEl('p', ['smith-header-text', 'small'], 'Locked Upgrades');
+    const ownedUpgradesHeader = createEl('p', ['smith-header-text', 'small'], 'Owned Upgrades');
 
-    InstanceState.smithUpgrades
-        .filter((upgrade) => !upgrade.isLocked && !upgrade.isInProgress)
-        .forEach((upgrade) => {
-            const upgradeEl = createEl('div', ['smith-upgrade']);
+    const smithAvailableUpgradesContainer = createEl('div', ['smith-upgrades-container', 'available-smith-upgrades-container']);
+    const smithLockedUpgradesContainer = createEl('div', ['smith-upgrades-container', 'locked-smith-upgrades-container']);
+    const smithOwnedUpgradesContainer = createEl('div', ['smith-upgrades-container', 'owned-smith-upgrades-container']);
 
-            const upgradeImg = document.createElement('img');
-            upgradeImg.src = `./../images/smithUpgrade-${upgrade.codeName}.png`;
+    let hasAvailableUpgrades = false;
+    let hasLockedUpgrades = false;
+    let hasOwnedUpgrades = false;
 
+    InstanceState.smithUpgrades.forEach((upgrade) => {
+        const upgradeEl = createEl('div', ['smith-upgrade']);
+        const upgradeImg = document.createElement('img');
+        upgradeImg.src = `./../images/smithUpgrade-${upgrade.codeName}.png`;
+
+        upgradeEl.append(upgradeImg);
+
+        if (upgrade.isNew) {
+            const newText = createEl('p', ['new'], 'New!');
+            upgradeEl.append(newText);
+        }
+
+        if (!upgrade.isLocked && !upgrade.isOwned && !upgrade.isInProgress) {
+            hasAvailableUpgrades = true;
             upgradeEl.addEventListener('click', (event) => upgrade.buy(event));
+            upgradeEl.addEventListener('mouseover', (event) => upgrade.removeNew(event));
             upgradeEl.addEventListener('mousemove', (event) => showTooltip(event, { type: 'smithUpgrade', smithUpgrade: upgrade }));
             upgradeEl.addEventListener('mouseleave', () => hideTooltip());
+            smithAvailableUpgradesContainer.append(upgradeEl);
+        }
+        if (upgrade.isLocked) {
+            hasLockedUpgrades = true;
+            smithLockedUpgradesContainer.append(upgradeEl);
+        }
+        if (upgrade.isOwned) {
+            hasOwnedUpgrades = true;
+            upgradeEl.addEventListener('mousemove', (event) => showTooltip(event, { type: 'smithUpgrade', smithUpgrade: upgrade }));
+            upgradeEl.addEventListener('mouseleave', () => hideTooltip());
+            smithOwnedUpgradesContainer.append(upgradeEl);
+        }
+    });
 
-            upgradeEl.append(upgradeImg);
-            smithUpgradesContainer.append(upgradeEl);
-        });
+    if (hasAvailableUpgrades) {
+        smithUpgradesWrapper.append(availableUpgradesHeader);
+        smithUpgradesWrapper.append(smithAvailableUpgradesContainer);
+    }
 
-    smithUpgradesWrapper.append(availableUpgradesHeader);
-    smithUpgradesWrapper.append(smithUpgradesContainer);
+    if (hasLockedUpgrades) {
+        smithUpgradesWrapper.append(lockedUpgradesHeader);
+        smithUpgradesWrapper.append(smithLockedUpgradesContainer);
+    }
+
+    if (hasOwnedUpgrades) {
+        smithUpgradesWrapper.append(ownedUpgradesHeader);
+        smithUpgradesWrapper.append(smithOwnedUpgradesContainer);
+    }
 
     return smithUpgradesWrapper;
+};
+
+const buildSmithSettings = (): HTMLElement => {
+    const el = createEl(
+        'div',
+        ['smith-settings-container'],
+        `
+        <p class='smith-power-text'>Smith Power</p>
+        <p class='smith-power'>${State.smith.power}</p>
+    `
+    );
+
+    const inputRange = document.createElement('input');
+    inputRange.classList.add('smith-slider');
+    inputRange.type = 'range';
+    inputRange.min = '0';
+    inputRange.max = `${State.smith.maxPower}`;
+    inputRange.value = `${State.smith.power}`;
+    inputRange.step = '1';
+    inputRange.addEventListener('input', (e: any) => updateSmithPower(e.target.value));
+
+    el.append(inputRange);
+
+    return el;
 };
 
 // - -----------------------------------------------------------------------------------
 // - INIT STUFF ------------------------------------------------------------------------
 // - -----------------------------------------------------------------------------------
 
+let tick = 0;
 const gameLoop = () => {
     if (UpdatesState.updateOres) updateOres();
     if (UpdatesState.updateOreHp) updateOreHp();
@@ -518,6 +596,12 @@ const gameLoop = () => {
             constants.particlesCanvasContext.canvas.height
         );
         for (let i in InstanceState.oreParticles) InstanceState.oreParticles[i].draw();
+    }
+
+    tick++;
+    if (tick >= State.settings.tick) {
+        tick = 0;
+        if (State.ops > 0) generateRisingText(null, 'buildingOps', State.ops);
     }
 };
 

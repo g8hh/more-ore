@@ -42,3 +42,26 @@
         transform: rotate(-360deg);
     }
 }
+
+
+@keyframes buildingFlyingNumber {
+    from {
+        transform: translateY(0);
+        opacity: .4;
+    }
+
+    to {
+        transform: translateY(-150px);
+        opacity: .1;
+    }
+}
+
+@keyframes newText {
+    from {
+        transform: rotate(-50deg) scale(1);
+    }
+
+    to {
+        transforM: rotate(-40deg) scale(1.1);
+    }
+}

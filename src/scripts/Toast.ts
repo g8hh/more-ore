@@ -21,3 +21,4 @@ export const Toast = function () {
 
     toastsContainerEl.append(toastEl);
 };
+1;
