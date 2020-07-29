@@ -3,6 +3,7 @@ import { spend, updateOPS } from './index';
 import { State, InstanceState } from './State';
 import { UpdatesState } from './Updates';
 import { showTooltip } from './Tooltip';
+import { generateRisingText } from './RisingText';
 
 export interface Building {
     name: string;
@@ -49,6 +50,7 @@ const Building = function (b) {
 
             updateBuildingsVisibility(this.id);
 
+            generateRisingText(event, 'buy');
             showTooltip(event, { type: 'building', building: this });
         }
     };

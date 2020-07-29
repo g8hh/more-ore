@@ -49,9 +49,10 @@ footer {
   z-index: 3;
 }
 
+@import './components/animations';
+
 @import './components/game';
 @import './components/particles';
-@import './components/animations';
 @import './components/tabs';
 @import './components/store';
 @import './components/tooltip';

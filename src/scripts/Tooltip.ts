@@ -2,10 +2,12 @@ import { tooltipWrapperEl, gameContainerRight } from './constants';
 import { getGeometricSequencePrice, beautifyNumber, getPercentage } from './utils';
 import { Building } from './Buildings';
 import { State } from './State';
+import { SmithUpgrade } from './SmithUpgrades';
 
 interface Tooltip {
-    type: 'building';
-    building: Building;
+    type: 'building' | 'smithUpgrade' | 'upgrade';
+    building?: Building;
+    smithUpgrade?: SmithUpgrade;
 }
 
 export const hideTooltip = () => {
@@ -24,16 +26,16 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
             str += `
                 <div class='tooltip-container tooltip-building tooltip-building-${tt.building.codeName}'>
                     <div class='tooltip-top'>
-                        <img src='./../images/building-${tt.building.name}.png'/>
+                        <img src='./../images/building-${tt.building.codeName}.png'/>
                         <p>${tt.building.name}</p>
-                        <p class='building-price' style='${State.inventory.ores < price ? 'color: crimson' : ''}'>
+                        <p class='price' style='${State.inventory.ores < price ? 'color: crimson' : ''}'>
                             <img src='./../images/ore.png'/>
                             ${beautifyNumber(price)}
                         </p>
                     </div>
                     <div class='tooltip-middle'>
                         <p>${tt.building.desc}</p>
-                        <div class='building-stats'>
+                        <div class='stats'>
                             <p>Each ${tt.building.name} generates <strong>${tt.building.production}</strong> ores per second.</p>`;
 
             if (tt.building.owned > 0) {
@@ -57,6 +59,29 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
             `;
             break;
 
+        case 'smithUpgrade':
+            const upgrade = tt.smithUpgrade;
+            str += `
+                <div class='tooltip-container tooltip-smithUpgrade tooltip-smithUpgrade-${upgrade.codeName}'>
+                    <div class='tooltip-top'>
+                        <img src='./../images/smithUpgrade-${upgrade.codeName}.png'/>
+                        <p>${upgrade.name}</p>
+                    </div>
+                    <div class='tooltip-middle'>
+                        <p>${upgrade.desc}</p>
+                        <div class='cost'>
+                            <p>Requires:</p>
+                            <p>Refined Ores: ${upgrade.cost}</p>
+                            <p>Power Needed: ${upgrade.powerNeeded}</p>
+                        </div>
+                    </div>
+                    <div class='tooltip-bottom'>
+                        <p>${upgrade.flavorText}</p>
+                    </div>
+                </div>
+            `;
+            break;
+
         default:
             console.log('no tooltip yet for this type:', tt.type);
     }
@@ -64,7 +89,7 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
     tooltipWrapperEl.innerHTML = str;
 
     switch (tt.type) {
-        case 'building':
+        default:
             const tooltipWidth = 350;
 
             tooltipWrapperEl.style.width = tooltipWidth + 'px';

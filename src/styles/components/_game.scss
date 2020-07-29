@@ -50,7 +50,7 @@
                         position: absolute;
                         height: var(--gap);
                         width: 20px;
-                        background: red;
+                        background: black;
                         background-image: url('./../../static/images/misc-vertical_separator.png');
                         background-size: 100% auto;
                         top: -56px;
@@ -131,6 +131,48 @@
 
                             &:active {
                                 transform: scale(1);
+                            }
+                        }
+
+                        .weak-spot {
+                            position: absolute;
+                            height: 16px;
+                            width: 16px;
+                            border-radius: 50%;
+                            cursor: pointer;
+                            background: rgba(0, 0, 0, 0.2);
+                            transition: all .1s ease-out;
+
+                            &::after,
+                            &::before {
+                                content: '';
+                                position: absolute;
+                                border-radius: 50%;
+                                height: 100%;
+                                width: 100%;
+                                border: 3px solid #f3f3f3;
+                                border-left-color: #727272;
+                                border-right-color: #727272;
+                                animation: weakSpotSpin 1s linear infinite;
+                            }
+
+                            &::after {
+                                height: 4px;
+                                width: 4px;
+                                animation: weakSpotSpinCounterClockwise 1s linear infinite;
+                                left: 6px;
+                                top: 6px;
+                            }
+
+                            &:hover {
+                                transform: scale(1.3);
+
+                                &::after,
+                                &::before {
+                                    border-top-color: red;
+                                    border-bottom-color: red;
+                                    animation-duration: .5s;
+                                }
                             }
                         }
                     }

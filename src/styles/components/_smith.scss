@@ -3,16 +3,48 @@
 }
 
 .smith-progress-container {
+    --gap: 20px;
     padding: 10px;
     display: grid;
-    grid-template-columns: 64px auto;
+    grid-template-columns: 50px auto;
     column-gap: 10px;
     align-items: end;
     background-color: white;
     font-family: 'Germania One';
+    position: relative;
+    box-shadow: 0 0 40px #222 inset;
+    background-color: #322011;
+    border: 6px ridge #42250f;
+    color: white;
+
+    margin-left: var(--gap);
+    margin-right: var(--gap);
+    width: calc(100% - 40px);
+    margin-top: var(--gap);
+    ;
+
+    &::after,
+    &::before {
+        content: '';
+        position: absolute;
+        height: var(--gap);
+        width: 12px;
+        background: black;
+        background-image: url('./../../static/images/misc-vertical_separator.png');
+        background-size: 100% auto;
+        top: -26px;
+    }
+
+    &::before {
+        left: var(--gap);
+    }
+
+    &::after {
+        right: var(--gap);
+    }
 
     img {
-        height: 64px;
+        height: 50px;
     }
 
     >div {
@@ -25,7 +57,8 @@
             margin-bottom: 4px;
 
             .smith-upgrade-name {
-                font-size: 20px;
+                font-size: 18px;
+                text-shadow: 0 0 1px #222;
             }
         }
 
@@ -34,11 +67,15 @@
             width: 100%;
             height: 24px;
             border: 1px solid black;
+            background: #222;
+            box-shadow: 0 0 2px white inset;
+            border-radius: 3px;
 
             .bar {
                 width: 0;
                 height: 100%;
-                background-color: black;
+                background-color: #31dd6c;
+                border-top: 1px solid white;
             }
         }
 
@@ -46,55 +83,62 @@
             font-family: 'Asap Condensed';
             height: 24px;
             width: 60px;
-            background: black;
+            background: transparent;
+            // background: black;
+            border: 1px solid white;
             color: white;
+            border-radius: 3px;
             letter-spacing: .5px;
             cursor: pointer;
+            transition: all .1s ease-out;
+
+            &:hover {
+                background: white;
+                color: black;
+            }
         }
     }
 }
 
-.smith-upgrade {
-    display: grid;
-    grid-template-columns: 64px auto;
-    column-gap: 10px;
-    height: 80px;
-    background: black;
-    align-items: center;
-    color: white;
-    padding-left: 5px;
-    cursor: pointer;
-    background-image: url('./../../static/images/smithUpgrade-nonRepeatablesBg.png');
-    background-size: 100% 100%;
-    box-shadow: 0 0 30px #222 inset;
+.smith-upgrades-wrapper {
 
-    img {
-        height: 64px;
+    .smith-header-text {
+        padding: 20px;
+        font-size: 24px;
+        color: white;
+        font-family: 'Germania One';
+        text-shadow: 0 0 2px gold;
+        letter-spacing: .3px;
     }
 
-    >div {
-        font-family: 'Germania One';
+    .smith-upgrades-container {
+        display: grid;
+        grid-template-columns: 88.3px 88.3px 88.3px;
+        ;
+        padding-left: 20px;
+        padding-right: 20px;
 
-        .smith-upgrade-name {
-            text-shadow: 0 0 1px black;
-            font-size: 24px;
-            letter-spacing: 0.1px;
-        }
-
-        .smith-upgrade-cost {
+        .smith-upgrade {
+            padding: 5px;
+            height: 88.3px;
+            width: 88.3px;
+            background-image: url('./../../static/images/smithUpgrade-repeatablesBg.png');
+            background-size: 100% 100%;
+            // url("./assets/images/smith_upgrade-repeatables_bg.png")
+            // border: 4px ridge white;
+            cursor: pointer;
             display: flex;
-            flex-flow: row nowrap;
+            justify-content: center;
             align-items: center;
-            color: black;
+
 
             img {
-                height: 16px;
-                margin-right: 4px;
+                height: 90%;
+            }
+
+            &:hover:not(.locked) {
+                box-shadow: 0 0 5px #fff inset;
             }
         }
-    }
-
-    &:hover:not(.locked) {
-        box-shadow: 0 0 5px #fff inset;
     }
 }

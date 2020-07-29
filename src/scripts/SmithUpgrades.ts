@@ -1,7 +1,9 @@
 import { getCodeName } from './utils';
 import { InstanceState, State } from './State';
-import { spend } from '.';
+import { spend, unlockSmithUpgrade } from '.';
 import { UpdatesState } from './Updates';
+import { generateRisingText } from './RisingText';
+import { hideTooltip } from './Tooltip';
 
 // once quest board is unlocked,
 // upgrade called Boots of Swiftness
@@ -21,9 +23,12 @@ export interface SmithUpgrade {
     isLocked: boolean;
     isInProgress?: boolean;
     isNew?: boolean;
+    isOwned?: boolean;
     complete?: () => void;
     start?: () => void;
-    buy?: () => void;
+    buy?: (event: MouseEvent) => void;
+    startedOn?: Date;
+    completedOn?: Date;
 }
 
 const SmithUpgrade = function (u) {
@@ -37,20 +42,27 @@ const SmithUpgrade = function (u) {
     this.isLocked = u.isLocked;
     this.isInProgress = u.isInProgress || false;
     this.isNew = u.isNew || true;
+    this.isOwned = u.isOwned || false;
 
     this.complete = () => {
         console.log('completed upgrade:', this.name);
+
+        this.completedOn = new Date();
+
         UpdatesState.updateTabContent = true;
         UpdatesState.updateTabs = true;
 
         State.smith.currentProgress = 0;
         State.smith.inProgress = false;
         State.smith.currentUpgrade = this;
+
+        unlockSmithUpgrade(this.codeName);
     };
 
     this.start = () => {
         console.log('starting a smith upgrade');
         this.isInProgress = true;
+        this.startedOn = new Date();
 
         UpdatesState.updateTabContent = true;
         UpdatesState.updateTabs = true;
@@ -60,10 +72,12 @@ const SmithUpgrade = function (u) {
         State.smith.currentUpgrade = this;
     };
 
-    this.buy = () => {
-        console.log('buying a smith upgrade');
+    this.buy = (event: MouseEvent) => {
+        console.log('buying a smith upgrade', event);
         if (!State.smith.inProgress) {
-            if (spend(this.cost)) {
+            if (spend(this.cost, 'refined')) {
+                generateRisingText(event, 'buy');
+                hideTooltip();
                 this.start();
             }
         }
@@ -73,7 +87,7 @@ const SmithUpgrade = function (u) {
 const smithUpgrades: SmithUpgrade[] = [
     {
         name: 'Fragility Spectacles',
-        desc: 'Allows you to spot "weak spots" within the ore. Hitting the weak spot generates 7x the normal amount.',
+        desc: 'Allows you to spot "weak spots" within the ore. Hitting the weak spot generates 5x the normal amount.',
         flavorText: 'I can see... I can FIGHT!',
         powerNeeded: 10,
         cost: 0,
@@ -85,7 +99,7 @@ const smithUpgrades: SmithUpgrade[] = [
         flavorText: "Fetch quests are the greatest aren't they?",
         powerNeeded: 1000,
         cost: 1,
-        isLocked: true
+        isLocked: false
     }
 ];
 

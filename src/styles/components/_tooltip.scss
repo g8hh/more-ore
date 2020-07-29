@@ -14,7 +14,7 @@
         display: block;
     }
 
-    .tooltip-building {
+    .tooltip-container {
 
         .tooltip-top {
             font-family: 'Germania One';
@@ -25,7 +25,11 @@
             font-size: 24px;
             border-bottom: 1px solid rgba(255, 255, 255, .4);
 
-            .building-price {
+            >img {
+                height: 64px;
+            }
+
+            .price {
                 font-size: 16px;
                 font-family: 'Asap Condensed';
                 display: flex;
@@ -43,7 +47,11 @@
         .tooltip-middle {
             padding: 8px 0;
 
-            .building-stats {
+            .cost {
+                padding-top: 8px;
+            }
+
+            .stats {
                 padding-top: 8px;
                 font-size: 14px;
                 opacity: .8;

@@ -11,7 +11,8 @@ import {
     updateEl,
     createEl,
     beautifyNumber,
-    getGeometricSequencePrice
+    getGeometricSequencePrice,
+    findCodeNameInArr
 } from './utils';
 import { generateOreParticles } from './OreParticle';
 import { generateRisingText } from './RisingText';
@@ -60,13 +61,39 @@ const generateNewOre = () => {
     State.ore.hp = State.ore.maxHp;
 };
 
-const handleOreClick = (event: MouseEvent) => {
-    gainOre(State.opc);
-    gainGenerationXp(1);
+const handleOreClick = (event: MouseEvent, weakSpotClick: boolean = false) => {
+    let amount = State.opc;
+
+    if (weakSpotClick) {
+        amount *= State.stats.weakSpotMultiplier;
+        gainGenerationXp(3);
+        generateRisingText(event, 'weakSpot', amount);
+        generateWeakSpot();
+        State.stats.weakSpotClicks++;
+    } else {
+        gainGenerationXp(1);
+        generateRisingText(event, null, amount);
+    }
+
+    gainOre(amount);
     generateOreParticles(event);
-    generateRisingText(event, null, State.opc);
 
     State.stats.oreClicks++;
+};
+
+const generateWeakSpot = () => {
+    let weakSpot = select('.weak-spot');
+    if (!weakSpot) {
+        weakSpot = createEl('div', ['weak-spot']);
+        weakSpot.addEventListener('click', (event: MouseEvent) => handleOreClick(event, true));
+        constants.oreSpriteContainerEl.append(weakSpot);
+    }
+
+    const x = getRandomNum(0, constants.oreSpriteEl.offsetWidth - 20);
+    const y = getRandomNum(0, constants.oreSpriteEl.offsetHeight - 20);
+
+    weakSpot.style.left = x + 'px';
+    weakSpot.style.bottom = y + 'px';
 };
 
 // - -----------------------------------------------------------------------------------
@@ -178,6 +205,53 @@ const updateBuildingPriceClass = () => {
                 if (!buildingPriceEl.classList.contains('not-enough')) buildingPriceEl.classList.add('not-enough');
             }
         });
+};
+
+// - -----------------------------------------------------------------------------------
+// - SMITH STUFF -----------------------------------------------------------------------
+// - -----------------------------------------------------------------------------------
+
+const updateSmithProgress = () => {
+    if (State.smith.currentProgress >= State.smith.currentUpgrade.powerNeeded) return;
+
+    const powerPerTick = State.smith.power / State.settings.tick;
+
+    if (spend(powerPerTick)) {
+        State.smith.currentProgress += powerPerTick;
+
+        updateSmithProgressBar();
+    }
+};
+
+const updateSmithProgressBar = () => {
+    const tabProgressBar = select('.smith-tab-progress-bar .bar');
+    const percentage = getPercentage(State.smith.currentProgress, State.smith.currentUpgrade.powerNeeded);
+
+    tabProgressBar.style.width = percentage + '%';
+    tabProgressBar.style.filter = `grayscale( ${100 - percentage}% )`;
+
+    if (InstanceState.selectedTab === 'smith') {
+        if (percentage > 100) {
+            UpdatesState.updateTabContent = true;
+            return;
+        }
+
+        const progressBar = select('.smith-progress-bar .bar');
+
+        progressBar.style.filter = `grayscale( ${100 - percentage}% )`;
+        progressBar.style.width = percentage + '%';
+    }
+};
+
+export const unlockSmithUpgrade = (codeName: string) => {
+    InstanceState.smithUpgrades.forEach((upgrade) => {
+        if (upgrade.codeName === codeName) {
+            upgrade.isOwned = true;
+
+            if (codeName === 'fragilitySpectacles') generateWeakSpot();
+            return;
+        }
+    });
 };
 
 // - -----------------------------------------------------------------------------------
@@ -355,7 +429,6 @@ const buildSmithProgressContainer = (): HTMLElement => {
         ['smith-progress-top'],
         `
         <p class='smith-upgrade-name'>${upgrade.name}</p>
-        <p class='smith-progress-percentage'>${beautifyNumber(percentage)}%</p>
         `
     );
 
@@ -386,39 +459,10 @@ const buildSmithProgressContainer = (): HTMLElement => {
     return smithProgressContainer;
 };
 
-const updateSmithProgress = () => {
-    if (State.smith.currentProgress >= State.smith.currentUpgrade.powerNeeded) return;
-
-    const powerPerTick = State.smith.power / State.settings.tick;
-
-    if (spend(powerPerTick)) {
-        State.smith.currentProgress += powerPerTick;
-
-        updateSmithProgressBar();
-    }
-};
-
-const updateSmithProgressBar = () => {
-    const tabProgressBar = select('.smith-tab-progress-bar .bar');
-    const percentage = getPercentage(State.smith.currentProgress, State.smith.currentUpgrade.powerNeeded);
-
-    tabProgressBar.style.width = percentage + '%';
-
-    if (InstanceState.selectedTab === 'smith') {
-        if (percentage > 100) {
-            UpdatesState.updateTabContent = true;
-            return;
-        }
-
-        const progressBar = select('.smith-progress-bar .bar');
-        const progressPercentage = select('.smith-progress-percentage');
-
-        progressBar.style.width = percentage + '%';
-        progressPercentage.innerHTML = beautifyNumber(percentage) + '%';
-    }
-};
-
 const buildSmithUpgrades = (): HTMLElement => {
+    const smithUpgradesWrapper = createEl('div', ['smith-upgrades-wrapper']);
+
+    const availableUpgradesHeader = createEl('p', ['smith-header-text'], 'Available Upgrades');
     const smithUpgradesContainer = createEl('div', ['smith-upgrades-container']);
 
     InstanceState.smithUpgrades
@@ -426,24 +470,21 @@ const buildSmithUpgrades = (): HTMLElement => {
         .forEach((upgrade) => {
             const upgradeEl = createEl('div', ['smith-upgrade']);
 
-            let str = `
-                <img src='./../images/smithUpgrade-${upgrade.codeName}.png'/>
-                <div>
-                    <p class='smith-upgrade-name'>${upgrade.name}</p>
-                    <p class='smith-upgrade-cost'>
-                        <img src='./../images/refined-ore.png' />
-                        ${upgrade.cost > 0 ? upgrade.cost : 'FREE'}
-                    </p>
-                </div>
-            `;
+            const upgradeImg = document.createElement('img');
+            upgradeImg.src = `./../images/smithUpgrade-${upgrade.codeName}.png`;
 
-            upgradeEl.addEventListener('click', () => upgrade.buy());
+            upgradeEl.addEventListener('click', (event) => upgrade.buy(event));
+            upgradeEl.addEventListener('mousemove', (event) => showTooltip(event, { type: 'smithUpgrade', smithUpgrade: upgrade }));
+            upgradeEl.addEventListener('mouseleave', () => hideTooltip());
 
-            upgradeEl.innerHTML = str;
+            upgradeEl.append(upgradeImg);
             smithUpgradesContainer.append(upgradeEl);
         });
 
-    return smithUpgradesContainer;
+    smithUpgradesWrapper.append(availableUpgradesHeader);
+    smithUpgradesWrapper.append(smithUpgradesContainer);
+
+    return smithUpgradesWrapper;
 };
 
 // - -----------------------------------------------------------------------------------

@@ -48,7 +48,9 @@ export const State: State = {
     },
 
     stats: {
+        weakSpotMultiplier: 5,
         oreClicks: 0,
+        weakSpotClicks: 0,
         rocksDestroyed: 0
     },
 
@@ -56,8 +58,8 @@ export const State: State = {
         inProgress: false,
         currentProgress: null,
         currentUpgrade: null,
-        power: 1,
-        maxPower: 1
+        power: 5,
+        maxPower: 5
     },
 
     settings: {

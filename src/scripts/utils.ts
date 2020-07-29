@@ -135,3 +135,11 @@ export const getGeometricSequencePrice = (b: Building) => {
     //     b.currentPrice * ((Math.pow(b.priceScale, InstanceState.buyAmount - b.owned + 1) - Math.pow(1, InstanceState.buyAmount)) / 1.12 - 1)
     // );
 };
+
+export const findCodeNameInArr = (codeName: string, arr: []) => {
+    arr.forEach((obj: any) => {
+        if (obj.codeName === codeName) {
+            return obj;
+        }
+    });
+};
