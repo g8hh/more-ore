@@ -6,6 +6,9 @@ export const gameContainerRight: HTMLElement = s('.game-container-right');
 export const torchLeft: HTMLElement = s('.torch-left');
 export const torchRight: HTMLElement = s('.torch-right');
 
+export const textScrollerContainerEl: HTMLElement = s('.text-scroller-container');
+export const textScrollerTextEl: HTMLElement = s('.text-scroller-container p');
+
 export const toastsContainerEl: HTMLElement = s('.toasts-container');
 
 export const oreSpriteContainerEl: HTMLElement = s('.ore-sprite-container');

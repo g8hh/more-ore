@@ -12,11 +12,11 @@
         position: relative;
         display: grid;
         grid-template-columns: 1fr;
-        grid-template-rows: 1fr 200px;
+        grid-template-rows: 1fr 160px;
 
         .game-container-left-top {
             display: grid;
-            grid-template-rows: 150px 1fr 50px;
+            grid-template-rows: 150px 1fr auto;
             background-image: url('./../../static/images/bg-test.png');
             background-size: cover;
 
@@ -65,12 +65,10 @@
                     }
 
                     .topbar-inventory-ores {
-
                         .amount {
-
                             .ops {
                                 font-size: 16px;
-                                opacity: .5;
+                                opacity: 0.5;
                             }
                         }
                     }
@@ -150,7 +148,7 @@
                                 border-radius: 50%;
                                 cursor: pointer;
                                 background: rgba(0, 0, 0, 0.2);
-                                transition: all .1s ease-out;
+                                transition: all 0.1s ease-out;
 
                                 &::after,
                                 &::before {
@@ -180,13 +178,12 @@
                                     &::before {
                                         border-top-color: red;
                                         border-bottom-color: red;
-                                        animation-duration: .5s;
+                                        animation-duration: 0.5s;
                                     }
                                 }
                             }
                         }
                     }
-
 
                     .ore-hp {
                         position: absolute;
@@ -199,7 +196,25 @@
                 }
             }
 
-            .game-container-left-top-bottom {}
+            .game-container-left-top-bottom {
+                .text-scroller-container {
+                    height: 32px;
+                    width: 100%;
+                    background: #111111;
+                    border-top: 8px solid saddlebrown;
+                    border-image: url('./../../static/images/misc-horizontal_separator.png') 10 round;
+                    position: relative;
+                    overflow: hidden;
+
+                    >p {
+                        position: relative;
+                        display: inline-block;
+                        left: 100%;
+                        line-height: 24px;
+                        color: white;
+                    }
+                }
+            }
         }
 
         .game-container-left-bottom {

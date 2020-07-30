@@ -152,3 +152,5 @@ export const getRandomColor = () => {
     }
     return color;
 };
+
+export const getRandomFromArr = (arr) => arr[Math.floor(Math.random() * arr.length)];

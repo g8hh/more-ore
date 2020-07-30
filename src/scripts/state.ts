@@ -22,6 +22,7 @@ interface State {
     };
     stats: Stats;
     settings: Settings;
+    textScrollerMessages: string[];
 }
 
 export const State: State = {
@@ -67,7 +68,21 @@ export const State: State = {
     settings: {
         tick: 60,
         oreHpType: 'percentage'
-    }
+    },
+
+    textScrollerMessages: [
+        'What is a rocks favorite fruit? ... Pom-a-granite',
+        "Did you see that cleavage? Now that's some gneiss schist.",
+        'All rock and no clay makes you a dull boy (or girl)',
+        "Don't take life for granite",
+        'What happens when you throw a blue rock in the red sea? ... It gets wet',
+        'As you can tell, these are pretty lame... Submit your own to /u/name_is_Syn',
+        'Rocks really rock!',
+        "I can't believe I'm googling rock puns right now",
+        'There are a few gems amongst all these terrible rock puns',
+        'These puns sure are all ore nothing',
+        'Rock pun here'
+    ]
 };
 
 interface InstanceState {
@@ -78,6 +93,10 @@ interface InstanceState {
     buildings: Building[];
     toasts: any[];
     smithUpgrades: SmithUpgrade[];
+    textScroller: {
+        isInProgress: boolean;
+        backlog: string[];
+    };
 }
 
 export const InstanceState: InstanceState = {
@@ -87,5 +106,9 @@ export const InstanceState: InstanceState = {
     tabs: [],
     buildings: [],
     toasts: [],
-    smithUpgrades: []
+    smithUpgrades: [],
+    textScroller: {
+        isInProgress: true,
+        backlog: []
+    }
 };

@@ -12,7 +12,8 @@ import {
     createEl,
     beautifyNumber,
     getGeometricSequencePrice,
-    findCodeNameInArr
+    findCodeNameInArr,
+    getRandomFromArr
 } from './utils';
 import { generateOreParticles } from './OreParticle';
 import { generateRisingText } from './RisingText';
@@ -239,7 +240,7 @@ const updateSmithProgressBar = () => {
     tabProgressBar.style.filter = `grayscale( ${100 - percentage}% )`;
 
     if (InstanceState.selectedTab === 'smith') {
-        if (percentage > 100) {
+        if (percentage >= 100) {
             UpdatesState.updateTabContent = true;
             return;
         }
@@ -251,12 +252,22 @@ const updateSmithProgressBar = () => {
     }
 };
 
-export const unlockSmithUpgrade = (codeName: string) => {
+export const completeSmithUpgrade = (codeName: string) => {
     InstanceState.smithUpgrades.forEach((upgrade) => {
         if (upgrade.codeName === codeName) {
             upgrade.isOwned = true;
 
-            if (codeName === 'fragilitySpectacles') generateWeakSpot();
+            switch (codeName) {
+                case 'fragilitySpectacles':
+                    generateWeakSpot();
+                    break;
+                case 'smithPowerUp':
+                    State.smith.maxPower *= 1.5;
+                    break;
+                default:
+                    console.log('default case firing', codeName);
+            }
+
             return;
         }
     });
@@ -272,7 +283,7 @@ const updateSmithPower = (power) => {
 // - TAB BUILD STUFF -------------------------------------------------------------------
 // - -----------------------------------------------------------------------------------
 
-const updateTabs = () => {
+const updateTabs = (): void => {
     const tabsContainer = document.createElement('div');
     tabsContainer.classList.add('tabs-container');
 
@@ -321,7 +332,7 @@ const unlockTab = (tabName: string): void => {
     });
 };
 
-const updateTabContent = () => {
+const updateTabContent = (): void => {
     const tabsContentContainer = document.createElement('div');
     tabsContentContainer.classList.add('tabs-content-container');
 
@@ -419,7 +430,7 @@ const buildBuyAmountContainer = (): HTMLElement => {
     return buyAmountContainer;
 };
 
-const buildSmithTabContent = () => {
+const buildSmithTabContent = (): HTMLElement => {
     const smithTabContentContainer = createEl('div', ['tab-content', 'tab-content-smith']);
     const underTabBar = createEl('div', ['under-tab-bar']);
 
@@ -452,7 +463,7 @@ const buildSmithProgressContainer = (): HTMLElement => {
     collectBtn.addEventListener('click', () => upgrade.complete());
 
     const smithProgressBottom =
-        percentage > 100
+        percentage >= 100
             ? collectBtn
             : createEl(
                   'div',
@@ -502,19 +513,20 @@ const buildSmithUpgrades = (): HTMLElement => {
             upgradeEl.append(newText);
         }
 
-        if (!upgrade.isLocked && !upgrade.isOwned && !upgrade.isInProgress) {
+        if (
+            (!upgrade.isLocked && !upgrade.isOwned && !upgrade.isInProgress) ||
+            (upgrade.isRepeatable && !upgrade.isLocked && !upgrade.isInProgress)
+        ) {
             hasAvailableUpgrades = true;
             upgradeEl.addEventListener('click', (event) => upgrade.buy(event));
             upgradeEl.addEventListener('mouseover', (event) => upgrade.removeNew(event));
             upgradeEl.addEventListener('mousemove', (event) => showTooltip(event, { type: 'smithUpgrade', smithUpgrade: upgrade }));
             upgradeEl.addEventListener('mouseleave', () => hideTooltip());
             smithAvailableUpgradesContainer.append(upgradeEl);
-        }
-        if (upgrade.isLocked) {
+        } else if (upgrade.isLocked) {
             hasLockedUpgrades = true;
             smithLockedUpgradesContainer.append(upgradeEl);
-        }
-        if (upgrade.isOwned) {
+        } else if (upgrade.isOwned) {
             hasOwnedUpgrades = true;
             upgradeEl.addEventListener('mousemove', (event) => showTooltip(event, { type: 'smithUpgrade', smithUpgrade: upgrade }));
             upgradeEl.addEventListener('mouseleave', () => hideTooltip());
@@ -527,10 +539,10 @@ const buildSmithUpgrades = (): HTMLElement => {
         smithUpgradesWrapper.append(smithAvailableUpgradesContainer);
     }
 
-    if (hasLockedUpgrades) {
-        smithUpgradesWrapper.append(lockedUpgradesHeader);
-        smithUpgradesWrapper.append(smithLockedUpgradesContainer);
-    }
+    // if (hasLockedUpgrades) {
+    //     smithUpgradesWrapper.append(lockedUpgradesHeader);
+    //     smithUpgradesWrapper.append(smithLockedUpgradesContainer);
+    // }
 
     if (hasOwnedUpgrades) {
         smithUpgradesWrapper.append(ownedUpgradesHeader);
@@ -565,6 +577,30 @@ const buildSmithSettings = (): HTMLElement => {
 };
 
 // - -----------------------------------------------------------------------------------
+// - TEXT SCROLLER ---------------------------------------------------------------------
+// - -----------------------------------------------------------------------------------
+
+const startTextScroller = () => {
+    const selectedMessage = getRandomFromArr(State.textScrollerMessages);
+    constants.textScrollerTextEl.innerHTML = selectedMessage;
+    InstanceState.textScroller.isInProgress = true;
+};
+
+const moveTextInScroller = () => {
+    const speed = State.settings.tick === 30 ? 2 : 1;
+    const currentLeft = constants.textScrollerTextEl.offsetLeft;
+
+    constants.textScrollerTextEl.style.left = currentLeft - speed + 'px';
+
+    if (currentLeft + constants.textScrollerTextEl.offsetWidth <= 0) {
+        constants.textScrollerTextEl.innerHTML = '';
+        constants.textScrollerTextEl.style.left = '100%';
+        InstanceState.textScroller.isInProgress = false;
+        startTextScroller();
+    }
+};
+
+// - -----------------------------------------------------------------------------------
 // - INIT STUFF ------------------------------------------------------------------------
 // - -----------------------------------------------------------------------------------
 
@@ -584,6 +620,7 @@ const gameLoop = () => {
         updateBuildingPriceClass();
     }
 
+    if (InstanceState.textScroller.isInProgress) moveTextInScroller();
     if (State.smith.inProgress) updateSmithProgress();
 
     gainOre(State.ops / State.settings.tick, false);
@@ -617,6 +654,9 @@ const initialLoad = () => {
     instantiateSmithUpgrades();
     constants.oreSpriteEl.onclick = handleOreClick;
 
+    // ! DELETE LATER - TESTING
+    startTextScroller();
+
     setInterval(gameLoop, 1000 / State.settings.tick);
 };
 
@@ -630,10 +670,15 @@ var before, now, fps;
 let fpsEl: HTMLElement = document.querySelector('.fps');
 fpsEl.style.zIndex = '5';
 before = Date.now();
-fps = 0;
+fps = 1000;
+let lowest = 1000;
 requestAnimationFrame(function loop() {
     now = Date.now();
     fps = Math.round(1000 / (now - before));
+    if (fps < lowest) {
+        lowest = fps;
+        console.log('lowest:', lowest);
+    }
     before = now;
     requestAnimationFrame(loop);
     fpsEl.innerHTML = fps;

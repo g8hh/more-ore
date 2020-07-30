@@ -72,12 +72,18 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
                         <div class='cost'>
                             <p>Requires:</p>
                             <p>Refined Ores: ${upgrade.cost}</p>
-                            <p>Power Needed: ${upgrade.powerNeeded}</p>
+                            <p>Power Needed: ${beautifyNumber(upgrade.powerNeeded)}</p>
                         </div>
                     </div>
+                    `;
+            if (upgrade.flavorText) {
+                str += `
                     <div class='tooltip-bottom'>
                         <p>${upgrade.flavorText}</p>
-                    </div>
+                    </div>`;
+            }
+
+            str += `
                 </div>
             `;
             break;
