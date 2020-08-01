@@ -1,16 +1,20 @@
 {
-  "name": "More-Ore",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": "https://github.com/iSyn/More-Ore.git",
-  "author": "Synclair Wang <synclairwang11@yahoo.com>",
-  "license": "MIT",
-  "dependencies": {
-    "browser-sync": "^2.26.3",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^6.0.0",
-    "gulp-plumber": "^1.2.0",
-    "gulp-sass": "^4.0.2",
-    "howler": "^2.0.15"
-  }
+    "name": "more-ore",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "git@github.com:iSyn/More-Ore.git",
+    "author": "iSyn <synclairwang11@yahoo.com>",
+    "license": "MIT",
+    "scripts": {
+        "parcel:dev": "parcel src/index.html",
+        "parcel:build": "parcel build src/index.html"
+    },
+    "devDependencies": {
+        "parcel-bundler": "^1.12.4",
+        "sass": "^1.26.10",
+        "typescript": "^3.9.7"
+    },
+    "dependencies": {
+        "parcel-plugin-static-files-copy": "^2.4.3"
+    }
 }

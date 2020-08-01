@@ -1,0 +1,80 @@
+@keyframes flyingNumber {
+
+    0% {
+        transform: translateY(0), scale(1);
+    }
+
+    5% {
+        transform: scale(1.8);
+    }
+
+    10% {
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-200px);
+    }
+}
+
+@keyframes weakSpotSpin {
+
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes weakSpotSpinCounterClockwise {
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+
+@keyframes buildingFlyingNumber {
+    from {
+        transform: translateY(0);
+        opacity: .4;
+    }
+
+    to {
+        transform: translateY(-150px);
+        opacity: .1;
+    }
+}
+
+@keyframes newText {
+    from {
+        transform: rotate(-50deg) scale(1);
+    }
+
+    to {
+        transforM: rotate(-40deg) scale(1.1);
+    }
+}
+
+@keyframes toast {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}

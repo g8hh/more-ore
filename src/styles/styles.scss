@@ -1,0 +1,62 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+body {
+  font-family: 'Asap Condensed';
+  image-rendering: pixelated;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  /* remove scrollbar space */
+  background: transparent;
+  /* optional: just make scrollbar invisible */
+}
+
+.page-container {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+}
+
+footer {
+  background: black;
+  color: white;
+  display: flex;
+  justify-content: center;
+
+  .more-ore-logo {
+    height: 17px;
+    width: 78px;
+    background-image: url('./../../static/images/misc-logo.png');
+    background-size: 100% 100%;
+  }
+}
+
+#particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+@import './components/animations';
+
+@import './components/game';
+@import './components/particles';
+@import './components/tabs';
+@import './components/store';
+@import './components/tooltip';
+@import './components/toast';
+@import './components/torches';
+@import './components/smith';
+@import './components/comboSign';
