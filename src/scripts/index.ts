@@ -441,7 +441,7 @@ const buildUpgrades = (): HTMLElement => {
                 'div',
                 ['upgrade', `upgrade-${upgrade[1].codeName}`, `${State.inventory.ores < upgrade[1].price && 'not-enough'}`],
                 `
-                <img src='./../images/upgrade-${upgrade[1].codeName}.png'/>
+                <img src='./images/upgrade-${upgrade[1].codeName}.png'/>
             `
             );
             upgradeEl.addEventListener('mousemove', (event: MouseEvent) => upgrade[1].mousemove(event));
@@ -467,14 +467,14 @@ const buildBuildings = (): HTMLElement => {
             const buildingEl = createEl('div', ['building', `building-${building.codeName}`, `${building.isLocked && 'locked'}`]);
             const price = getGeometricSequencePrice(building);
 
-            let str = `<img class='building-img' src='./../images/building-${building.codeName}.png' />`;
+            let str = `<img class='building-img' src='./images/building-${building.codeName}.png' />`;
 
             if (!building.isLocked) {
                 str += `
                     <div class='building-left'>
                         <p class='building-name'>${building.name} ${InstanceState.buyAmount != 1 ? `x${InstanceState.buyAmount}` : ''}</p>
                         <p class='building-price'>
-                            <img src='./../images/ore.png' />
+                            <img src='./images/ore.png' />
                             ${beautifyNumber(price)}
                         </p>
                     </div>
@@ -569,7 +569,7 @@ const buildSmithProgressContainer = (): HTMLElement => {
     div.append(smithProgressBottom);
 
     const upgradeImg = document.createElement('img');
-    upgradeImg.src = `./../images/smithUpgrade-${upgrade.codeName}.png`;
+    upgradeImg.src = `./images/smithUpgrade-${upgrade.codeName}.png`;
 
     smithProgressContainer.append(upgradeImg);
     smithProgressContainer.append(div);
@@ -595,7 +595,7 @@ const buildSmithUpgrades = (): HTMLElement => {
     InstanceState.smithUpgrades.forEach((upgrade) => {
         const upgradeEl = createEl('div', ['smith-upgrade']);
         const upgradeImg = document.createElement('img');
-        upgradeImg.src = `./../images/smithUpgrade-${upgrade.codeName}.png`;
+        upgradeImg.src = `./images/smithUpgrade-${upgrade.codeName}.png`;
 
         upgradeEl.append(upgradeImg);
 

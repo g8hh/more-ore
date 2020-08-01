@@ -27,10 +27,10 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
             str += `
                 <div class='tooltip-container tooltip-building tooltip-building-${tt.building.codeName}'>
                     <div class='tooltip-top'>
-                        <img src='./../images/building-${tt.building.codeName}.png'/>
+                        <img src='./images/building-${tt.building.codeName}.png'/>
                         <p>${tt.building.name}</p>
                         <p class='price' style='${State.inventory.ores < price ? 'color: crimson' : ''}'>
-                            <img src='./../images/ore.png'/>
+                            <img src='./images/ore.png'/>
                             ${beautifyNumber(price)}
                         </p>
                     </div>
@@ -63,10 +63,10 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
             str += `
                 <div class='tooltip-container tooltip-upgrade tooltip-upgrade-${tt.upgrade.codeName}'>
                     <div class='tooltip-top'>
-                        <img src='./../images/upgrade-${tt.upgrade.codeName}.png'/>
+                        <img src='./images/upgrade-${tt.upgrade.codeName}.png'/>
                         <p>${tt.upgrade.name}</p>
                         <p class='price' style='${State.inventory.ores < tt.upgrade.price ? 'color: crimson' : ''}'>
-                            <img src='./../images/ore.png'/>
+                            <img src='./images/ore.png'/>
                             ${beautifyNumber(tt.upgrade.price)}
                         </p>
                     </div>
@@ -84,7 +84,7 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
             str += `
                 <div class='tooltip-container tooltip-smithUpgrade tooltip-smithUpgrade-${upgrade.codeName}'>
                     <div class='tooltip-top'>
-                        <img src='./../images/smithUpgrade-${upgrade.codeName}.png'/>
+                        <img src='./images/smithUpgrade-${upgrade.codeName}.png'/>
                         <p>${upgrade.name}</p>
                     </div>
                     <div class='tooltip-middle'>

@@ -7,7 +7,7 @@
     "license": "MIT",
     "scripts": {
         "parcel:dev": "parcel src/index.html",
-        "parcel:build": "parcel build src/index.html",
+        "parcel:build": "parcel build src/index.html --public-url replacethislinewithadot && sed -i '' 's/replacethislinewithadot/./g' dist/*.html dist/*.css",
         "deploy": "gh-pages -d dist"
     },
     "devDependencies": {
