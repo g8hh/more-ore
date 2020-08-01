@@ -3,6 +3,7 @@ import { State, InstanceState } from './State';
 import { Building } from './Buildings';
 import { showTooltip, hideTooltip } from './Tooltip';
 import { upgrades as u } from './upgrades/index';
+import { spend } from '.';
 
 export interface Upgrade {
     name: string;
@@ -23,7 +24,11 @@ const Upgrade = function (upgrade) {
     this.isLocked = upgrade.isLocked === false ? false : true;
     this.isOwned = upgrade.isOwned === false ? false : false;
 
-    this.buy = (event: MouseEvent) => {};
+    this.buy = (event: MouseEvent) => {
+        // if (spend(this.price)) {
+        //     this.isOwned = true
+        // }
+    };
 
     this.mousemove = (event: MouseEvent): void => showTooltip(event, { type: 'upgrade', upgrade: this });
 };
