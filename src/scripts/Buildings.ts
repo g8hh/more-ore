@@ -19,6 +19,8 @@ export interface Building {
     isHidden: boolean;
     owned?: number;
     buy?: Function;
+    mousemove?: Function;
+    onBuy?: any;
 }
 
 let id = 0;
@@ -36,6 +38,7 @@ const Building = function (b) {
     this.isLocked = b.isLocked;
     this.isHidden = b.isHidden;
     this.owned = b.owned || 0;
+    this.onBuy = b.onBuy || null;
     id += 1;
 
     this.buy = (event) => {
@@ -50,10 +53,25 @@ const Building = function (b) {
 
             updateBuildingsVisibility(this.id);
 
+            if (this.onBuy) {
+                if (this.onBuy.unlockUpgrade) {
+                    this.onBuy.unlockUpgrade.forEach((upgrade) => {
+                        if (this.owned >= upgrade.amountNeeded) {
+                            State.upgrades[upgrade.name].isLocked = false;
+                            UpdatesState.updateTabContent = true;
+
+                            console.log('UPGRADES', State.upgrades);
+                        }
+                    });
+                }
+            }
+
             generateRisingText(event, 'buy');
             showTooltip(event, { type: 'building', building: this });
         }
     };
+
+    this.mousemove = (event) => showTooltip(event, { type: 'building', building: this });
 };
 
 const updateBuildingsVisibility = (index: number) => {
@@ -73,7 +91,19 @@ const buildings: Building[] = [
         basePrice: 12,
         priceScale: 1.12,
         isLocked: false,
-        isHidden: false
+        isHidden: false,
+        onBuy: {
+            unlockUpgrade: [
+                { name: 'Composition Notebooks', amountNeeded: 1 },
+                { name: 'No. 2 Pencil', amountNeeded: 5 },
+                { name: '3 Ring Binder', amountNeeded: 10 },
+                { name: 'Looseleaf', amountNeeded: 20 },
+                { name: 'Schoolbag', amountNeeded: 50 },
+                { name: 'Fresh Pink Eraser', amountNeeded: 100 },
+                { name: 'Gum', amountNeeded: 200 },
+                { name: 'Report Card', amountNeeded: 400 }
+            ]
+        }
     },
     {
         name: 'Farm',
@@ -84,7 +114,19 @@ const buildings: Building[] = [
         basePrice: 240,
         priceScale: 1.15,
         isLocked: true,
-        isHidden: false
+        isHidden: false,
+        onBuy: {
+            unlockUpgrade: [
+                { name: 'Manure Spreader', amountNeeded: 1 },
+                { name: 'Pitchfork', amountNeeded: 5 },
+                { name: 'Tractor', amountNeeded: 10 },
+                { name: 'Rotary Cutter', amountNeeded: 20 },
+                { name: 'Hoe', amountNeeded: 50 },
+                { name: 'Baler', amountNeeded: 100 },
+                { name: 'Sickle', amountNeeded: 200 },
+                { name: 'Scythe', amountNeeded: 400 }
+            ]
+        }
     },
     {
         name: 'Quarry',
@@ -95,7 +137,19 @@ const buildings: Building[] = [
         basePrice: 2_520,
         priceScale: 1.15,
         isLocked: true,
-        isHidden: false
+        isHidden: false,
+        onBuy: {
+            unlockUpgrade: [
+                { name: 'Floodlights', amountNeeded: 1 },
+                { name: 'Twill Rope', amountNeeded: 5 },
+                { name: 'Wooden Compass', amountNeeded: 10 },
+                { name: 'Ore Filter', amountNeeded: 20 },
+                { name: 'Waterproof Tape', amountNeeded: 50 },
+                { name: 'Metallic Compass', amountNeeded: 100 },
+                { name: 'Miners Mask', amountNeeded: 200 },
+                { name: 'Cape Chisel', amountNeeded: 400 }
+            ]
+        }
     },
     {
         name: 'Church',
@@ -106,7 +160,19 @@ const buildings: Building[] = [
         basePrice: 37_800,
         priceScale: 1.15,
         isLocked: true,
-        isHidden: true
+        isHidden: true,
+        onBuy: {
+            unlockUpgrade: [
+                { name: 'Scripture Reading', amountNeeded: 1 },
+                { name: 'Communion', amountNeeded: 5 },
+                { name: 'Worship Session', amountNeeded: 10 },
+                { name: '7th Day', amountNeeded: 20 },
+                { name: 'Eden Apple', amountNeeded: 50 },
+                { name: 'Apocalypse', amountNeeded: 100 },
+                { name: 'Judgement Day', amountNeeded: 200 },
+                { name: 'Rapture', amountNeeded: 400 }
+            ]
+        }
     },
     {
         name: 'Factory',
@@ -117,7 +183,16 @@ const buildings: Building[] = [
         basePrice: 490_000,
         priceScale: 1.15,
         isLocked: true,
-        isHidden: true
+        isHidden: true,
+        onBuy: {
+            unlockUpgrade: [
+                { name: 'Rubber Conveyor Belt', amountNeeded: 1 },
+                { name: 'Floppy Squiggle Tubes', amountNeeded: 5 },
+                { name: 'Clicky Squish Buttons', amountNeeded: 10 },
+                { name: 'Metallic Magnetic Panels', amountNeeded: 20 },
+                { name: 'Hydroponic Auxilleration', amountNeeded: 50 }
+            ]
+        }
     },
     {
         name: 'Crypt',

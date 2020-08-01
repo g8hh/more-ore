@@ -1,7 +1,7 @@
 .game-container {
     position: relative;
     display: grid;
-    grid-template-columns: 1fr 320px;
+    grid-template-columns: 1fr 314px;
     grid-template-rows: 1fr;
     // border: 15px solid saddlebrown;
     border: 20px solid transparent;
@@ -218,7 +218,7 @@
         }
 
         .game-container-left-bottom {
-            border-top: 15px solid saddlebrown;
+            border-top: 8px solid saddlebrown;
             border-image: url('./../../static/images/misc-horizontal_separator.png') 10 round;
             background-image: url('./../../static/images/misc-mineshaft.png');
             background-size: auto 100%;

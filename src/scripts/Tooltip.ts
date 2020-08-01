@@ -8,6 +8,7 @@ interface Tooltip {
     type: 'building' | 'smithUpgrade' | 'upgrade';
     building?: Building;
     smithUpgrade?: SmithUpgrade;
+    upgrade?: any;
 }
 
 export const hideTooltip = () => {
@@ -58,7 +59,26 @@ export const showTooltip = (event: MouseEvent, tt: Tooltip) => {
                 </div>
             `;
             break;
-
+        case 'upgrade':
+            str += `
+                <div class='tooltip-container tooltip-upgrade tooltip-upgrade-${tt.upgrade.codeName}'>
+                    <div class='tooltip-top'>
+                        <img src='./../images/upgrade-${tt.upgrade.codeName}.png'/>
+                        <p>${tt.upgrade.name}</p>
+                        <p class='price' style='${State.inventory.ores < tt.upgrade.price ? 'color: crimson' : ''}'>
+                            <img src='./../images/ore.png'/>
+                            ${beautifyNumber(tt.upgrade.price)}
+                        </p>
+                    </div>
+                    <div class='tooltip-middle'>
+                        <p>${tt.upgrade.desc}</p>
+                    </div>
+                    <div class='tooltip-bottom'>
+                        <p>${tt.upgrade.flavorText}</p>
+                    </div>
+                </div>
+            `;
+            break;
         case 'smithUpgrade':
             const upgrade = tt.smithUpgrade;
             str += `

@@ -3,6 +3,8 @@
     .tabs-container {
         display: flex;
         flex-flow: row nowrap;
+        // border-bottom: 10px solid saddlebrown;
+        // border-image: url('./../../static/images/misc-horizontal_separator.png') 10 round;
 
         .tab {
             flex-grow: 1;

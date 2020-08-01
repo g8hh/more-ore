@@ -142,7 +142,8 @@ const smithUpgrades: SmithUpgrade[] = [
         name: 'Fragility Spectacles',
         desc: 'Allows you to spot "weak spots" within the ore. Hitting the weak spot generates 5x the normal amount.',
         flavorText: 'I can see... I can FIGHT!',
-        powerNeeded: 150,
+        powerNeeded: 15,
+        // powerNeeded: 150,
         cost: 0,
         isLocked: false,
         onComplete: {

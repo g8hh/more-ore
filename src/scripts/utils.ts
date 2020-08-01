@@ -11,7 +11,7 @@ export const formatNumber = (num: number): number => {
 };
 
 export const removeEl = (el: HTMLElement): void => {
-    el.parentNode.removeChild(el);
+    if (el.parentNode) el.parentNode.removeChild(el);
 };
 
 export const getRandomNum = (min = 0, max = 1, fractionDigits = 0, inclusive = true) => {
@@ -136,12 +136,8 @@ export const getGeometricSequencePrice = (b: Building) => {
     // );
 };
 
-export const findCodeNameInArr = (codeName: string, arr: []) => {
-    arr.forEach((obj: any) => {
-        if (obj.codeName === codeName) {
-            return obj;
-        }
-    });
+export const findCodeNameInArr = (codeName: string, arr: any[]) => {
+    return arr.find((obj) => obj.codeName === codeName);
 };
 
 export const getRandomColor = () => {
@@ -154,3 +150,12 @@ export const getRandomColor = () => {
 };
 
 export const getRandomFromArr = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+export const isObjEmpty = (obj) => {
+    return Object.keys(obj).length === 0;
+};
+
+export const sortObj = (obj, key) => {
+    let entries = Object.entries(obj);
+    return entries.sort((a: any, b: any) => a[1][key] - b[1][key]);
+};

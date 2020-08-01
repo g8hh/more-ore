@@ -10,6 +10,8 @@ export const textScrollerContainerEl: HTMLElement = s('.text-scroller-container'
 export const textScrollerTextEl: HTMLElement = s('.text-scroller-container p');
 
 export const toastsContainerEl: HTMLElement = s('.toasts-container');
+export const toastsContainerLeftEl: HTMLElement = s('.toasts-container .left');
+export const toastsContainerRightEl: HTMLElement = s('.toasts-container .right');
 
 export const oreSpriteContainerEl: HTMLElement = s('.ore-sprite-container');
 export const oreSpriteEl: HTMLImageElement = s('.ore-sprite');
@@ -20,6 +22,8 @@ export const topbarInventoryOresEl: HTMLElement = s('.topbar-inventory-ores > .a
 export const topbarInventoryGenerationLv: HTMLElement = s('.topbar-inventory-generation > .level');
 export const topbarInventoryGenerationLvOnRefine: HTMLElement = s('.topbar-inventory-generation > .level-on-refine');
 export const topbarInventoryGenerationXpBarEl: HTMLElement = s('.topbar-inventory-generation-xp .bar');
+export const comboSignEl: HTMLElement = s('.combo-sign');
+export const comboSignNumberEl: HTMLElement = s('.combo-sign span');
 
 export const particlesCanvasEl: HTMLCanvasElement = s('#particles');
 export const particlesCanvasContext: CanvasRenderingContext2D = particlesCanvasEl.getContext('2d');

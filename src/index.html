@@ -15,11 +15,17 @@
     </head>
 
     <body>
-        <div class="fps" style="position: absolute; font-size: 40px; background: red;"></div>
+        <div
+            class="fps"
+            style="position: absolute; font-size: 40px; background: black; color: white; padding: 8px; font-weight: bold;"
+        ></div>
         <div class="page-container">
             <div class="game-container">
                 <canvas id="particles"></canvas>
-                <div class="toasts-container"></div>
+                <div class="toasts-container">
+                    <div class="left"></div>
+                    <div class="right"></div>
+                </div>
                 <div class="tooltip-wrapper"></div>
                 <div class="game-container-left">
                     <div class="torch torch-left"></div>
@@ -27,6 +33,9 @@
                     <div class="game-container-left-top">
                         <div class="game-container-left-top-top">
                             <div class="topbar-inventory">
+                                <div class="combo-sign">
+                                    <p>Current Combo <span>0</span></p>
+                                </div>
                                 <p class="topbar-inventory-ores">Ores: <span class="amount"></span></p>
                                 <div class="topbar-inventory-generation-wrapper">
                                     <p class="topbar-inventory-generation">

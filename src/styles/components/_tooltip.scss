@@ -19,14 +19,19 @@
         .tooltip-top {
             font-family: 'Germania One';
             display: grid;
-            grid-template-columns: 64px auto min-content;
+            grid-template-columns: 50px auto max-content;
             column-gap: 8px;
             align-items: center;
-            font-size: 24px;
+            font-size: 18px;
             border-bottom: 1px solid rgba(255, 255, 255, .4);
 
             >img {
-                height: 64px;
+                height: 50px;
+            }
+
+            p:not(.price) {
+                text-shadow: 0 0 2px black;
+                letter-spacing: .2px;
             }
 
             .price {

@@ -13,7 +13,8 @@ import {
     beautifyNumber,
     getGeometricSequencePrice,
     findCodeNameInArr,
-    getRandomFromArr
+    getRandomFromArr,
+    sortObj
 } from './utils';
 import { generateOreParticles } from './OreParticle';
 import { generateRisingText } from './RisingText';
@@ -22,6 +23,8 @@ import { instantiateBuildings } from './Buildings';
 import { showTooltip, hideTooltip } from './Tooltip';
 import { Toast } from './Toast';
 import { instantiateSmithUpgrades } from './SmithUpgrades';
+import { instantiateAchievements } from './Achievements';
+import { instantiateUpgrades } from './Upgrades';
 
 const gainOre = (amount: number, damageOre: boolean = true) => {
     State.inventory.ores += amount;
@@ -52,7 +55,16 @@ const handleBrokenOre = () => {
     gainGenerationXp(50);
     generateNewOre();
     State.ore.spriteType = getRandomNum(1, 5);
+
     State.stats.rocksDestroyed++;
+    if (State.stats.rocksDestroyed === 1) winAchievement('Newbie Miner');
+    if (State.stats.rocksDestroyed === 10) winAchievement('Novice Miner');
+    if (State.stats.rocksDestroyed === 25) winAchievement('Intermediate Miner');
+    if (State.stats.rocksDestroyed === 50) winAchievement('Advanced Miner');
+    if (State.stats.rocksDestroyed === 100) winAchievement('Master Miner');
+    if (State.stats.rocksDestroyed === 200) winAchievement('Chief Miner');
+    if (State.stats.rocksDestroyed === 500) winAchievement('Exalted Miner');
+    if (State.stats.rocksDestroyed === 1000) winAchievement('God Miner');
 
     if (State.stats.rocksDestroyed === 1) unlockTab('smith');
 };
@@ -60,6 +72,11 @@ const handleBrokenOre = () => {
 const generateNewOre = () => {
     State.ore.maxHp *= 1.13;
     State.ore.hp = State.ore.maxHp;
+};
+
+const updateComboSign = () => {
+    if (!constants.comboSignEl.classList.contains('visible')) instantiateComboSign();
+    constants.comboSignNumberEl.innerHTML = `${State.stats.currentCombo}`;
 };
 
 const handleOreClick = (event: MouseEvent, weakSpotClick: boolean = false) => {
@@ -75,6 +92,18 @@ const handleOreClick = (event: MouseEvent, weakSpotClick: boolean = false) => {
 
         if (State.stats.currentCombo % 5 === 0) generateRisingText(event, 'combo', State.stats.currentCombo);
         if (State.stats.currentCombo > State.stats.highestCombo) State.stats.highestCombo = State.stats.currentCombo;
+
+        if (State.stats.currentCombo === 5) winAchievement('Combo Baby');
+        if (State.stats.currentCombo === 20) winAchievement('Combo Pleb');
+        if (State.stats.currentCombo === 50) winAchievement('Combo Squire');
+        if (State.stats.currentCombo === 100) winAchievement('Combo Knight');
+        if (State.stats.currentCombo === 200) winAchievement('Combo King');
+        if (State.stats.currentCombo === 350) winAchievement('Combo Master');
+        if (State.stats.currentCombo === 666) winAchievement('Combo Devil');
+        if (State.stats.currentCombo === 777) winAchievement('Combo Jackpot');
+        if (State.stats.currentCombo === 1000) winAchievement('Combo God');
+        if (State.stats.currentCombo === 5000) winAchievement('Combo Saiyan');
+        if (State.stats.currentCombo === 10000) winAchievement('Combo Saitama');
         generateWeakSpot();
     } else {
         if (State.stats.currentCombo > 0) {
@@ -84,6 +113,12 @@ const handleOreClick = (event: MouseEvent, weakSpotClick: boolean = false) => {
         generateRisingText(event, null, amount);
     }
 
+    if (amount >= 100) winAchievement('Not Even A Scratch');
+    if (amount >= 1_000) winAchievement('Didnt Even Hurt');
+    if (amount >= 100_000) winAchievement('That Tickled');
+    if (amount >= 1_000_000) winAchievement('I Felt That');
+
+    updateComboSign();
     gainOre(amount);
     generateOreParticles(event);
 
@@ -103,6 +138,11 @@ const generateWeakSpot = () => {
 
     weakSpot.style.left = x + 'px';
     weakSpot.style.bottom = y + 'px';
+};
+
+const winAchievement = (achievementName: string) => {
+    const achievement = State.achievements[achievementName];
+    achievement.win();
 };
 
 // - -----------------------------------------------------------------------------------
@@ -195,6 +235,13 @@ export const updateOPS = () => {
     });
 
     State.ops = ops;
+
+    if (ops >= 50) winAchievement('Ore-aid Stand');
+    if (ops >= 10000) winAchievement('Ore Store');
+    if (ops >= 401000) winAchievement('401k');
+    if (ops >= 5_000_000) winAchievement('Retirement Plan');
+    if (ops >= 1_000_000_000) winAchievement('Hedge Fund');
+
     UpdatesState.updateOPS = false;
 };
 
@@ -203,17 +250,30 @@ const changeBuyAmount = (amount) => {
     UpdatesState.updateTabContent = true;
 };
 
-const updateBuildingPriceClass = () => {
-    InstanceState.buildings
-        .filter((building) => !building.isHidden && !building.isLocked)
-        .forEach((building) => {
+const updateStorePriceClasses = () => {
+    InstanceState.buildings.forEach((building) => {
+        if (!building.isHidden && !building.isLocked) {
             const buildingPriceEl = document.querySelector(`.building-${building.codeName} .building-price`);
             if (State.inventory.ores >= getGeometricSequencePrice(building)) {
                 if (buildingPriceEl.classList.contains('not-enough')) buildingPriceEl.classList.remove('not-enough');
             } else {
                 if (!buildingPriceEl.classList.contains('not-enough')) buildingPriceEl.classList.add('not-enough');
             }
-        });
+        }
+    });
+
+    for (const upgrade in State.upgrades) {
+        const u = State.upgrades[upgrade];
+        if (!u.isLocked && !u.isOwned) {
+            const upgradeEl = document.querySelector(`.upgrade-${u.codeName}`);
+            if (State.inventory.ores >= u.price) {
+                if (upgradeEl.classList.contains('not-enough')) upgradeEl.classList.remove('not-enough');
+            } else {
+                if (!upgradeEl.classList.contains('not-enough')) upgradeEl.classList.add('not-enough');
+            }
+        }
+        // console.log('upgrade', State.upgrades[upgrade]);
+    }
 };
 
 // - -----------------------------------------------------------------------------------
@@ -358,13 +418,44 @@ const updateTabContent = (): void => {
 const buildStoreTabContent = (): HTMLElement => {
     const storeTabContainer = createEl('div', ['tab-content', 'tab-content-store']);
 
+    const upgradesContainer = buildUpgrades();
     const buyAmountContainer = buildBuyAmountContainer();
     const buildingsContainer = buildBuildings();
 
+    if (upgradesContainer.innerHTML) storeTabContainer.append(upgradesContainer);
     storeTabContainer.append(buyAmountContainer);
     storeTabContainer.append(buildingsContainer);
 
     return storeTabContainer;
+};
+
+const buildUpgrades = (): HTMLElement => {
+    const upgradesContainer = createEl('div', ['upgrades-container']);
+    upgradesContainer.addEventListener('mouseenter', () => resizeUpgradesContainer('enter'));
+    upgradesContainer.addEventListener('mouseleave', () => resizeUpgradesContainer('leave'));
+
+    sortObj(State.upgrades, 'price')
+        .filter((upgrade: any) => !upgrade[1].isOwned && !upgrade[1].isLocked)
+        .forEach((upgrade: any) => {
+            const upgradeEl = createEl(
+                'div',
+                ['upgrade', `upgrade-${upgrade[1].codeName}`, `${State.inventory.ores < upgrade[1].price && 'not-enough'}`],
+                `
+                <img src='./../images/upgrade-${upgrade[1].codeName}.png'/>
+            `
+            );
+            upgradeEl.addEventListener('mousemove', (event: MouseEvent) => upgrade[1].mousemove(event));
+            upgradeEl.addEventListener('mouseleave', (event: MouseEvent) => hideTooltip());
+            upgradesContainer.append(upgradeEl);
+        });
+
+    return upgradesContainer;
+};
+
+const resizeUpgradesContainer = (type: 'enter' | 'leave') => {
+    const upgradesContainer: HTMLElement = select('.upgrades-container');
+    if (type === 'enter') upgradesContainer.style.height = upgradesContainer.scrollHeight + 'px';
+    if (type === 'leave') upgradesContainer.style.height = '60px';
 };
 
 const buildBuildings = (): HTMLElement => {
@@ -395,7 +486,7 @@ const buildBuildings = (): HTMLElement => {
 
             if (!building.isLocked) {
                 buildingEl.addEventListener('click', (event) => building.buy(event));
-                buildingEl.addEventListener('mousemove', (event) => showTooltip(event, { type: 'building', building }));
+                buildingEl.addEventListener('mousemove', (event) => building.mousemove(event));
                 buildingEl.addEventListener('mouseleave', () => hideTooltip());
             }
 
@@ -617,7 +708,7 @@ const gameLoop = () => {
     if (UpdatesState.updateOPS) updateOPS();
 
     if (InstanceState.selectedTab === 'store') {
-        updateBuildingPriceClass();
+        updateStorePriceClasses();
     }
 
     if (InstanceState.textScroller.isInProgress) moveTextInScroller();
@@ -647,11 +738,21 @@ const initiateCanvasParticles = () => {
     constants.particlesCanvasEl.width = window.innerWidth;
 };
 
+const instantiateComboSign = () => {
+    if (State.stats.highestCombo >= 5) {
+        constants.comboSignEl.classList.add('visible');
+    }
+};
+
 const initialLoad = () => {
     initiateCanvasParticles();
     instantiateTabs();
     instantiateBuildings();
     instantiateSmithUpgrades();
+    instantiateAchievements();
+    instantiateComboSign();
+    instantiateUpgrades();
+
     constants.oreSpriteEl.onclick = handleOreClick;
 
     // ! DELETE LATER - TESTING
@@ -670,15 +771,9 @@ var before, now, fps;
 let fpsEl: HTMLElement = document.querySelector('.fps');
 fpsEl.style.zIndex = '5';
 before = Date.now();
-fps = 1000;
-let lowest = 1000;
 requestAnimationFrame(function loop() {
     now = Date.now();
     fps = Math.round(1000 / (now - before));
-    if (fps < lowest) {
-        lowest = fps;
-        console.log('lowest:', lowest);
-    }
     before = now;
     requestAnimationFrame(loop);
     fpsEl.innerHTML = fps;

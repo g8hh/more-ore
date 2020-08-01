@@ -22,11 +22,13 @@ interface State {
     };
     stats: Stats;
     settings: Settings;
+    upgrades: any;
+    achievements: any;
     textScrollerMessages: string[];
 }
 
 export const State: State = {
-    opc: 50,
+    opc: 100,
     ops: 0,
 
     inventory: {
@@ -69,6 +71,9 @@ export const State: State = {
         tick: 60,
         oreHpType: 'percentage'
     },
+
+    upgrades: {},
+    achievements: {},
 
     textScrollerMessages: [
         'What is a rocks favorite fruit? ... Pom-a-granite',
