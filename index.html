@@ -7,35 +7,39 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>无尽的挖矿 - More Ore - A clicker, incremental, idle RPG game.</title>
     <link rel="icon shortcut" href="./misc-tinyRock.22ef93dd.ico">
-    <meta name="description" content="More Ore is an clicker game inspired by Cookie Clicker. Mine ores, buy buildings, find better equips, embark on quests, and defeat bosses.">
+    <meta name="description"
+        content="More Ore is an clicker game inspired by Cookie Clicker. Mine ores, buy buildings, find better equips, embark on quests, defeat bosses, PETS?, ARTIFACTS??">
     <meta name="keywords" content="More Ore, incremental, clicker, game, cookie clicker, rpg, idle">
     <meta name="author" content="Syns Studio">
     <meta name="robots" content="follow">
-    <link rel="stylesheet" type="text/css" href="./styles.0c7b7f56.css">
-<!--
+    <link rel="stylesheet" type="text/css" href="./styles.eac70ddf.css">
     <link href="https://fonts.googleapis.com/css?family=Asap+Condensed:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Germania+One" rel="stylesheet">
--->
-<!--
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105854273-1"></script>
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105812121254273-1"></script> -->
     <script>
         function a() {
             dataLayer.push(arguments)
         }
-        window.dataLayer = window.dataLayer || [], a("js", new Date), a("config", "UA-105854273-1");
-
+        window.dataLayer = window.dataLayer || [], a("js", new Date), a("config", "UA-1442323235854273-1");
     </script>
--->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B62HS57JPW"></script>
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-B62HS12121257JPW"></script> -->
+    <script>
+        function a() {
+            dataLayer.push(arguments)
+        }
+        window.dataLayer = window.dataLayer || [], a("js", new Date), a("config", "G-B62HS57JPW");
+    </script>
+    <script async data-ad-client="ca-pub-458456395812121870163"
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="0">
     <meta http-equiv="pragma" content="no-cache">
 </head>
 
 <body>
-<script src="chs.js?07071443"></script>
-<script src="https://cdn.jsdelivr.net/gh/g8hh/g8hh.github.io/zh/core.js"></script>
+    <script src="chs.js"></script>
+    <script src="//g8hh.com/zh/core.js"></script>
     <div class="testing-tools"></div>
     <div class="too-small-screen">
         <div> <img src="./misc-logo.d0079ec5.png" alt="more ore logo">
@@ -45,56 +49,78 @@
     <div class="loading-screen">
         <div> <img src="./misc-logo.d0079ec5.png" alt="main logo">
             <div class="lds-dual-ring">
-                <h1>Loading...</h1> </div>
+                <h1>Loading...</h1>
+            </div>
         </div>
         <div class="loading-screen-bottom-text">
             <p>If the game doesn't load, your save might be corrupted.</p>
-            <p> You can <span class="export loading-screen-link">EXPORT</span> your save and reach out to the developer on <a class="loading-screen-link" href="https://discord.gg/NU99mMQ" target="_blank">DISCORD</a> or <span class="loading-screen-link wipe">WIPE</span> your save </p>
+            <p> You can <span class="export loading-screen-link">EXPORT</span> your save and reach out to the developer
+                on <a class="loading-screen-link" href="https://discord.gg/NU99mMQ" target="_blank">DISCORD</a> or <span
+                    class="loading-screen-link wipe">WIPE</span> your save </p>
         </div>
         <script>
-            function e() {
-                dataLayer.push(arguments)
-            }
-            window.dataLayer = window.dataLayer || [], e("js", new Date), e("config", "G-B62HS57JPW");
-            var o = document.querySelector(".wipe.loading-screen-link");
-            o.onclick = function() {
+            window.adsbygoogle = window.adsbygoogle || [], adBreak = adConfig = function (e) {
+                adsbygoogle.push(e)
+            };
+            var e = document.querySelector(".wipe.loading-screen-link");
+            e.onclick = function () {
                 localStorage.removeItem("s"), location.reload()
             };
-            var t = document.querySelector(".export.loading-screen-link");
-            t.onclick = function() {
+            var o = document.querySelector(".export.loading-screen-link");
+            o.onclick = function () {
                 var e = localStorage.getItem("s"),
                     o = document.createElement("textarea");
-                o.textContent = e, o.style.position = "fixed", document.body.appendChild(o), o.select(), document.execCommand("copy"), document.body.removeChild(o), alert("Save copied to clipboard! Send it to the Dev.")
+                o.textContent = e, o.style.position = "fixed", document.body.appendChild(o), o.select(), document
+                    .execCommand("copy"), document.body.removeChild(o), alert(
+                        "Save copied to clipboard! Send it to the Dev.")
             };
-
         </script>
     </div>
     <div class="generation-skill-tree-wrapper">
         <div class="generation-header">
             <h1>Generation: <span></span></h1>
-            <p>Available points: <span></span></p>
-            <button>OK</button>
+            <p>Available points: <span></span></p> <button>OK</button>
         </div>
         <div class="generation-skill-tree-container"></div>
     </div>
     <div class="page-container">
         <div class="tooltip-wrapper"></div>
-        <div class="game-container">
-            <canvas id="particles"></canvas>
+        <div class="game-container"> <canvas id="particles"></canvas>
             <div class="toasts-container">
                 <div class="left"></div>
                 <div class="right"></div>
             </div>
             <div class="game-container-left">
+                <div class="cheater-detected-container">
+                    <h3>Cheater Detected</h3>
+                    <p>OpS and OpC is reduced by <strong>90%</strong> and combos don't count</p>
+                </div>
                 <div class="torch torch-left"></div>
                 <div class="torch torch-right"></div>
                 <div class="game-container-left-top">
+                    <div class="reward-ad-container"> <img src="./gift.f5c50c19.png" alt="ad reward">
+                        <p class="ad-cooldown"></p>
+                    </div>
                     <div class="game-container-left-top-bg"></div>
                     <div class="game-container-left-top-top">
                         <div class="topbar-inventory">
-                            <div class="combo-sign">
-                                <p>Current Combo</p>
-                                <h1>0</h1> </div>
+                            <div class="combo-sign-wrapper">
+                                <div class="combo-sign">
+                                    <p>Current Combo</p>
+                                    <h1>0</h1>
+                                    <div class="box-shadowed combo-preventer-container">
+                                        <p>Combo Preventor</p> <input type="checkbox">
+                                    </div>
+                                </div>
+                                <div class="combo-blessing-container">
+                                    <p>Combo Blessing Bonus</p>
+                                    <h3>0%</h3>
+                                </div>
+                                <div class="treasury-bonus-container">
+                                    <p>Ore Treasury Bonus</p>
+                                    <h3>0%</h3>
+                                </div>
+                            </div>
                             <div class="refined-ores-container">
                                 <p class="topbar-inventory-refined-ores">Refined Ores: <span class="amount">0</span></p>
                             </div>
@@ -102,7 +128,8 @@
                                 <p class="topbar-inventory-ores">Ores: <span class="amount"></span></p>
                             </div>
                             <div class="topbar-inventory-generation-wrapper">
-                                <p class="topbar-inventory-generation"> Generation: <span class="level"></span> <span class="levels-on-refine"></span> </p>
+                                <p class="topbar-inventory-generation"> Generation: <span class="level"></span> <span
+                                        class="levels-on-refine"></span> </p>
                                 <div class="topbar-inventory-generation-xp">
                                     <div class="bar"></div>
                                 </div>
@@ -112,16 +139,26 @@
                     <div class="game-container-left-top-middle">
                         <div class="ore-wrapper">
                             <div class="ore-sprite-wrapper">
-                                <div class="ore-sprite-container"> <img draggable="false" class="ore-sprite" alt="Click to gain ORE" ondragstart="return false;"> </div>
+                                <div class="ore-sprite-container"> <img draggable="false" class="ore-sprite"
+                                        alt="Click to gain ORE" ondragstart="return false;"> </div>
                             </div>
                             <div class="ore-hp"></div>
+                        </div>
+                        <div class="artifact-bag-container">
+                            <h3>Artifact Bag</h3>
+                            <div class="artifact-bag"></div>
                         </div>
                     </div>
                     <div class="game-container-left-top-bottom">
                         <div class="bottom-buttons-container">
                             <div class="left"></div>
                             <div class="achievements-anchor"></div>
-                            <div class="right"> <img class="icon icon-stats" src="./icon-stats.c8469849.svg" alt="stats button"> <img class="icon icon-settings" src="./icon-settings.6939a210.svg" alt="settings button"> </div>
+                            <div class="right">
+                                <div class="icon icon-pomegranite"> <img src="./pomegranite.cdad1cf3.png"
+                                        alt="pomegranite store"> </div> <img class="icon icon-stats"
+                                    src="./icon-stats.c8469849.svg" alt="stats button"> <img class="icon icon-settings"
+                                    src="./icon-settings.6939a210.svg" alt="settings button">
+                            </div>
                         </div>
                         <div class="text-scroller-container"></div>
                     </div>
@@ -135,20 +172,40 @@
         </div>
         <footer>
             <div class="left"> <img src="./misc-logo.d0079ec5.png" alt="more ore logo"> </div>
+            <div class="middle"></div>
             <div class="right"></div>
         </footer>
     </div>
-    <script src="./hackTimer.7036bc2b.js"></script>
-    <script src="./scripts.64ea8551.js"></script>
+    <div class="display-ads-container">
+        <p>sponsors :)</p>
+        <script async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4584asf63958870163"
+            crossorigin></script> <ins class="adsbygoogle" style="display:block"
+            data-ad-client="ca-pub-4584563958870163" data-ad-slot="294223541690" data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+    <script src="confetti.browser.min.js"></script>
+    <script src="./scripts.b55986e4.js"></script>
+<!--客服 开始-->
+<script src="//g8hh.com/static/js/jquery.min.js"></script>
+<link rel="stylesheet" href="//g8hh.com/static/css/kf.css" type="text/css" media="screen" charset="utf-8">
+<script src="//g8hh.com/static/js/kf.js"></script>
+<!-- 客服 结束 -->
+<!--站长统计-->
+<div style="display: none"><script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f237591d5976f87ca2e06b38c3658d9c";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+    
+        </div>
 </body>
 
 </html>
-<!--客服 开始-->
-<script src="https://cdn.jsdelivr.net/gh/g8hh/g8hh.github.io/static/js/jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/g8hh/g8hh.github.io/static/css/kf.css" type="text/css" media="screen" charset="utf-8">
-<script src="https://cdn.jsdelivr.net/gh/g8hh/g8hh.github.io/static/js/kf.js"></script>
-<!-- 客服 结束 -->
-<!--站长统计-->
-    <div style="display: none">
-       <script type="text/javascript" src="https://v1.cnzz.com/z_stat.php?id=1280006740&web_id=1280006740"></script>
-    </div>
