@@ -309,7 +309,7 @@ var cnItems = {
     "Heck yea! 😘": "哎呀！ 😘",
     "Hire the homo-erectus for cheap manual labor": "雇用直立人以获得廉价的体力劳动",
     "If nothing happens, you might have an adblocker on. Turn it off, refresh and try again": "如果没有任何反应，您可能打开了广告拦截器。 关闭它，刷新并重试",
-    "Nah": "不",
+    "Nah": "不了",
     "once it's over!": "一旦结束！",
     "Oonga-boonga!": "呜呜呜！",
     "Potential Rewards": "潜在回报",
