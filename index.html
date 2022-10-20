@@ -12,26 +12,27 @@
     <meta name="keywords" content="More Ore, incremental, clicker, game, cookie clicker, rpg, idle">
     <meta name="author" content="Syns Studio">
     <meta name="robots" content="follow">
-    <link rel="stylesheet" type="text/css" href="./styles.eac70ddf.css">
+    <link rel="stylesheet" type="text/css" href="./styles.88f5c1f5.css">
     <link href="https://fonts.googleapis.com/css?family=Asap+Condensed:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Germania+One" rel="stylesheet">
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105812121254273-1"></script> -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-105854273-1"></script> -->
     <script>
         function a() {
             dataLayer.push(arguments)
         }
-        window.dataLayer = window.dataLayer || [], a("js", new Date), a("config", "UA-1442323235854273-1");
+        window.dataLayer = window.dataLayer || [], a("js", new Date), a("config", "UA-10532323854273-1");
     </script>
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-B62HS12121257JPW"></script> -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-B62HS57JPW"></script> -->
     <script>
         function a() {
             dataLayer.push(arguments)
         }
         window.dataLayer = window.dataLayer || [], a("js", new Date), a("config", "G-B62HS57JPW");
     </script>
-    <script async data-ad-client="ca-pub-458456395812121870163"
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- <script async data-ad-client="ca-pub-4584563958870163"
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="0">
     <meta http-equiv="pragma" content="no-cache">
@@ -39,7 +40,7 @@
 
 <body>
     <script src="chs.js"></script>
-    <script src="//g8hh.com/zh/core.js"></script>
+    <script src="core.js"></script>
     <div class="testing-tools"></div>
     <div class="too-small-screen">
         <div> <img src="./misc-logo.d0079ec5.png" alt="more ore logo">
@@ -101,9 +102,13 @@
                     <div class="reward-ad-container"> <img src="./gift.f5c50c19.png" alt="ad reward">
                         <p class="ad-cooldown"></p>
                     </div>
-                    <div class="game-container-left-top-bg"></div>
+                    <div class="game-container-left-top-bg"> <img value=".5" src="./bg-main--foreground.f92ed590.png"
+                            alt="foreground"> <img value="-.5" src="./bg-main--midground1.258d2376.png"
+                            alt="midground1"> <img value="1" src="./bg-main--midground2.0979bcff.png" alt="midground2">
+                        <img value="1.5" src="./bg-main--background.cddecbf4.png" alt="background"> </div>
                     <div class="game-container-left-top-top">
                         <div class="topbar-inventory">
+                            <div class="chains-container"></div>
                             <div class="combo-sign-wrapper">
                                 <div class="combo-sign">
                                     <p>Current Combo</p>
@@ -176,36 +181,40 @@
             <div class="right"></div>
         </footer>
     </div>
-    <div class="display-ads-container" style="display: none;">
+    <div class="display-ads-container">
         <p>sponsors :)</p>
-        <script async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4584asf63958870163"
+        <!-- <script async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4584563958870163"
             crossorigin></script> <ins class="adsbygoogle" style="display:block"
-            data-ad-client="ca-pub-458456395812121870163" data-ad-slot="294222323541690" data-ad-format="auto"
+            data-ad-client="ca-pub-4584563958870163" data-ad-slot="2942541690" data-ad-format="auto"
             data-full-width-responsive="true"></ins>
         <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+        </script> -->
     </div>
-    <script src="confetti.browser.min.js"></script>
-    <script src="./scripts.b55986e4.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+    <script src="./scripts.8559ee08.js"></script>
 <!--客服 开始-->
-<script src="//g8hh.com/static/js/jquery.min.js"></script>
-<link rel="stylesheet" href="//g8hh.com/static/css/kf.css" type="text/css" media="screen" charset="utf-8">
-<script src="//g8hh.com/static/js/kf.js"></script>
+<script src="//g8hh.github.io/static/js/jquery.min.js"></script>
+<link rel="stylesheet" href="//g8hh.github.io/static/css/kf.css" type="text/css" media="screen" charset="utf-8">
+<script src="//g8hh.github.io/static/js/kf.js"></script>
+
+<style>
+    .loading-screen .lds-dual-ring h1{font-size: 13px !important;}
+</style>
 <!-- 客服 结束 -->
 <!--站长统计-->
-<div style="display: none"><script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?f237591d5976f87ca2e06b38c3658d9c";
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s);
-    })();
-    </script>
-    
-        </div>
+   <div style="display: none"><script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?f237591d5976f87ca2e06b38c3658d9c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    </div>
 </body>
 
 </html>
